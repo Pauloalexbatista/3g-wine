@@ -54,7 +54,7 @@ export default function AccessPage() {
                 borderRadius: '8px',
                 backgroundColor: '#111'
             }}>
-                <h1 style={{ marginBottom: '1.5rem', fontWeight: '300' }}>Página de teste</h1>
+                <h1 style={{ marginBottom: '1.5rem', fontWeight: 'bold', color: '#ffffff' }}>Página de teste</h1>
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     <input
                         type="password"
