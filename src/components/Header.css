@@ -4,10 +4,9 @@
     left: 0;
     right: 0;
     z-index: var(--z-fixed);
-    background-color: #4A0E0E;
-    /* Bordeaux profundo inicial */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(10, 10, 10, 0.85);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     transition: all var(--transition-base);
     border-bottom: 1px solid rgba(212, 175, 55, 0.2);
 }
@@ -51,11 +50,18 @@
     /* Marcellus */
     font-size: var(--text-3xl);
     font-weight: 900;
-    color: var(--color-light);
+    color: var(--color-secondary); /* Restored to Yellow */
     line-height: normal;
     letter-spacing: 1px;
     display: flex;
     align-items: center;
+}
+
+/* Manual nudge for the '3' in Marcellus */
+.logo-3 {
+    display: inline-block;
+    transform: translateY(-2px); /* Correcting the drop */
+    margin-right: 1px;
 }
 
 .logo-subtitle {
@@ -225,13 +231,18 @@
 }
 
 /* Responsive */
-@media (max-width: 1024px) {
+@media (max-width: 1100px) {
     .nav-desktop {
-        gap: var(--spacing-md);
+        gap: var(--spacing-sm);
+    }
+    
+    .header-content {
+        gap: var(--spacing-sm);
     }
 
     .nav-link {
-        font-size: var(--text-xs);
+        font-size: 0.75rem;
+        padding: var(--spacing-xs) 0.5rem;
     }
 }
 
@@ -250,6 +261,7 @@
 
     .header-content {
         padding: var(--spacing-xs) 0;
+        gap: var(--spacing-sm);
     }
 
     .logo-text {

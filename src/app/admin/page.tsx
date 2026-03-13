@@ -24,6 +24,10 @@ export default function AdminPage() {
     const [loading, setLoading] = useState(true);
     const [view, setView] = useState<'list' | 'form'>('list');
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null); // null = checking, false = prompt, true = access
+    const [password, setPassword] = useState('');
+    const [authError, setAuthError] = useState('');
+    const [isAuthenticating, setIsAuthenticating] = useState(false);
 
     // Image Selection State
     const [availableImages, setAvailableImages] = useState<string[]>([]);
@@ -44,9 +48,53 @@ export default function AdminPage() {
     });
 
     useEffect(() => {
+        checkAuth();
         fetchProducts();
         fetchImages();
     }, []);
+
+    async function checkAuth() {
+        try {
+            // No frontend, apenas verificamos se conseguimos ler algo restrito ou se temos o cookie (simulado via API)
+            // Para simplicidade total, vamos bater num endpoint que verifica o cookie
+            const res = await fetch('/api/verify-password', {
+                method: 'POST',
+                body: JSON.stringify({ checkOnly: true })
+            });
+            if (res.ok) {
+                setIsAuthenticated(true);
+            } else {
+                setIsAuthenticated(false);
+            }
+        } catch (error) {
+            setIsAuthenticated(false);
+        }
+    }
+
+    async function handleLogin(e: React.FormEvent) {
+        e.preventDefault();
+        setIsAuthenticating(true);
+        setAuthError('');
+
+        try {
+            const res = await fetch('/api/verify-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password })
+            });
+
+            if (res.ok) {
+                setIsAuthenticated(true);
+            } else {
+                const data = await res.json();
+                setAuthError(data.error || 'Password incorreta');
+            }
+        } catch (error) {
+            setAuthError('Erro ao verificar a password.');
+        } finally {
+            setIsAuthenticating(false);
+        }
+    }
 
     async function fetchProducts() {
         try {
@@ -273,6 +321,95 @@ export default function AdminPage() {
         return product.type === filterType;
     });
 
+
+    // Style for the authentication prompt
+    const authStyles = {
+        overlay: {
+            minHeight: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#0a0a0a',
+            padding: '2rem'
+        },
+        card: {
+            maxWidth: '400px',
+            width: '100%',
+            backgroundColor: '#1a1a1a',
+            padding: '3rem',
+            borderRadius: '12px',
+            border: '1px solid #333',
+            textAlign: 'center' as const,
+            boxShadow: '0 20px 40px rgba(0,0,0,0.5)'
+        }
+    };
+
+    if (isAuthenticated === null) {
+        return (
+            <div style={authStyles.overlay}>
+                <div style={{ color: 'var(--color-primary)', fontSize: '1.2rem' }}>A verificar acesso...</div>
+            </div>
+        );
+    }
+
+    if (!isAuthenticated) {
+        return (
+            <div style={authStyles.overlay}>
+                <div style={authStyles.card}>
+                    <div style={{ marginBottom: '2rem' }}>
+                        <span style={{ fontSize: '2.5rem', fontWeight: 'bold', color: '#fff', letterSpacing: '4px' }}>
+                            <span style={{ color: 'var(--color-primary)' }}>3</span>GWINE
+                        </span>
+                    </div>
+                    
+                    <h2 style={{ color: 'var(--color-primary)', marginBottom: '1.5rem', fontFamily: 'Marcellus, serif' }}>Portal do Administrador</h2>
+                    <p style={{ color: '#888', marginBottom: '2rem', fontSize: '0.9rem' }}>
+                        Introduza a chave de acesso para gerir a garrafeira.
+                    </p>
+
+                    <form onSubmit={handleLogin}>
+                        <input
+                            type="password"
+                            placeholder="Password de Acesso"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            style={{
+                                width: '100%',
+                                padding: '12px',
+                                backgroundColor: '#222',
+                                border: '1px solid #444',
+                                borderRadius: '6px',
+                                color: '#fff',
+                                marginBottom: '1.5rem',
+                                textAlign: 'center',
+                                outline: 'none'
+                            }}
+                            autoFocus
+                        />
+                        {authError && <p style={{ color: '#ef4444', fontSize: '0.85rem', marginBottom: '1.5rem' }}>{authError}</p>}
+                        
+                        <button 
+                            type="submit" 
+                            disabled={isAuthenticating}
+                            style={{
+                                width: '100%',
+                                padding: '14px',
+                                backgroundColor: 'var(--color-primary)',
+                                color: '#000',
+                                fontWeight: 'bold',
+                                border: 'none',
+                                borderRadius: '6px',
+                                cursor: isAuthenticating ? 'wait' : 'pointer',
+                                transition: 'transform 0.2s'
+                            }}
+                        >
+                            {isAuthenticating ? 'A entrar...' : 'Entrar na Garrafeira'}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        );
+    }
 
     if (view === 'form') {
         return (

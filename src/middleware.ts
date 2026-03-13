@@ -1,28 +1,37 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { updateSession } from '@/utils/supabase/middleware';
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
+    // 1. Atualizar a sessão do Supabase e verificar proteção de rotas
+    const supabaseResponse = await updateSession(request);
+    
+    // Se o middleware do Supabase retornou um redirecionamento (ex: para /login), usá-lo
+    if (supabaseResponse.headers.get('location')) {
+        return supabaseResponse;
+    }
+
     const accessCookie = request.cookies.get('site_access');
     const { pathname } = request.nextUrl;
 
-    // Permitir acesso à página de login, à API de verificação e a ficheiros estáticos/públicos
-    if (
-        pathname === '/acesso' ||
-        pathname.startsWith('/api/verify-password') ||
-        pathname.includes('.') || // Ficheiros com extensão (imagens, favicon, etc)
-        pathname.startsWith('/_next') // Pasta interna do Next.js
-    ) {
-        return NextResponse.next();
+    const isAcessoPage = pathname === '/acesso';
+    const isVerifyApi = pathname === '/api/verify-password';
+    const isAuthPath = pathname.startsWith('/auth');
+    const isStaticFile = pathname.includes('.') || pathname.startsWith('/_next');
+
+    // Permitir acesso a páginas de autenticação, API e ficheiros estáticos
+    if (isAcessoPage || isVerifyApi || isAuthPath || isStaticFile) {
+        return supabaseResponse;
     }
 
-    // Redirecionar para a página de acesso se não houver cookie
+    // Redirecionar para a página de acesso se não houver cookie (proteção global do site)
     if (!accessCookie || accessCookie.value !== 'granted') {
         const url = request.nextUrl.clone();
         url.pathname = '/acesso';
         return NextResponse.redirect(url);
     }
 
-    return NextResponse.next();
+    return supabaseResponse;
 }
 
 // Configurar o matcher para aplicar o middleware a todas as rotas

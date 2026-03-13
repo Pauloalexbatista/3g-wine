@@ -2,8 +2,7 @@ export interface Product {
     id: number;
     name: string;
     type: string;
-    years?: number; // Optional because legacy data might not have it, but clearly used in app as 'year'. Wait, admin page uses 'year'.
-    year?: number; // Admin page uses 'year', so I should probably stick to that.
+    year?: number;
     region?: string;
     price: number;
     description?: string;

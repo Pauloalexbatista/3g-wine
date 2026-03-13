@@ -1,3 +1,0 @@
-@echo off
-echo A abrir a pasta de imagens da loja...
-explorer "public\images\loja"

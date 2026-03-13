@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import styles from './page.module.css';
 
 export default function AccessPage() {
     const [password, setPassword] = useState('');
@@ -11,88 +12,53 @@ export default function AccessPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
         setError('');
+        setLoading(true);
 
         try {
             const res = await fetch('/api/verify-password', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password }),
             });
 
             if (res.ok) {
                 router.push('/');
-                router.refresh();
             } else {
-                setError('Palavra-passe incorrecta.');
+                setError('Acesso negado. Password incorrecta.');
             }
         } catch (err) {
-            setError('Ocorreu um erro. Tente novamente.');
+            setError('Erro ao verificar password.');
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <main style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100vh',
-            fontFamily: 'system-ui, -apple-system, sans-serif',
-            backgroundColor: '#000',
-            color: '#fff'
-        }}>
-            <div style={{
-                padding: '2rem',
-                textAlign: 'center',
-                border: '1px solid #333',
-                borderRadius: '8px',
-                backgroundColor: '#111'
-            }}>
-                <h1 style={{ marginBottom: '1.5rem', fontWeight: 'bold', color: '#ffffff' }}>Página de teste</h1>
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Introduza a palavra-passe"
-                        style={{
-                            padding: '0.75rem',
-                            borderRadius: '4px',
-                            border: '1px solid #444',
-                            backgroundColor: '#222',
-                            color: '#fff',
-                            fontSize: '1rem',
-                            outline: 'none'
-                        }}
-                        required
-                        autoFocus
-                    />
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        style={{
-                            padding: '0.75rem',
-                            borderRadius: '4px',
-                            border: 'none',
-                            backgroundColor: '#fff',
-                            color: '#000',
-                            fontSize: '1rem',
-                            fontWeight: 'bold',
-                            cursor: loading ? 'not-allowed' : 'pointer',
-                            transition: 'opacity 0.2s'
-                        }}
-                    >
-                        {loading ? 'A verificar...' : 'Entrar'}
-                    </button>
-                    {error && <p style={{ color: '#ff4444', fontSize: '0.9rem', marginTop: '0.5rem' }}>{error}</p>}
+        <div className={styles.wrapper}>
+            <div className={styles.content}>
+                <h1 className={styles.logo}>3G WINE</h1>
+                <p className={styles.subtitle}>Curadoria de Vinhos Premium</p>
+                
+                <form onSubmit={handleSubmit} className={styles.form}>
+                    <div className={styles.inputWrapper}>
+                        <input
+                            type="password"
+                            placeholder="PALAVRA-PASSE"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value.toUpperCase())}
+                            className={`${styles.input} ${error ? styles.inputError : ''}`}
+                            disabled={loading}
+                            autoFocus
+                        />
+                        {error && <p className={styles.error}>{error}</p>}
+                    </div>
                 </form>
             </div>
-        </main>
+            
+            <footer className={styles.footer}>
+                &copy; 2024 3G Wine. Todos os direitos reservados.
+            </footer>
+        </div>
     );
 }

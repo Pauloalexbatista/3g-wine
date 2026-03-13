@@ -88,24 +88,20 @@ export default function LojaPage() {
             <Header />
 
             <main className="loja-page">
-                {/* Page Header */}
-                <section className="loja-hero">
-                    <div className="container">
-                        <h1 className="loja-title">A Nossa Seleção</h1>
-                        <div className="divider-gold"></div>
-                        <p className="loja-subtitle">
-                            Descubra os melhores vinhos selecionados com paixão e conhecimento
-                        </p>
-                    </div>
-                </section>
+                {/* Filters Section */}
 
                 {/* Filters Section */}
                 <section className="filters-section">
                     <div className="container">
                         <div className="filters-bar">
                             {/* Type Filter */}
-                            <div className="filter-group">
-                                <label className="filter-label">Tipo</label>
+                            <div className="filter-group type-filter-group">
+                                <div className="filter-header-inline">
+                                    <label className="filter-label">Tipo</label>
+                                    <div className="results-count-inline">
+                                        {loading ? 'Carregando...' : `${filteredProducts.length} ${filteredProducts.length === 1 ? 'produto encontrado' : 'produtos encontrados'}`}
+                                    </div>
+                                </div>
                                 <div className="filter-buttons">
                                     {types.map(type => (
                                         <button
@@ -121,7 +117,9 @@ export default function LojaPage() {
 
                             {/* Price Filter */}
                             <div className="filter-group">
-                                <label className="filter-label">Preço</label>
+                                <div className="filter-header-inline">
+                                    <label className="filter-label">Preço</label>
+                                </div>
                                 <select
                                     className="filter-select"
                                     value={priceRange}
@@ -135,7 +133,9 @@ export default function LojaPage() {
 
                             {/* Sort */}
                             <div className="filter-group">
-                                <label className="filter-label">Ordenar por</label>
+                                <div className="filter-header-inline">
+                                    <label className="filter-label">Ordenar por</label>
+                                </div>
                                 <select
                                     className="filter-select"
                                     value={sortBy}
@@ -147,10 +147,6 @@ export default function LojaPage() {
                                     <option value="name">Nome A-Z</option>
                                 </select>
                             </div>
-                        </div>
-
-                        <div className="results-count">
-                            {loading ? 'Carregando...' : `${filteredProducts.length} ${filteredProducts.length === 1 ? 'produto encontrado' : 'produtos encontrados'}`}
                         </div>
                     </div>
                 </section>

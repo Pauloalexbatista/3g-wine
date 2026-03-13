@@ -23,9 +23,11 @@ export default function SobrePage() {
                     <div className="container">
                         <div className="sobre-hero-content">
                             <div className="sobre-badge">A Nossa História</div>
-                            <h1 className="sobre-title">3G Wine</h1>
+                            <h1 className="sobre-title">
+                                <span className="logo-3">3</span>G Wine
+                            </h1>
                             <div className="divider-gold"></div>
-                            <p className="sobre-tagline">Reserva Exclusiva desde o início</p>
+                            <p className="sobre-tagline">Garrafeira Exclusiva desde o início</p>
                         </div>
                     </div>
                 </section>
@@ -53,7 +55,7 @@ export default function SobrePage() {
                                 </p>
 
                                 <p className="story-text">
-                                    A nossa coleção <em>"Reserva Exclusiva"</em> é o resultado de uma curadoria
+                                    A nossa coleção <em>"Garrafeira Exclusiva"</em> é o resultado de uma curadoria
                                     meticulosa, onde privilegiamos vinhos com história, caráter e potencial de
                                     envelhecimento. Porque acreditamos que cada vinho conta uma história única.
                                 </p>
@@ -79,7 +81,12 @@ export default function SobrePage() {
 
                         <div className="values-grid">
                             <div className="value-card">
-                                <div className="value-icon">🏆</div>
+                                <div className="value-icon gold-icon">
+                                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <circle cx="12" cy="8" r="7" />
+                                        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
+                                    </svg>
+                                </div>
                                 <h3 className="value-title">Qualidade</h3>
                                 <p className="value-description">
                                     Selecionamos apenas os melhores vinhos, com rigorosos padrões de qualidade
@@ -88,7 +95,12 @@ export default function SobrePage() {
                             </div>
 
                             <div className="value-card">
-                                <div className="value-icon">🤝</div>
+                                <div className="value-icon gold-icon">
+                                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                        <path d="M9 12l2 2 4-4" />
+                                    </svg>
+                                </div>
                                 <h3 className="value-title">Confiança</h3>
                                 <p className="value-description">
                                     Relações transparentes com produtores e clientes, baseadas em honestidade
@@ -97,7 +109,14 @@ export default function SobrePage() {
                             </div>
 
                             <div className="value-card">
-                                <div className="value-icon">🎯</div>
+                                <div className="value-icon gold-icon">
+                                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M6 3h12l4 6-10 13L2 9z" />
+                                        <path d="M11 3l-4 6 7 13" />
+                                        <path d="M13 3l4 6-7 13" />
+                                        <path d="M2 9h20" />
+                                    </svg>
+                                </div>
                                 <h3 className="value-title">Exclusividade</h3>
                                 <p className="value-description">
                                     Acesso a vinhos raros e edições limitadas que não encontra facilmente
@@ -106,7 +125,12 @@ export default function SobrePage() {
                             </div>
 
                             <div className="value-card">
-                                <div className="value-icon">💡</div>
+                                <div className="value-icon gold-icon">
+                                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                                    </svg>
+                                </div>
                                 <h3 className="value-title">Conhecimento</h3>
                                 <p className="value-description">
                                     Partilhamos a nossa expertise para ajudá-lo a escolher o vinho perfeito
@@ -153,10 +177,10 @@ export default function SobrePage() {
 
                         <div className="cellar-image">
                             <Image
-                                src="/images/brand/cellar-2.jpg"
-                                alt="Wine Cellar"
+                                src="/images/loja/Adega_Virtual.jpg"
+                                alt="Adega Virtual 3G Wine"
                                 fill
-                                style={{ objectFit: 'cover' }}
+                                style={{ objectFit: 'contain' }}
                             />
                         </div>
                     </div>

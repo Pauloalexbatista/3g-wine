@@ -33,15 +33,27 @@ export default function Home() {
       <Header />
 
       <main className="home-page">
-        {/* Nova Hero Section Reestruturada */}
-        <section className="hero-modern">
-          <div className="container hero-grid">
+        {/* Nova Hero Section Reestruturada com Fundo Total */}
+        <section className="hero-modern-redesign">
+          <div className="hero-background">
+            <Image
+              src="/images/brand/quinta-hero-bg.png"
+              alt="Rustic Vineyard Background"
+              fill
+              priority
+              style={{ objectFit: 'cover' }}
+              quality={100}
+            />
+            <div className="hero-overlay-redesign"></div>
+          </div>
+          
+          <div className="container hero-grid-redesign">
             {/* Coluna Esquerda: Texto e Botões */}
             <div className="hero-text-side">
               <div className="hero-badge animate-fadeIn">Garrafeira exclusiva</div>
               <h1 className="hero-title animate-fadeIn">
                 A Arte de Escolher <br />
-                <span className="text-gold logo-text-hero">3GWINE</span>
+                <span className="text-gold logo-text-hero"><span className="logo-3">3</span>GWINE</span>
               </h1>
               <p className="hero-subtitle animate-fadeIn">
                 Vinhos premium seleccionados com paixão para os verdadeiros apreciadores.
@@ -50,7 +62,7 @@ export default function Home() {
                 <Link href="/loja" className="btn btn-primary">
                   A Nossa Seleção
                 </Link>
-                <Link href="/sobre" className="btn btn-outline">
+                <Link href="/sobre" className="btn btn-outline-white">
                   A Nossa História
                 </Link>
               </div>

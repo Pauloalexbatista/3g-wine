@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import './cart.css';
 
 export default function CartPage() {
     const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
@@ -109,105 +110,7 @@ export default function CartPage() {
 
     if (!mounted) return null;
 
-    const styles = {
-        pageContainer: {
-            padding: '8rem 1rem 4rem',
-            maxWidth: '1200px',
-            margin: '0 auto',
-            minHeight: '60vh',
-        },
-        title: {
-            fontSize: 'var(--text-4xl)',
-            color: 'var(--color-primary)',
-            fontFamily: 'var(--font-heading)',
-            marginBottom: '2rem',
-            textAlign: 'center' as const,
-        },
-        emptyCart: {
-            textAlign: 'center' as const,
-            padding: '4rem 2rem',
-            backgroundColor: 'var(--color-light)',
-            borderRadius: 'var(--radius-lg)',
-            boxShadow: 'var(--shadow-md)',
-        },
-        grid: {
-            display: 'grid',
-            gridTemplateColumns: '2fr 1fr',
-            gap: '2rem',
-            alignItems: 'start',
-        },
-        itemsList: {
-            backgroundColor: 'var(--color-light)',
-            borderRadius: 'var(--radius-lg)',
-            boxShadow: 'var(--shadow-md)',
-            overflow: 'hidden',
-        },
-        item: {
-            display: 'flex',
-            padding: '1.5rem',
-            borderBottom: '1px solid var(--color-gray-200)',
-            gap: '1.5rem',
-            alignItems: 'center',
-        },
-        itemImage: {
-            position: 'relative' as const,
-            width: '100px',
-            height: '100px',
-            backgroundColor: '#f9fafb',
-            borderRadius: 'var(--radius-md)',
-            overflow: 'hidden',
-            flexShrink: 0,
-        },
-        itemInfo: {
-            flex: 1,
-        },
-        summary: {
-            backgroundColor: 'var(--color-light)',
-            padding: '2rem',
-            borderRadius: 'var(--radius-lg)',
-            boxShadow: 'var(--shadow-md)',
-            position: 'sticky' as const,
-            top: '100px',
-        },
-        summaryRow: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginBottom: '0.75rem',
-            fontSize: 'var(--text-base)',
-            color: 'var(--color-gray-700)',
-        },
-        totalRow: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginTop: '1.5rem',
-            paddingTop: '1.5rem',
-            borderTop: '2px solid var(--color-gray-200)',
-            fontWeight: 800,
-            fontSize: 'var(--text-xl)',
-            color: 'var(--color-dark)',
-        },
-        btnPrimary: {
-            display: 'block',
-            width: '100%',
-            padding: '1rem',
-            backgroundColor: 'var(--color-primary)',
-            color: 'white',
-            border: 'none',
-            cursor: 'pointer',
-            textAlign: 'center' as const,
-            borderRadius: 'var(--radius-md)',
-            fontWeight: 600,
-            marginTop: '1rem',
-            transition: 'opacity 0.2s',
-        },
-        methodSelector: {
-            display: 'flex',
-            gap: '1rem',
-            marginBottom: '2rem',
-            backgroundColor: '#f3f4f6',
-            padding: '0.5rem',
-            borderRadius: 'var(--radius-md)',
-        },
+    const dynamicStyles = {
         methodBtn: (active: boolean) => ({
             flex: 1,
             padding: '0.75rem',
@@ -221,90 +124,41 @@ export default function CartPage() {
             color: active ? 'var(--color-primary)' : 'var(--color-gray-600)',
             transition: 'all 0.2s',
         }),
-        removeBtn: {
-            color: '#ef4444',
-            backgroundColor: 'transparent',
-            border: 'none',
-            fontSize: '0.875rem',
-            textDecoration: 'underline',
-            cursor: 'pointer',
-            marginTop: '0.5rem',
-            display: 'block',
-            padding: 0,
-        },
-        paymentLabel: {
-            display: 'block',
-            marginTop: '2rem',
-            fontSize: '0.8rem',
-            color: 'var(--color-gray-500)',
-            textAlign: 'center' as const,
-            textTransform: 'uppercase' as const,
-            letterSpacing: '1px',
-        },
-        paymentGrid: {
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '0.5rem',
-            marginTop: '0.5rem',
-        },
-        shippingForm: {
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: 'var(--radius-md)',
-            border: '1px solid var(--color-gray-200)',
-            marginTop: '1.5rem',
-            display: 'flex',
-            flexDirection: 'column' as const,
-            gap: '1rem',
-        },
-        formField: {
-            display: 'flex',
-            flexDirection: 'column' as const,
-            gap: '0.4rem',
-        },
-        input: {
-            padding: '0.75rem',
-            borderRadius: 'var(--radius-sm)',
-            border: '1px solid var(--color-gray-300)',
-            fontSize: '1rem',
-            width: '100%',
-        }
     };
 
     return (
-        <div style={styles.pageContainer}>
-            <h1 style={styles.title}>O Seu Carrinho</h1>
+        <div className="cart-page-container">
+            <h1 className="cart-title">O Seu Carrinho</h1>
 
             {cart.length === 0 ? (
-                <div style={styles.emptyCart}>
+                <div className="cart-empty text-center">
                     <p style={{ fontSize: '1.25rem', color: 'var(--color-gray-500)', marginBottom: '2rem' }}>
                         O seu carrinho está vazio.
                     </p>
-                    <Link href="/loja" style={{
-                        display: 'inline-block',
-                        padding: '1rem 2rem',
-                        backgroundColor: 'var(--color-primary)',
-                        color: 'white',
-                        borderRadius: 'var(--radius-md)',
-                        fontWeight: 600,
-                        textDecoration: 'none'
-                    }}>
+                    <Link href="/loja" className="btn btn-primary" style={{ textDecoration: 'none' }}>
                         Descobrir Vinhos
                     </Link>
                 </div>
             ) : (
-                <div className="cart-grid" style={styles.grid}>
+                <div className="cart-grid">
                     {/* Items List */}
                     <div>
-                        <div style={styles.methodSelector}>
+                        <div style={{
+                            display: 'flex',
+                            gap: '1rem',
+                            marginBottom: '2rem',
+                            backgroundColor: '#f3f4f6',
+                            padding: '0.5rem',
+                            borderRadius: 'var(--radius-md)',
+                        }}>
                             <button
-                                style={styles.methodBtn(deliveryMethod === 'delivery')}
+                                style={dynamicStyles.methodBtn(deliveryMethod === 'delivery')}
                                 onClick={() => setDeliveryMethod('delivery')}
                             >
                                 Entrega ao Domicílio
                             </button>
                             <button
-                                style={styles.methodBtn(deliveryMethod === 'pickup')}
+                                style={dynamicStyles.methodBtn(deliveryMethod === 'pickup')}
                                 onClick={() => setDeliveryMethod('pickup')}
                             >
                                 Levantamento em Loja
@@ -312,61 +166,70 @@ export default function CartPage() {
                         </div>
 
                         {deliveryMethod === 'delivery' && (
-                            <div style={styles.shippingForm}>
+                            <div style={{
+                                backgroundColor: 'white',
+                                padding: '1.5rem',
+                                borderRadius: 'var(--radius-md)',
+                                border: '1px solid var(--color-gray-200)',
+                                marginTop: '1.5rem',
+                                display: 'flex',
+                                flexDirection: 'column' as const,
+                                gap: '1rem',
+                            }}>
                                 <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Dados de Envio</h3>
-                                <div style={styles.formField}>
+                                <div className="flex flex-col gap-1">
                                     <label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Nome Completo</label>
                                     <input
                                         type="text"
                                         name="fullName"
                                         placeholder="Seu nome..."
-                                        style={styles.input}
+                                        className="input"
                                         value={shippingInfo.fullName}
                                         onChange={handleInputChange}
                                     />
                                 </div>
-                                <div style={styles.formField}>
+                                <div className="flex flex-col gap-1">
                                     <label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Morada</label>
                                     <input
                                         type="text"
                                         name="address"
                                         placeholder="Rua, número, andar..."
-                                        style={styles.input}
+                                        className="input"
                                         value={shippingInfo.address}
                                         onChange={handleInputChange}
                                     />
                                 </div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '1rem' }}>
-                                    <div style={styles.formField}>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div className="flex flex-col gap-1">
                                         <label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Cód. Postal</label>
                                         <input
                                             type="text"
                                             name="zipCode"
                                             placeholder="0000-000"
-                                            style={styles.input}
+                                            className="input"
                                             value={shippingInfo.zipCode}
                                             onChange={handleInputChange}
                                         />
                                     </div>
-                                    <div style={styles.formField}>
+                                    <div className="flex flex-col gap-1">
                                         <label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Localidade</label>
                                         <input
                                             type="text"
                                             name="city"
                                             placeholder="Cidade..."
-                                            style={styles.input}
+                                            className="input"
                                             value={shippingInfo.city}
                                             onChange={handleInputChange}
                                         />
                                     </div>
                                 </div>
-                                <div style={styles.formField}>
+                                <div className="flex flex-col gap-1">
                                     <label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Telemóvel</label>
                                     <input
                                         type="tel"
                                         name="phone"
                                         placeholder="9xx xxx xxx"
-                                        style={styles.input}
+                                        className="input"
                                         value={shippingInfo.phone}
                                         onChange={handleInputChange}
                                     />
@@ -374,10 +237,18 @@ export default function CartPage() {
                             </div>
                         )}
 
-                        <div style={{ marginTop: '2rem', ...styles.itemsList }}>
+                        <div className="cart-items-list" style={{ marginTop: '2rem' }}>
                             {displayItems.map((item) => (
-                                <div key={item.id} style={styles.item}>
-                                    <div style={styles.itemImage}>
+                                <div key={item.id} className="cart-item">
+                                    <div className="cart-item-image" style={{
+                                        position: 'relative' as const,
+                                        width: '100px',
+                                        height: '100px',
+                                        backgroundColor: '#f9fafb',
+                                        borderRadius: 'var(--radius-md)',
+                                        overflow: 'hidden',
+                                        flexShrink: 0,
+                                    }}>
                                         <Image
                                             src={item.image || '/images/products/douro-2018.png'}
                                             alt={item.name}
@@ -385,17 +256,26 @@ export default function CartPage() {
                                             style={{ objectFit: 'contain', padding: '0.5rem' }}
                                         />
                                     </div>
-                                    <div style={styles.itemInfo}>
+                                    <div style={{ flex: 1 }}>
                                         <h3 style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '0.25rem' }}>{item.name}</h3>
                                         <p style={{ color: 'var(--color-secondary)', fontSize: '0.9rem' }}>{item.type} | {item.year}</p>
                                         <button
                                             onClick={() => removeFromCart(item.id)}
-                                            style={styles.removeBtn}
+                                            style={{
+                                                color: '#ef4444',
+                                                backgroundColor: 'transparent',
+                                                border: 'none',
+                                                fontSize: '0.875rem',
+                                                textDecoration: 'underline',
+                                                cursor: 'pointer',
+                                                marginTop: '0.5rem',
+                                                padding: 0
+                                            }}
                                         >
                                             Remover
                                         </button>
                                     </div>
-                                    <div style={{ textAlign: 'right' }}>
+                                    <div className="cart-item-price-qty" style={{ textAlign: 'right' }}>
                                         <div style={{ fontWeight: 600, fontSize: '1.1rem', marginBottom: '0.5rem' }}>€{item.price.toFixed(2)}</div>
                                         <div style={{
                                             display: 'flex',
@@ -447,22 +327,29 @@ export default function CartPage() {
                     </div>
 
                     {/* Order Summary */}
-                    <div style={styles.summary}>
+                    <div className="cart-summary" style={{
+                        backgroundColor: 'var(--color-light)',
+                        padding: '2rem',
+                        borderRadius: 'var(--radius-lg)',
+                        boxShadow: 'var(--shadow-md)',
+                        position: 'sticky' as const,
+                        top: '100px',
+                    }}>
                         <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1.5rem', color: 'var(--color-dark)' }}>Resumo do Pedido</h2>
 
-                        <div style={styles.summaryRow}>
+                        <div className="flex justify-between mb-3 text-base text-gray-700">
                             <span>Produtos (Base)</span>
                             <span>€{currentSubtotal.toFixed(2)}</span>
                         </div>
-                        <div style={styles.summaryRow}>
+                        <div className="flex justify-between mb-3 text-base text-gray-700">
                             <span>IVA (23%)</span>
                             <span>€{ivaAmount.toFixed(2)}</span>
                         </div>
-                        <div style={styles.summaryRow}>
+                        <div className="flex justify-between mb-3 text-base text-gray-700">
                             <span>Subtotal c/ IVA</span>
                             <span>€{subtotalWithIva.toFixed(2)}</span>
                         </div>
-                        <div style={styles.summaryRow}>
+                        <div className="flex justify-between mb-3 text-base text-gray-700">
                             <span>Portes de Envio</span>
                             <span style={{ color: shippingCharge === 0 ? '#16a34a' : 'inherit' }}>
                                 {shippingCharge === 0 ? 'Grátis' : `€${shippingCharge.toFixed(2)}`}
@@ -475,21 +362,40 @@ export default function CartPage() {
                             </p>
                         )}
 
-                        <div style={styles.totalRow}>
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            marginTop: '1.5rem',
+                            paddingTop: '1.5rem',
+                            borderTop: '2px solid var(--color-gray-200)',
+                            fontWeight: 800,
+                            fontSize: 'var(--text-xl)',
+                            color: 'var(--color-dark)',
+                        }}>
                             <span>Total</span>
                             <span>€{finalTotal.toFixed(2)}</span>
                         </div>
 
-                        <span style={styles.paymentLabel}>Pagar via IFTHENPAY</span>
-                        <div style={styles.paymentGrid}>
+                        <span style={{
+                            display: 'block',
+                            marginTop: '2rem',
+                            fontSize: '0.8rem',
+                            color: 'var(--color-gray-500)',
+                            textAlign: 'center' as const,
+                            textTransform: 'uppercase' as const,
+                            letterSpacing: '1px',
+                        }}>Pagar via IFTHENPAY</span>
+                        <div className="grid grid-cols-2 gap-2 mt-2">
                             <button
-                                style={{ ...styles.btnPrimary, marginTop: 0, fontSize: '0.8rem', backgroundColor: '#004fe5' }}
+                                className="btn btn-secondary w-full"
+                                style={{ fontSize: '0.8rem', backgroundColor: '#004fe5', border: 'none' }}
                                 onClick={() => alert('Referência Multibanco: Preparando integração...')}
                             >
                                 Multibanco
                             </button>
                             <button
-                                style={{ ...styles.btnPrimary, marginTop: 0, fontSize: '0.8rem', backgroundColor: '#e20613' }}
+                                className="btn btn-secondary w-full"
+                                style={{ fontSize: '0.8rem', backgroundColor: '#e20613', border: 'none' }}
                                 onClick={() => alert('MB WAY: Preparando integração...')}
                             >
                                 MB WAY

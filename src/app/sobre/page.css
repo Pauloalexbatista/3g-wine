@@ -8,8 +8,8 @@
 
 .sobre-hero {
     position: relative;
-    height: 60vh;
-    min-height: 400px;
+    height: 45vh; /* Narrower as requested */
+    min-height: 350px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -27,8 +27,8 @@
     position: absolute;
     inset: 0;
     background: linear-gradient(180deg,
-            rgba(10, 10, 10, 0.7) 0%,
-            rgba(10, 10, 10, 0.85) 100%);
+            rgba(10, 10, 10, 0.3) 0%,
+            rgba(10, 10, 10, 0.5) 100%);
     z-index: 1;
 }
 
@@ -55,11 +55,10 @@
 
 .sobre-title {
     font-size: var(--text-6xl);
-    background: var(--gradient-gold);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-family: var(--font-logo); /* Use Marcellus font as in header */
+    color: var(--color-secondary); /* Solid color might be clearer on lighter bg */
     margin-bottom: var(--spacing-md);
+    letter-spacing: -2px;
 }
 
 .sobre-tagline {
@@ -149,6 +148,21 @@
 .value-icon {
     font-size: 60px;
     margin-bottom: var(--spacing-md);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+}
+
+.gold-icon {
+    color: var(--color-secondary);
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.3));
+    transition: all var(--transition-base);
+}
+
+.value-card:hover .gold-icon {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.5));
 }
 
 .value-title {
@@ -174,8 +188,9 @@
 
 .cellar-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    min-height: 600px;
+    grid-template-columns: 1.2fr 0.8fr; /* More space for text, less for image */
+    min-height: 700px;
+    background: var(--color-dark);
 }
 
 .cellar-content {
@@ -230,6 +245,11 @@
 .cellar-image {
     position: relative;
     overflow: hidden;
+    background: #0a0a0a; /* Deep black to blend with image edges if contain is used */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl);
 }
 
 /* ============================================

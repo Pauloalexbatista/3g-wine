@@ -1,57 +1,80 @@
-/* Existing Styles */
+/* Redesign Premium - Contactos (Light Version) */
 .contactos-page {
-    padding-bottom: 4rem;
+    padding-bottom: 0;
+    background-color: #fcfcfc;
+    color: #1a1a1a;
 }
 
 .contactos-hero {
-    background-color: var(--color-light);
-    padding: 4rem 0;
+    position: relative;
+    padding: 7rem 0 2rem; /* Increased top padding to fix header overlap */
     text-align: center;
-    margin-bottom: 4rem;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.9), #fcfcfc), url('/images/about/team-hero.jpg');
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 0;
 }
 
 .contactos-title {
-    font-size: 3rem;
-    color: var(--color-primary);
-    margin-bottom: 1rem;
+    font-size: clamp(2rem, 4vw, 3rem); /* Slightly smaller */
+    color: #4a041c; /* Traditional wine color */
+    margin-bottom: 0.5rem;
+    font-family: 'Marcellus', serif;
+    letter-spacing: 1px;
 }
 
 .contactos-subtitle {
-    font-size: 1.25rem;
-    color: var(--color-gray-600);
+    font-size: 1.1rem;
+    color: #666;
     max-width: 600px;
     margin: 0 auto;
+    font-family: 'Inter', sans-serif;
+}
+
+.divider-gold {
+    width: 50px;
+    height: 2px;
+    background: var(--color-primary);
+    margin: 1rem auto;
+}
+
+.contact-section {
+    padding: 1.5rem 0 4rem; /* Reduced top padding */
+    background: #fcfcfc;
 }
 
 .contact-grid {
     display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    gap: 4rem;
-    margin-bottom: 4rem;
+    grid-template-columns: 1fr 1fr; /* Balanced boxes */
+    gap: 2.5rem;
+    align-items: stretch; /* Stretch to keep equal height */
 }
 
-/* Form Styles */
+/* Premium Light Wrappers */
 .contact-form-wrapper,
 .contact-info-wrapper {
-    background-color: white;
-    padding: 2.5rem;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--color-gray-200);
+    background: #ffffff;
+    padding: 3rem;
+    border-radius: 20px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
 .form-title,
 .info-title {
-    font-size: 1.5rem;
-    color: var(--color-secondary);
+    font-size: 1.6rem;
+    color: #222;
     margin-bottom: 0.5rem;
+    font-family: 'Marcellus', serif;
 }
 
 .form-description {
-    color: var(--color-gray-600);
-    margin-bottom: 2rem;
+    color: #777;
+    margin-bottom: 2.5rem;
+    font-size: 0.95rem;
 }
 
+/* Form Styles Premium Light */
 .contact-form {
     display: flex;
     flex-direction: column;
@@ -61,129 +84,178 @@
 .form-group {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.4rem;
 }
 
 .form-label {
-    font-weight: 500;
-    color: var(--color-gray-700);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+    font-weight: 600;
+}
+
+.contact-form .input {
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #333;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.contact-form .input:focus {
+    border-color: var(--color-primary);
+    background: #fff;
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.1);
 }
 
 .btn-submit {
-    align-self: flex-start;
     margin-top: 1rem;
+    padding: 1rem 2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
 }
 
-/* Contact Info Cards */
+.btn-submit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(138, 17, 49, 0.2);
+    background-color: #720e2a;
+}
+
+/* Info Cards Premium Light */
 .info-cards {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    margin-top: 2rem;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
 }
 
 .info-card {
     display: flex;
-    flex-direction: column;
-    padding: 1.5rem;
-    background-color: var(--color-gray-50);
-    border-radius: var(--radius-md);
-    transition: transform 0.3s ease;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.25rem;
+    background: #fdfdfd;
+    border-radius: 12px;
+    border: 1px solid #eee;
+    transition: all 0.3s ease;
 }
 
 .info-card:hover {
-    transform: translateY(-2px);
-    background-color: white;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--color-gray-100);
+    background: #fff;
+    border-color: rgba(212, 175, 55, 0.4);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
 }
 
 .info-icon {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    color: var(--color-primary);
+    background: rgba(138, 17, 49, 0.05);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.info-content {
+    flex: 1;
 }
 
 .info-card-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--color-dark);
-    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.2rem;
 }
 
 .info-card-text {
-    color: var(--color-gray-600);
-    line-height: 1.6;
+    color: #666;
+    font-size: 0.85rem;
+    line-height: 1.4;
 }
 
 .info-card-text a {
-    color: var(--color-primary);
+    color: #444;
     text-decoration: none;
     transition: color 0.2s;
 }
 
 .info-card-text a:hover {
-    color: var(--color-primary-dark);
-    text-decoration: underline;
+    color: var(--color-primary);
 }
 
 /* Social Section */
 .social-section {
-    margin-top: 3rem;
+    margin-top: 2.5rem;
 }
 
 .social-title {
-    font-size: 1.25rem;
-    color: var(--color-secondary);
-    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: #444;
+    margin-bottom: 1.25rem;
     font-weight: 600;
+    text-align: center;
 }
 
 .social-links-contact {
     display: flex;
-    gap: 1rem;
+    justify-content: center;
+    gap: 1.5rem;
 }
 
 .social-link-contact {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 48px;
-    height: 48px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    background-color: var(--color-gray-100);
-    color: var(--color-secondary);
+    background: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
     transition: all 0.3s ease;
 }
 
 .social-link-contact:hover {
-    background-color: var(--color-primary);
-    color: white;
-    transform: translateY(-2px);
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+    transform: translateY(-5px);
 }
 
-.social-link-contact svg {
-    width: 24px;
-    height: 24px;
-}
+/* WhatsApp removed - using only 2 links now */
 
-/* QR Codes Section */
+/* Instagram QR Grid (Enlarged) */
 .qr-codes-section {
-    margin-top: 2rem;
-    border-top: 1px solid var(--color-gray-200);
-    padding-top: 1.5rem;
+    margin-top: 2.5rem;
+    border-top: 1px solid #eee;
+    padding-top: 2rem;
 }
 
 .qr-codes-title {
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    color: var(--color-secondary);
-    font-weight: 600;
+    font-size: 0.85rem;
+    color: #999;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .qr-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    gap: 2rem; /* Increased gap */
 }
 
 .qr-item {
@@ -193,93 +265,69 @@
 .qr-image-wrapper {
     position: relative;
     width: 100%;
-    padding-bottom: 100%;
-    /* Aspect Ratio 1:1 */
-    border-radius: 12px;
+    aspect-ratio: 1;
+    border-radius: 15px; /* Softer radius */
     overflow: hidden;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--color-gray-100);
+    border: 3px solid #f0f0f0;
+    transition: all 0.3s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.qr-item:hover .qr-image-wrapper {
+    transform: scale(1.03);
+    border-color: var(--color-primary);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
 .qr-label {
-    margin-top: 0.5rem;
-    font-size: 0.875rem;
-    font-weight: 600;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
-
-.qr-label.primary {
-    color: var(--color-primary);
-}
-
-.qr-label.secondary {
-    color: #f09433;
-    /* Instagram gradient start approx */
-    background: -webkit-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    /* color: transparent; Only if background clip works well, otherwise fallback */
-}
-
 
 /* Map Section */
 .map-section {
-    height: 450px;
-    background-color: var(--color-gray-200);
+    margin-top: 0;
+    border-top: 1px solid #eee;
 }
 
 .map-container iframe {
-    width: 100%;
-    height: 450px;
-    display: block;
-    filter: grayscale(20%);
-    transition: filter var(--transition-base);
-    border: 0;
+    /* Normal filter for light theme */
+    filter: grayscale(10%) contrast(105%);
 }
 
 /* Success Message */
 .success-message {
-    background-color: #ecfdf5;
-    color: #065f46;
-    padding: 1rem;
-    border-radius: var(--radius-md);
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+    background: #ecfdf5;
+    color: #059669;
+    padding: 1.25rem;
+    border-radius: 10px;
     border: 1px solid #d1fae5;
-}
-
-.success-icon {
-    background-color: #10b981;
-    color: white;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75rem;
+    margin-bottom: 2rem;
+    font-weight: 600;
 }
 
 /* Responsive */
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
     .contact-grid {
         grid-template-columns: 1fr;
-        gap: 2rem;
+        max-width: 700px;
+        margin: 0 auto;
     }
 }
 
 @media (max-width: 600px) {
     .contactos-title {
-        font-size: 2.5rem;
+        font-size: 1.8rem;
     }
-
+    
     .contact-form-wrapper,
     .contact-info-wrapper {
-        padding: 1.5rem;
+        padding: 2rem 1.25rem;
     }
-
+    
     .qr-grid {
-        gap: 0.75rem;
+        gap: 1.25rem;
     }
-}
+}
