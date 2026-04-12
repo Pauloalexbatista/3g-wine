@@ -180,12 +180,6 @@ button {
 .justify-between { justify-content: space-between; }
 .gap-md { gap: var(--spacing-md); }
 
-/* Manual nudge for the '3' in Marcellus logo */
-.logo-3 {
-  display: inline-block;
-  transform: translateY(-3px);
-  margin-right: 1px;
-}
 
 /* ============================================
    Component Classes

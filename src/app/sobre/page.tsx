@@ -24,7 +24,7 @@ export default function SobrePage() {
                         <div className="sobre-hero-content">
                             <div className="sobre-badge">A Nossa História</div>
                             <h1 className="sobre-title">
-                                <span className="logo-3">3</span>G Wine
+                                3GWINE
                             </h1>
                             <div className="divider-gold"></div>
                             <p className="sobre-tagline">Garrafeira Exclusiva desde o início</p>
@@ -41,23 +41,11 @@ export default function SobrePage() {
                                 <div className="divider-gold" style={{ margin: 'var(--spacing-md) 0' }}></div>
 
                                 <p className="story-text">
-                                    A <strong>3G Wine</strong> nasceu de uma paixão profunda pelo mundo do vinho
-                                    e do desejo de partilhar as melhores garrafas com verdadeiros apreciadores.
-                                    Cada vinho na nossa seleção é escolhido a dedo, representando o melhor que
-                                    Portugal e o mundo têm para oferecer.
+                                    <strong>3GWINE</strong> É uma Garrafeira Original que nasceu em Outubro de 2016 dentro de uma Barbearia, <strong>3GBARBEARIA</strong>. Foi aliás o primeiro projecto deste género criado em Portugal.
                                 </p>
 
                                 <p className="story-text">
-                                    Com anos de experiência no setor vinícola, estabelecemos relações diretas
-                                    com as melhores quintas e produtores, garantindo que cada garrafa que chega
-                                    aos nossos clientes é autêntica, de qualidade superior e representa o verdadeiro
-                                    espírito da região de onde provém.
-                                </p>
-
-                                <p className="story-text">
-                                    A nossa coleção <em>"Garrafeira Exclusiva"</em> é o resultado de uma curadoria
-                                    meticulosa, onde privilegiamos vinhos com história, caráter e potencial de
-                                    envelhecimento. Porque acreditamos que cada vinho conta uma história única.
+                                    Nasceu de uma paixão vínica do proprietário Mário Medeiros e é esse ambiente que proporcionamos a quem nos procura com uma vasta seleção de vinhos únicos e diferenciados para apaixonados pelo néctar do Deus Baco.
                                 </p>
                             </div>
 

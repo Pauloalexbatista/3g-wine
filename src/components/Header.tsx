@@ -35,7 +35,7 @@ export default function Header() {
                     {/* Logo */}
                     <Link href="/" className="header-logo">
                         <div className="logo-container">
-                            <span className="logo-text"><span className="logo-3">3</span>GWINE</span>
+                            <span className="logo-text">3GWINE</span>
                         </div>
                     </Link>
 

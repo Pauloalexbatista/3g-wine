@@ -53,7 +53,7 @@ export default function Home() {
               <div className="hero-badge animate-fadeIn">Garrafeira exclusiva</div>
               <h1 className="hero-title animate-fadeIn">
                 A Arte de Escolher <br />
-                <span className="text-gold logo-text-hero"><span className="logo-3">3</span>GWINE</span>
+                <span className="text-gold logo-text-hero">3GWINE</span>
               </h1>
               <p className="hero-subtitle animate-fadeIn">
                 Vinhos premium seleccionados com paixão para os verdadeiros apreciadores.
@@ -217,14 +217,14 @@ export default function Home() {
               </h2>
               <div className="divider-gold" style={{ margin: 'var(--spacing-md) 0' }}></div>
               <p className="about-text">
-                Na 3G Wine, selecionamos cuidadosamente cada garrafa para oferecer
-                aos nossos clientes uma experiência única e memorável. Os nossos vinhos
-                são escolhidos a dedo das melhores quintas de Portugal e do mundo.
+                A 3GWINE nasceu em 2016 de uma paixão profunda pelo mundo do vinho.
+                Criada dentro da 3GBARBEARIA, foi o primeiro projeto deste género
+                em Portugal, focado em oferecer vinhos únicos e diferenciados.
               </p>
               <p className="about-text">
-                Com anos de experiência e uma paixão inabalável pelo vinho,
-                garantimos que cada produto na nossa seleção representa o melhor
-                em qualidade, sabor e tradição.
+                Com a curadoria de Mário Medeiros, proporcionamos um ambiente
+                exclusivo para apaixonados pelo vinho, garantindo qualidade,
+                tradição e exclusividade em cada garrafa selecionada.
               </p>
               <Link href="/sobre" className="btn btn-outline">
                 Saiba Mais Sobre Nós
