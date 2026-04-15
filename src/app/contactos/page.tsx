@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { supabase } from '@/lib/supabase';
 import './page.css';
 
 export default function ContactosPage() {
@@ -13,17 +14,34 @@ export default function ContactosPage() {
         message: '',
     });
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // TODO: Connect to API
-        console.log('Form submitted:', formData);
-        setSubmitted(true);
-        setTimeout(() => {
-            setSubmitted(false);
+        setIsSubmitting(true);
+        setError(null);
+
+        try {
+            const { error: supabaseError } = await supabase
+                .from('contact_messages')
+                .insert([formData]);
+
+            if (supabaseError) throw supabaseError;
+
+            setSubmitted(true);
             setFormData({ name: '', email: '', phone: '', message: '' });
-        }, 3000);
+            
+            setTimeout(() => {
+                setSubmitted(false);
+            }, 5000);
+        } catch (err: any) {
+            console.error('Error submitting form:', err);
+            setError('Ocorreu um erro ao enviar a sua mensagem. Por favor, tente novamente.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -67,6 +85,12 @@ export default function ContactosPage() {
                                     </div>
                                 )}
 
+                                {error && (
+                                    <div className="error-message" style={{ color: '#f87171', marginBottom: '1rem', fontSize: '0.875rem' }}>
+                                        {error}
+                                    </div>
+                                )}
+
                                 <form onSubmit={handleSubmit} className="contact-form">
                                     <div className="form-group">
                                         <label htmlFor="name" className="form-label">Nome *</label>
@@ -78,6 +102,7 @@ export default function ContactosPage() {
                                             onChange={handleChange}
                                             className="input"
                                             required
+                                            disabled={isSubmitting}
                                         />
                                     </div>
 
@@ -91,6 +116,7 @@ export default function ContactosPage() {
                                             onChange={handleChange}
                                             className="input"
                                             required
+                                            disabled={isSubmitting}
                                         />
                                     </div>
 
@@ -103,6 +129,7 @@ export default function ContactosPage() {
                                             value={formData.phone}
                                             onChange={handleChange}
                                             className="input"
+                                            disabled={isSubmitting}
                                         />
                                     </div>
 
@@ -116,11 +143,16 @@ export default function ContactosPage() {
                                             className="input textarea"
                                             rows={6}
                                             required
+                                            disabled={isSubmitting}
                                         ></textarea>
                                     </div>
 
-                                    <button type="submit" className="btn btn-primary btn-submit">
-                                        Enviar Mensagem
+                                    <button 
+                                        type="submit" 
+                                        className="btn btn-primary btn-submit"
+                                        disabled={isSubmitting}
+                                    >
+                                        {isSubmitting ? 'A Enviar...' : 'Enviar Mensagem'}
                                     </button>
                                 </form>
                             </div>

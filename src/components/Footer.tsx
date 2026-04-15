@@ -72,7 +72,7 @@ export default function Footer() {
                 <div className="footer-grid">
                     <div className="footer-section">
                         <div className="footer-logo">
-                            <span className="logo-text">3GWINE</span>
+                            <span className="logo-text brand-3gwine">3GWINE</span>
                         </div>
                         <p className="footer-tagline">Garrafeira exclusiva</p>
                         <p className="footer-description">
@@ -168,7 +168,7 @@ export default function Footer() {
                     </div>
 
                     <p className="copyright">
-                        © {currentYear} 3GWINE. Todos os direitos reservados.
+                        © {currentYear} <span className="brand-3gwine" style={{ fontSize: '1em' }}>3GWINE</span>. Todos os direitos reservados.
                     </p>
 
                     <button 

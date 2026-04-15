@@ -18,8 +18,8 @@ export default function LoginPage() {
 
             <div className="relative z-10 w-full max-w-md">
                 <div className="mb-12 text-center animate-fadeIn">
-                    <h1 className="text-4xl md:text-5xl font-serif text-white tracking-[0.3em] mb-4">
-                        3G<span className="text-[#D4AF37]">WINE</span>
+                    <h1 className="text-4xl md:text-5xl text-white mb-4">
+                        <span className="brand-3gwine text-gold">3GWINE</span>
                     </h1>
                     <p className="text-gray-400 font-light tracking-[0.2em] text-xs uppercase">
                         EXCLUSIVIDADE & TRADIÇÃO

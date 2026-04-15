@@ -173,6 +173,18 @@ button {
 .text-gold { color: var(--color-secondary) !important; }
 .text-white { color: var(--color-light) !important; }
 
+/* Global Brand Consistency: 3GWINE */
+.brand-3gwine {
+  font-family: var(--font-logo) !important; /* Forces Marcellus */
+  font-variant-numeric: lining-nums !important; /* Forces uniform number height */
+  font-feature-settings: "lnum" 1 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+}
+
 .flex { display: flex; }
 .flex-col { flex-direction: column; }
 .items-center { align-items: center; }

@@ -147,7 +147,12 @@ export default function AdminPage() {
 
     function handleEdit(product: Product) {
         setEditingProduct(product);
-        setFormData(product);
+        setFormData({
+            ...product,
+            is_weekly_highlight: product.is_weekly_highlight ?? false,
+            weekly_highlight_image: product.weekly_highlight_image ?? '',
+            featured: product.featured ?? false
+        });
         setView('form');
         // Refresh images when opening form
         fetchImages();
@@ -163,7 +168,9 @@ export default function AdminPage() {
             price: 0,
             description: '',
             featured: false,
-            image: ''
+            image: '',
+            is_weekly_highlight: false,
+            weekly_highlight_image: ''
         });
         setView('form');
         // Refresh images when opening form
@@ -544,7 +551,7 @@ export default function AdminPage() {
                                     type="checkbox"
                                     id="featured"
                                     style={{ width: '1rem', height: '1rem', marginRight: '0.5rem' }}
-                                    checked={formData.featured}
+                                    checked={!!formData.featured}
                                     onChange={e => setFormData({ ...formData, featured: e.target.checked })}
                                 />
                                 <label htmlFor="featured" style={{ fontSize: '0.875rem', color: 'var(--color-dark)' }}>
@@ -557,7 +564,7 @@ export default function AdminPage() {
                                     type="checkbox"
                                     id="is_weekly_highlight"
                                     style={{ width: '1rem', height: '1rem', marginRight: '0.5rem' }}
-                                    checked={formData.is_weekly_highlight}
+                                    checked={!!formData.is_weekly_highlight}
                                     onChange={e => setFormData({ ...formData, is_weekly_highlight: e.target.checked })}
                                 />
                                 <label htmlFor="is_weekly_highlight" style={{ fontSize: '0.875rem', color: 'var(--color-dark)', fontWeight: 'bold' }}>

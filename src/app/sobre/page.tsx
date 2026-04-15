@@ -23,11 +23,7 @@ export default function SobrePage() {
                     <div className="container">
                         <div className="sobre-hero-content">
                             <div className="sobre-badge">A Nossa História</div>
-                            <h1 className="sobre-title">
-                                3GWINE
-                            </h1>
-                            <div className="divider-gold"></div>
-                            <p className="sobre-tagline">Garrafeira Exclusiva desde o início</p>
+                            <h1 className="sobre-tagline">Garrafeira Exclusiva desde o início</h1>
                         </div>
                     </div>
                 </section>
@@ -41,7 +37,7 @@ export default function SobrePage() {
                                 <div className="divider-gold" style={{ margin: 'var(--spacing-md) 0' }}></div>
 
                                 <p className="story-text">
-                                    <strong>3GWINE</strong> É uma Garrafeira Original que nasceu em Outubro de 2016 dentro de uma Barbearia, <strong>3GBARBEARIA</strong>. Foi aliás o primeiro projecto deste género criado em Portugal.
+                                    <strong className="brand-3gwine">3GWINE</strong> É uma Garrafeira Original que nasceu em Outubro de 2016 dentro de uma Barbearia, <strong>3GBARBEARIA</strong>. Foi aliás o primeiro projecto deste género criado em Portugal.
                                 </p>
 
                                 <p className="story-text">
@@ -133,18 +129,13 @@ export default function SobrePage() {
                 <section className="cellar-section">
                     <div className="cellar-grid">
                         <div className="cellar-content">
-                            <h2 className="section-title">Nossa Adega</h2>
+                            <h2 className="section-title">A Nossa Cave</h2>
                             <div className="divider-gold" style={{ margin: 'var(--spacing-md) 0' }}></div>
 
                             <p className="cellar-text">
                                 A nossa adega é um santuário dedicado à preservação e envelhecimento de vinhos
                                 excecionais. Com condições controladas de temperatura e humidade, garantimos
-                                que cada garrafa atinge o seu pleno potencial.
-                            </p>
-
-                            <p className="cellar-text">
-                                Das caves tradicionais de Portugal aos vinhedos internacionais mais prestigiados,
-                                trazemos para si uma seleção que reflete tradição, inovação e excelência.
+                                que cada garrafa atinge o seu pleno potencial, para que um dia mais tarde cheguem às vossas casas para serem degustados.
                             </p>
 
                             <div className="cellar-stats">
@@ -165,10 +156,10 @@ export default function SobrePage() {
 
                         <div className="cellar-image">
                             <Image
-                                src="/images/loja/Adega_Virtual.jpg"
-                                alt="Adega Virtual 3G Wine"
+                                src="/images/loja/adega_premium.png"
+                                alt="Cave de Vinhos Premium 3G Wine"
                                 fill
-                                style={{ objectFit: 'contain' }}
+                                style={{ objectFit: 'cover' }}
                             />
                         </div>
                     </div>

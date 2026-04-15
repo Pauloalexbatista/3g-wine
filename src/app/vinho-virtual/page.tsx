@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -12,28 +13,47 @@ export default function VinhoVirtualPage() {
 
     const wine: Product = {
         id: 999, // ID único para o Vinho Virtual
-        name: "Virtual Tinto 2020",
+        name: "Virtual Tinto 2021",
         type: "Tinto",
         price: 22.50,
         image: "/images/loja/vinho virtual.jpg",
-        description: "É um vinho com fruta fresca e cintilante, de bom volume, sem arestas e muito saboroso. Maduro mas sem ser musculado e concentrado, tem matéria e complexidade e, acima de tudo, um frescor delicioso.",
+        description: "Virtual é um vinho que nasceu à mesa num almoço de amigos que têm em comum a mesma paixão Vínica em plena Quinta da Pedra Alta. Uma edição limitada de 1256 garrafas que celebra o convívio e a amizade.",
     };
 
     const handleAddToCart = () => {
         addToCart(wine);
         alert("Vinho adicionado ao carrinho!");
     };
+
+    const fadeIn = {
+        initial: { opacity: 0, y: 30 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true },
+        transition: { duration: 0.8, ease: "easeOut" as const }
+    };
+
+    const stagger = {
+        initial: { opacity: 0, y: 20 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true },
+        transition: { staggerChildren: 0.2 }
+    };
+
     return (
         <>
             <Header />
             <div className="virtual-page">
-                {/* Herói com Vídeo */}
-
                 <main className="virtual-main">
                     <div className="container">
                         <div className="virtual-hero">
                             {/* Vídeo do Vinho na Esquerda */}
-                            <div className="virtual-video-side">
+                            <motion.div 
+                                className="virtual-video-side"
+                                initial={{ opacity: 0, x: -50 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 1, ease: "easeOut" }}
+                            >
                                 <div className="video-container-boxed">
                                     <video 
                                         className="hero-video"
@@ -46,14 +66,32 @@ export default function VinhoVirtualPage() {
                                     </video>
                                     <div className="video-overlay"></div>
                                     <div className="hero-video-text">
-                                        <h1>Virtual</h1>
-                                        <p>A Essência do Douro</p>
+                                        <motion.h1 
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: 0.5, duration: 1 }}
+                                        >
+                                            Virtual
+                                        </motion.h1>
+                                        <motion.p
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ delay: 1, duration: 1 }}
+                                        >
+                                            A Essência do Douro
+                                        </motion.p>
                                     </div>
                                 </div>
-                            </div>
+                            </motion.div>
 
                             {/* Conteúdo Técnico e Narrativa */}
-                            <div className="virtual-content">
+                            <motion.div 
+                                className="virtual-content"
+                                initial={{ opacity: 0, x: 50 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 1, ease: "easeOut" }}
+                            >
                                 <div className="rating-badge">
                                     <span>★ 92 PONTOS</span>
                                     <small>(PORTUGAL PROVA)</small>
@@ -61,35 +99,36 @@ export default function VinhoVirtualPage() {
 
                                 <h1 className="virtual-title">
                                     Virtual <br />
-                                    <span>Tinto 2020</span>
+                                    <span>Tinto 2021</span>
                                 </h1>
 
                                 <div className="virtual-story">
                                     <p>
-                                        "É um vinho com fruta fresca e cintilante, de bom volume, sem arestas e muito saboroso.
-                                        Maduro mas sem ser musculado e concentrado, tem matéria e complexidade e, acima de tudo,
-                                        um frescor delicioso, diferente de acidez pura e que só se consegue em altitude."
+                                        &ldquo;Virtual&rdquo; Vinho de convívio e amizade. <br />
+                                        Um vinho que nasceu à mesa num almoço de amigos que partilham a mesma paixão vínica.
                                     </p>
                                 </div>
 
                                 <div className="tech-sheet">
                                     <div className="tech-grid">
-                                        <div className="tech-item">
-                                            <span className="tech-label">Região</span>
-                                            <span className="tech-value">Douro DOC</span>
-                                        </div>
-                                        <div className="tech-item">
-                                            <span className="tech-label">Castas</span>
-                                            <span className="tech-value">Touriga Nacional, Franca, Tinta Roriz</span>
-                                        </div>
-                                        <div className="tech-item">
-                                            <span className="tech-label">Álcool</span>
-                                            <span className="tech-value">14.5%</span>
-                                        </div>
-                                        <div className="tech-item">
-                                            <span className="tech-label">Estágio</span>
-                                            <span className="tech-value">18 Meses Carvalho</span>
-                                        </div>
+                                        {[
+                                            { label: "Região", value: "Douro DOC" },
+                                            { label: "Castas", value: "Vinhas Velhas 45 anos" },
+                                            { label: "Álcool", value: "14.5%" },
+                                            { label: "Estágio", value: "18 Meses Carvalho" }
+                                        ].map((item, i) => (
+                                            <motion.div 
+                                                key={i} 
+                                                className="tech-item"
+                                                initial={{ opacity: 0, y: 10 }}
+                                                whileInView={{ opacity: 1, y: 0 }}
+                                                viewport={{ once: true }}
+                                                transition={{ delay: i * 0.1 + 0.5 }}
+                                            >
+                                                <span className="tech-label">{item.label}</span>
+                                                <span className="tech-value">{item.value}</span>
+                                            </motion.div>
+                                        ))}
                                     </div>
                                 </div>
 
@@ -103,21 +142,50 @@ export default function VinhoVirtualPage() {
                                         Adicionar ao Carrinho
                                     </button>
                                 </div>
-                            </div>
+                            </motion.div>
                         </div>
 
 
-                        <section className="history-section">
+                        <motion.section 
+                            className="history-section"
+                            {...fadeIn}
+                        >
                             <div className="history-content">
-                                <h2>A Herança do Terroir</h2>
-                                <p>
-                                    O Virtual Tinto 2020 nasceu da vontade da 3GWine em expressar o Douro de forma mais leve e elegante.
-                                    Proveniente de vinhas situadas em Favaios, a altitude elevada confere a este vinho uma frescura
-                                    invulgar na região, permitindo que a fruta brilhe sem o peso excessivo da madeira ou de extrações profundas.
-                                    É uma interpretação moderna de um terroir clássico.
-                                </p>
+                                <motion.h2 {...fadeIn}>A História do "Virtual"</motion.h2>
+                                <motion.p {...fadeIn}>
+                                    Virtual é um vinho que nasceu à mesa num almoço de amigos que têm em comum a mesma paixão Vínica em plena Quinta da Pedra Alta. 
+                                    João Pires, enólogo na referida Quinta, sugeriu aos dois amigos Mário&rsquo;s que fizessem um vinho&hellip; convite aceite, 
+                                    arranjamos uma vinha velha perto da região de Favaios que o João recuperou, e mais alguns pequenos talhões de Touriga Nacional, 
+                                    Tinta Roriz e Touriga Franca.
+                                </motion.p>
+                                
+                                <motion.p {...fadeIn}>
+                                    Toda a enologia ficou a cargo do João com 18 meses de barrica usada em lotes. A intervenção dos Mário&rsquo;s é feita aquando 
+                                    da saída do vinho das barricas com o Blend feito a gosto dos mesmos. Estagiou mais um ano em garrafa na cave com uma 
+                                    produção de 1256 garrafas.
+                                </motion.p>
+
+                                <motion.p {...fadeIn}>
+                                    É um vinho único, exclusivo, elegante e com um enorme potencial gastronómico que visa celebrar o convívio e amizade!! 
+                                    O rótulo conta a história do vinho&hellip; o João com as uvas na mão a propor o vinho, a linha do tempo com os dois m_m de 
+                                    Mário&amp;Mário e os Mário&rsquo;s junto às barricas a fazerem a mistura do vinho!!
+                                </motion.p>
+
+                                <motion.div 
+                                    className="consumption-advice"
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    whileInView={{ opacity: 1, scale: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 1 }}
+                                >
+                                    <h3>Conselhos de Consumo</h3>
+                                    <p>
+                                        Deve ser consumido durante a refeição com uma temperatura um pouco mais baixa e respirar 45m antes. 
+                                        Esperamos que vos dê tanto gosto a beber como nos deu a fazer!!
+                                    </p>
+                                </motion.div>
                             </div>
-                        </section>
+                        </motion.section>
                     </div>
                 </main>
             </div>

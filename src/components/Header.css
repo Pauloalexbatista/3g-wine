@@ -45,6 +45,7 @@
     gap: 0;
 }
 
+/* Logo titles and text follow uniform sizing - Marcellus font */
 .logo-text {
     font-family: var(--font-logo);
     /* Marcellus */
@@ -55,13 +56,6 @@
     letter-spacing: 1px;
     display: flex;
     align-items: center;
-}
-
-/* Manual nudge for the '3' in Marcellus */
-.logo-3 {
-    display: inline-block;
-    transform: translateY(-2px); /* Correcting the drop */
-    margin-right: 1px;
 }
 
 .logo-subtitle {
@@ -89,8 +83,8 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    transition: color var(--transition-base);
+    padding: var(--spacing-xs) 0.8rem;
+    transition: all var(--transition-base);
 }
 
 .nav-link::after {
@@ -241,8 +235,8 @@
     }
 
     .nav-link {
-        font-size: 0.75rem;
-        padding: var(--spacing-xs) 0.5rem;
+        font-size: 0.8rem;
+        padding: var(--spacing-xs) 0.6rem;
     }
 }
 

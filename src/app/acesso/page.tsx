@@ -37,7 +37,7 @@ export default function AccessPage() {
     return (
         <div className={styles.wrapper}>
             <div className={styles.content}>
-                <h1 className={styles.logo}>3G WINE</h1>
+                <h1 className="brand-3gwine text-4xl mb-6">3GWINE</h1>
                 <p className={styles.subtitle}>Curadoria de Vinhos Premium</p>
                 
                 <form onSubmit={handleSubmit} className={styles.form}>
@@ -57,7 +57,7 @@ export default function AccessPage() {
             </div>
             
             <footer className={styles.footer}>
-                &copy; 2024 3G Wine. Todos os direitos reservados.
+                &copy; 2024 <span className="brand-3gwine">3GWINE</span>. Todos os direitos reservados.
             </footer>
         </div>
     );

@@ -121,7 +121,7 @@ export default function Proposta() {
             </div>
             <div className="experiencia-content">
               <span className="section-tag">O DIFERENCIAL</span>
-              <h2>A Experiência<br /><span className="text-gold">3G Wine</span></h2>
+              <h2>A Experiência<br /><span className="text-gold brand-3gwine">3GWINE</span></h2>
               <div className="divider-gold" style={{margin: '1.5rem 0', width: '60px'}}></div>
               
               <div className="features-list">
@@ -157,7 +157,7 @@ export default function Proposta() {
           <div className="container">
             <div className="clube-content">
               <span className="section-tag text-white">MEMBRO EXCLUSIVO</span>
-              <h2 className="text-white">Entre para o<br /><span className="text-gold">Clube 3G Wine</span></h2>
+              <h2 className="text-white">Entre para o<br /><span className="text-gold brand-3gwine">Clube 3GWINE</span></h2>
               <p className="clube-desc">
                 Tenha acesso a lançamentos exclusivos, preços especiais e eventos privado.
               </p>

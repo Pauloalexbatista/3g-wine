@@ -7,24 +7,27 @@ A **3GWINE** é uma Garrafeira Original que nasceu em Outubro de 2016 dentro de 
 - **Stack Tecnológico:** Next.js 14+ (App Router), React, Tailwind CSS, Framer Motion, Supabase.
 - **Design System:** Tema premium e escuro. Cores principais: Preto/Cinzento escuro (fundos), Dourado (#D4AF37, #F3E5AB) para destaques. O nome deve ser sempre grafado como **3GWINE** (tudo junto, maiúsculas, mesma altura).
 
-## ✅ O que já está feito
+## ✅ O que já está feito (Atualizado 14 de Abril 2026)
 1. **Configuração Base:** Next.js configurado com Tailwind e Supabase.
 2. **Autenticação:** Integração com Supabase Auth configurada.
-3. **Página Inicial (`/`):** 
-   - Hero section com vídeo de fundo e destaque da semana.
-   - Secção de história atualizada (Barbearia/2016).
-4. **Layout Global:**
-   - **Header & Footer:** Normalizados com a marca **3GWINE**.
-5. **Página Vinho Virtual (`/vinho-virtual`):**
-   - Página dedicada ao vinho "Virtual" (um vinho real da marca, não confundir com Web3). Design premium com vídeo e ficha técnica.
-6. **Branding (Abril 2026):**
-   - **Normalização Total:** Nome corrigido para **3GWINE** globalmente. Removido o desalinhamento do "3".
+3. **Branding & Identidade:**
+   - **Normalização Global:** Criada a classe CSS `.brand-3gwine` para garantir que o **3GWINE** é apresentado com a fonte correta e o número "3" perfeitamente alinhado em todas as páginas (Hero, Login, Cabeçalho, Rodapé).
+   - **Página inicial:** Hero section corrigida visualmente.
+4. **Página Vinho Virtual (`/vinho-virtual`):**
+   - Implementadas animações premium com Framer Motion (*scroll-reveal*).
+   - Adicionado efeito de brilho dourado (*gold shimmer*) no botão de compra.
+   - Refinamento de layout e tipografia para um aspeto mais luxuoso.
+5. **Integração Supabase:**
+   - **Newsletter:** Funcional e ligada ao Supabase.
+   - **Contactos:** Formulário de contactos ligado à nova tabela `contact_messages` no Supabase, com feedback de sucesso/erro.
+6. **Sobre Nós:** Hero section simplificada, removendo o título redundante e dando destaque à frase "Garrafeira Exclusiva desde o início".
+7. **Admin Panel:** Corrigido bug de "uncontrolled input" na gestão de produtos (Destaque da Semana).
+8. **Segurança:** Criado script `fix_security_warnings.sql` para endurecimento das políticas RLS no Supabase.
 
-## 🚧 O que está a ser feito / Próximos Passos
-
-1. **Revisão de Páginas Secundárias:** O utilizador está a rever as outras páginas para garantir consistência com a nova página inicial.
-2. **Vinhos Virtuais (`/vinhos-virtuais/[id]`):** A página de detalhe já existe, a tarefa agora consiste em **melhorar as suas formatações e design**.
-3. **Gestão de Encomendas e Pagamentos:** O carrinho tem os atalhos preparados. O passo lógico final será integrar com o **IFTHENPAY**, ligando as encomendas ao checkout e ativando callbacks para confirmar pagamentos. Esta funcionalidade será ativamente testada.
+## 🚧 Próximos Passos
+1. **Gestão de Encomendas e Pagamentos:** Integração com o **IFTHENPAY** para pagamentos reais.
+2. **Loja:** Revisão do design dos cards de produto na página da loja.
+3. **Dashboard:** Melhorar a visualização das mensagens recebidas e subscritores para o admin.
 
 ## 🛠️ Instruções para o Novo Agente
 1. **Lê o código antes de alterar.** Usa o `view_file` para perceberes como os ficheiros (especialmente o `globals.css` e o `tailwind.config.ts`) estão estruturados.
@@ -32,4 +35,4 @@ A **3GWINE** é uma Garrafeira Original que nasceu em Outubro de 2016 dentro de 
 3. **Não apagues código que funciona** para tentar reescrever de raiz a não ser que o utilizador pede expressamente.
 
 ---
-**Última atualização:** 13 de Março de 2026
+**Última atualização:** 14 de Abril de 2026

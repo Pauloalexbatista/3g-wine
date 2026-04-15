@@ -62,9 +62,12 @@
 }
 
 .sobre-tagline {
-    font-size: var(--text-xl);
-    color: var(--color-gray-200);
-    font-style: italic;
+    font-size: var(--text-4xl);
+    color: #fff;
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    margin-top: 1rem;
 }
 
 /* ============================================
@@ -249,7 +252,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-xl);
 }
 
 /* ============================================

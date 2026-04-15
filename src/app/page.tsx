@@ -53,7 +53,7 @@ export default function Home() {
               <div className="hero-badge animate-fadeIn">Garrafeira exclusiva</div>
               <h1 className="hero-title animate-fadeIn">
                 A Arte de Escolher <br />
-                <span className="text-gold logo-text-hero">3GWINE</span>
+                <span className="text-gold brand-3gwine logo-text-hero">3GWINE</span>
               </h1>
               <p className="hero-subtitle animate-fadeIn">
                 Vinhos premium seleccionados com paixão para os verdadeiros apreciadores.
@@ -217,7 +217,7 @@ export default function Home() {
               </h2>
               <div className="divider-gold" style={{ margin: 'var(--spacing-md) 0' }}></div>
               <p className="about-text">
-                A 3GWINE nasceu em 2016 de uma paixão profunda pelo mundo do vinho.
+                A <span className="brand-3gwine" style={{ fontSize: '0.9em' }}>3GWINE</span> nasceu em 2016 de uma paixão profunda pelo mundo do vinho.
                 Criada dentro da 3GBARBEARIA, foi o primeiro projeto deste género
                 em Portugal, focado em oferecer vinhos únicos e diferenciados.
               </p>

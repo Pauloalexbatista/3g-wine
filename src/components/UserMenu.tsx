@@ -38,7 +38,7 @@ export default function UserMenu() {
         return (
             <Link 
                 href="/auth/login" 
-                className="text-gray-300 hover:text-[#D4AF37] transition-colors text-xs tracking-widest font-light"
+                className="text-white hover:text-[#D4AF37] transition-all text-[11px] tracking-[0.2em] font-semibold border border-transparent hover:border-[#D4AF37]/30 px-3 py-1 rounded-sm"
             >
                 ENTRAR
             </Link>
