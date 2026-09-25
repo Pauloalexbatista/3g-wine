@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -20,7 +21,8 @@ interface Product {
     image: string;
 }
 
-export default function LojaPage() {
+function LojaContent() {
+    const searchParams = useSearchParams();
     const { addToCart } = useCart();
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
@@ -29,13 +31,22 @@ export default function LojaPage() {
     const [sortBy, setSortBy] = useState<string>('featured');
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-
-    const types = ['Todos', 'Tinto', 'Branco', 'Rosé', 'Espumante', 'Outros'];
+    const types = ['Todos', 'Tinto', 'Branco', 'Rosé', 'Espumante', 'Outros', 'Cave'];
     const priceRanges = ['Todos', '0-30€', '30-50€', '50-100€', '100+€'];
 
     useEffect(() => {
         fetchProducts();
     }, []);
+
+    useEffect(() => {
+        const tipoParam = searchParams.get('tipo');
+        if (tipoParam) {
+            const matched = types.find(t => t.toLowerCase() === tipoParam.toLowerCase());
+            if (matched) {
+                setSelectedType(matched);
+            }
+        }
+    }, [searchParams]);
 
     async function fetchProducts() {
         try {
@@ -57,7 +68,22 @@ export default function LojaPage() {
     let filteredProducts = [...products];
 
     if (selectedType !== 'Todos') {
-        filteredProducts = filteredProducts.filter(p => p.type === selectedType);
+        const selLower = selectedType.toLowerCase();
+        if (selLower === 'cave') {
+            filteredProducts = filteredProducts.filter(p => {
+                const pType = (p.type || '').toLowerCase();
+                const pName = (p.name || '').toLowerCase();
+                const pDesc = (p.description || '').toLowerCase();
+                return (
+                    pType === 'cave' ||
+                    (p as any).is_cave === true ||
+                    pName.includes('cave') ||
+                    pDesc.includes('cave')
+                );
+            });
+        } else {
+            filteredProducts = filteredProducts.filter(p => (p.type || '').toLowerCase() === selLower);
+        }
     }
 
     if (priceRange !== 'Todos') {
@@ -78,8 +104,6 @@ export default function LojaPage() {
     } else if (sortBy === 'name') {
         filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
     } else if (sortBy === 'featured') {
-        // Sort by id for now as proxy for default, or if we had a featured column we could use it
-        // The mock data had featured boolean, let's assume Supabase has it or we sort by ID
         filteredProducts.sort((a, b) => (b.featured === a.featured ? 0 : b.featured ? 1 : -1));
     }
 
@@ -89,8 +113,6 @@ export default function LojaPage() {
 
             <main className="loja-page">
                 {/* Filters Section */}
-
-                {/* Filters Section */}
                 <section className="filters-section">
                     <div className="container">
                         <div className="filters-bar">
@@ -99,14 +121,14 @@ export default function LojaPage() {
                                 <div className="filter-header-inline">
                                     <label className="filter-label">Tipo</label>
                                     <div className="results-count-inline">
-                                        {loading ? 'Carregando...' : `${filteredProducts.length} ${filteredProducts.length === 1 ? 'produto encontrado' : 'produtos encontrados'}`}
+                                        {loading ? 'Carregando...' : filteredProducts.length + (filteredProducts.length === 1 ? ' produto encontrado' : ' produtos encontrados')}
                                     </div>
                                 </div>
                                 <div className="filter-buttons">
                                     {types.map(type => (
                                         <button
                                             key={type}
-                                            className={`filter-btn ${selectedType === type ? 'active' : ''}`}
+                                            className={'filter-btn ' + (selectedType === type ? 'active' : '')}
                                             onClick={() => setSelectedType(type)}
                                         >
                                             {type}
@@ -186,7 +208,7 @@ export default function LojaPage() {
 
                                             <div className="product-meta">
                                                 <span className="product-region">📍 {product.region || 'Portugal'}</span>
-                                                <span className="product-year">🗓️ {product.year}</span>
+                                                <span className="product-year">📅 {product.year}</span>
                                             </div>
 
                                             <p className="product-description">{product.description}</p>
@@ -198,9 +220,7 @@ export default function LojaPage() {
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         addToCart(product);
-                                                        // alert removed for smoother UX or replace with toast later
                                                     }}
-
                                                 >
                                                     <svg className="cart-icon-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -216,7 +236,7 @@ export default function LojaPage() {
 
                         {filteredProducts.length === 0 && (
                             <div className="no-results">
-                                <div className="no-results-icon">🔍</div>
+                                <div className="no-results-icon">🍷</div>
                                 <h3>Nenhum produto encontrado</h3>
                                 <p>Tente ajustar os seus filtros</p>
                             </div>
@@ -249,7 +269,7 @@ export default function LojaPage() {
 
                                 <div className="product-meta" style={{ marginBottom: '1.5rem' }}>
                                     <span className="product-region">📍 {selectedProduct.region || 'Portugal'}</span>
-                                    <span className="product-year">🗓️ {selectedProduct.year}</span>
+                                    <span className="product-year">📅 {selectedProduct.year}</span>
                                 </div>
 
                                 <p className="modal-description">{selectedProduct.description}</p>
@@ -275,8 +295,19 @@ export default function LojaPage() {
                 </div>
             )}
 
-
             <Footer />
         </>
+    );
+}
+
+export default function LojaPage() {
+    return (
+        <Suspense fallback={
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            </div>
+        }>
+            <LojaContent />
+        </Suspense>
     );
 }

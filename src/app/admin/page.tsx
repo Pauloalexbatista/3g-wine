@@ -320,7 +320,7 @@ export default function AdminPage() {
 
     // Filter State
     const [filterType, setFilterType] = useState('Todos');
-    const types = ['Todos', 'Tinto', 'Branco', 'Rosé', 'Espumante', 'Outros'];
+    const types = ['Todos', 'Tinto', 'Branco', 'Rosé', 'Espumante', 'Outros', 'Cave'];
 
     // Filtered Products
     const filteredProducts = products.filter(product => {
@@ -464,6 +464,7 @@ export default function AdminPage() {
                                     <option>Rosé</option>
                                     <option>Espumante</option>
                                     <option>Outros</option>
+                                    <option>Cave</option>
                                 </select>
                             </div>
                         </div>

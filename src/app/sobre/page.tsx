@@ -1,6 +1,9 @@
+'use client';
+
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Image from 'next/image';
+import Link from 'next/link';
 import './page.css';
 
 export default function SobrePage() {
@@ -9,21 +12,26 @@ export default function SobrePage() {
             <Header />
 
             <main className="sobre-page">
+                {/* Hero Section */}
                 <section className="sobre-hero">
                     <div className="sobre-hero-image">
                         <Image
                             src="/images/brand/tasting-room-vineyard.jpg"
-                            alt="3G Wine Tasting Room"
+                            alt="3G Wine Cellar"
                             fill
-                            style={{ objectFit: 'cover' }}
                             priority
+                            style={{ objectFit: 'cover' }}
+                            quality={100}
                         />
                         <div className="sobre-hero-overlay"></div>
                     </div>
                     <div className="container">
                         <div className="sobre-hero-content">
-                            <div className="sobre-badge">A Nossa História</div>
-                            <h1 className="sobre-tagline">Garrafeira Exclusiva desde o início</h1>
+                            <h1 className="sobre-hero-title">A Nossa História</h1>
+                            <div className="divider-gold"></div>
+                            <p className="sobre-hero-subtitle">
+                                Paixão que Atravessa Gerações
+                            </p>
                         </div>
                     </div>
                 </section>
@@ -33,15 +41,19 @@ export default function SobrePage() {
                     <div className="container">
                         <div className="story-grid">
                             <div className="story-content">
-                                <h2 className="section-title">Nossa Paixão pelo Vinho</h2>
+                                <h2 className="section-title">Como Tudo Começou</h2>
                                 <div className="divider-gold" style={{ margin: 'var(--spacing-md) 0' }}></div>
-
                                 <p className="story-text">
-                                    <strong className="brand-3gwine">3GWINE</strong> É uma Garrafeira Original que nasceu em Outubro de 2016 dentro de uma Barbearia, <strong>3GBARBEARIA</strong>. Foi aliás o primeiro projecto deste género criado em Portugal.
+                                    A <strong className="brand-3gwine">3GWINE</strong> nasceu em 2016 de uma paixão profunda pelo mundo do vinho.
+                                    Criada dentro da 3GBARBEARIA, foi o primeiro projeto deste género em Portugal,
+                                    focado em oferecer vinhos únicos e diferenciados que não se encontram nos circuitos comerciais habituais.
                                 </p>
-
                                 <p className="story-text">
-                                    Nasceu de uma paixão vínica do proprietário Mário Medeiros e é esse ambiente que proporcionamos a quem nos procura com uma vasta seleção de vinhos únicos e diferenciados para apaixonados pelo néctar do Deus Baco.
+                                    Com a curadoria rigorosa de Mário Medeiros, cada garrafa na nossa coleção é escolhida a dedo.
+                                    Procuramos pequenos produtores, edições limitadas e colheitas excecionais que contam histórias autênticas da nossa terra.
+                                </p>
+                                <p className="story-text">
+                                    Hoje, a 3GWINE é sinónimo de exclusividade, conhecimento e paixão vínica, conectando os apreciadores mais exigentes aos tesouros mais bem guardados de Portugal.
                                 </p>
                             </div>
 
@@ -152,6 +164,12 @@ export default function SobrePage() {
                                     <div className="stat-label">Regiões</div>
                                 </div>
                             </div>
+
+                            <div className="cellar-cta" style={{ marginTop: '2.5rem' }}>
+                                <Link href="/loja?tipo=Cave" className="btn btn-primary">
+                                    Ver Vinhos da Cave
+                                </Link>
+                            </div>
                         </div>
 
                         <div className="cellar-image">
@@ -169,14 +187,14 @@ export default function SobrePage() {
                 <section className="cta-section">
                     <div className="container">
                         <div className="cta-content">
-                            <h2 className="cta-title">Explore a Nossa Seleção</h2>
+                            <h2 className="cta-title">Explore a Nossa Loja</h2>
                             <p className="cta-text">
                                 Descubra vinhos exclusivos e deixe-se surpreender pela qualidade
                                 da nossa curadoria de excelência.
                             </p>
-                            <a href="/loja" className="btn btn-primary">
+                            <Link href="/loja" className="btn btn-primary">
                                 Ver Todos os Vinhos
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </section>

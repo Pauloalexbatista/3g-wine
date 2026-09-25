@@ -48,7 +48,7 @@ export default function CartPage() {
             const IVA_RATE = 0.23;
             const ivaAmount = currentSubtotal * IVA_RATE;
             const subtotalWithIva = currentSubtotal + ivaAmount;
-            const shippingCharge = (deliveryMethod === 'pickup' || currentSubtotal >= 100) ? 0 : 10;
+            const shippingCharge = (deliveryMethod === 'pickup' || currentSubtotal >= 150) ? 0 : 12.50;
             const finalTotal = subtotalWithIva + shippingCharge;
 
             const orderData = {
@@ -89,8 +89,8 @@ export default function CartPage() {
 
     // Constantes de negócio
     const IVA_RATE = 0.23;
-    const SHIPPING_COST = 20;
-    const FREE_SHIPPING_THRESHOLD = 100;
+    const SHIPPING_COST = 12.50;
+    const FREE_SHIPPING_THRESHOLD = 150;
 
     // Cálculos dinâmicos baseados no estado actual do carrinho
     const currentSubtotal = cart.reduce((total, item) => total + item.price * (item.quantity || 1), 0);

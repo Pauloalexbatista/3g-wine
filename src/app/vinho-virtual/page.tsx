@@ -17,7 +17,7 @@ export default function VinhoVirtualPage() {
         type: "Tinto",
         price: 22.50,
         image: "/images/loja/vinho virtual.jpg",
-        description: "Virtual é um vinho que nasceu à mesa num almoço de amigos que têm em comum a mesma paixão Vínica em plena Quinta da Pedra Alta. Uma edição limitada de 1256 garrafas que celebra o convívio e a amizade.",
+        description: "Virtual é um vinho que nasceu à mesa num almoço de amigos que têm em comum a mesma paixão vínica em plena Quinta da Pedra Alta. Uma edição limitada de 1256 garrafas que celebra o convívio e a amizade.",
     };
 
     const handleAddToCart = () => {
@@ -114,7 +114,7 @@ export default function VinhoVirtualPage() {
                                         {[
                                             { label: "Região", value: "Douro DOC" },
                                             { label: "Castas", value: "Vinhas Velhas 45 anos" },
-                                            { label: "Álcool", value: "14.5%" },
+                                            { label: "Álcool", value: "13.5%" },
                                             { label: "Estágio", value: "18 Meses Carvalho" }
                                         ].map((item, i) => (
                                             <motion.div 
@@ -166,7 +166,7 @@ export default function VinhoVirtualPage() {
                                 </motion.p>
 
                                 <motion.p {...fadeIn}>
-                                    É um vinho único, exclusivo, elegante e com um enorme potencial gastronómico que visa celebrar o convívio e amizade!! 
+É um vinho único, exclusivo, elegante e com um enorme potencial gastronómico que visa celebrar o convívio e amizade!! 
                                     O rótulo conta a história do vinho&hellip; o João com as uvas na mão a propor o vinho, a linha do tempo com os dois m_m de 
                                     Mário&amp;Mário e os Mário&rsquo;s junto às barricas a fazerem a mistura do vinho!!
                                 </motion.p>
@@ -180,7 +180,7 @@ export default function VinhoVirtualPage() {
                                 >
                                     <h3>Conselhos de Consumo</h3>
                                     <p>
-                                        Deve ser consumido durante a refeição com uma temperatura um pouco mais baixa e respirar 45m antes. 
+                                        Deve ser consumido durante a refeição com uma temperatura um pouco mais baixa e respirar 15mn antes. 
                                         Esperamos que vos dê tanto gosto a beber como nos deu a fazer!!
                                     </p>
                                 </motion.div>

@@ -23,7 +23,7 @@ export default function Header() {
 
     const navLinks = [
         { href: '/vinho-virtual', label: 'VINHO VIRTUAL' },
-        { href: '/loja', label: 'A Nossa Seleção' },
+        { href: '/loja', label: 'Loja' },
         { href: '/sobre', label: 'Sobre Nós' },
         { href: '/contactos', label: 'Contactos' },
     ];
