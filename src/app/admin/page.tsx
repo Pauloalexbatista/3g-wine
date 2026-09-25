@@ -1,4 +1,5 @@
 'use client';
+import { getTaxRate } from '@/utils/tax';
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
@@ -320,7 +321,7 @@ export default function AdminPage() {
 
     // Filter State
     const [filterType, setFilterType] = useState('Todos');
-    const types = ['Todos', 'Tinto', 'Branco', 'Rosé', 'Espumante', 'Outros', 'Cave'];
+    const types = ['Todos', 'Tinto', 'Branco', 'Rosé', 'Espumante', 'Cave', 'Azeite', 'Licores / Destilados', 'Outros'];
 
     // Filtered Products
     const filteredProducts = products.filter(product => {
@@ -754,7 +755,10 @@ export default function AdminPage() {
                                             <div style={{ fontWeight: 600 }}>{product.name}</div>
                                             <div style={{ fontSize: '0.8rem', color: 'var(--color-secondary)', textTransform: 'uppercase' }}>{product.type}</div>
                                         </td>
-                                        <td style={styles.td}>€{product.price}</td>
+                                        <td style={styles.td}>
+                                                <div><strong>€{(product.price * (1 + getTaxRate(product.type))).toFixed(2)}</strong> <span style={{ fontSize: '0.7rem', color: 'var(--color-primary)', fontWeight: 600 }}>C/ IVA</span></div>
+                                                <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>€{product.price.toFixed(2)} s/ IVA ({Math.round(getTaxRate(product.type) * 100)}%)</div>
+                                            </td>
                                         <td style={{ ...styles.td, textAlign: 'right' }}>
                                             <button
                                                 onClick={() => handleEdit(product)}

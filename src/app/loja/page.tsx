@@ -7,6 +7,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useCart } from '@/context/CartContext';
 import { supabase } from '@/lib/supabase';
+import { calculateProductTax } from '@/utils/tax';
 import './page.css';
 
 interface Product {
@@ -31,7 +32,7 @@ function LojaContent() {
     const [sortBy, setSortBy] = useState<string>('featured');
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-    const types = ['Todos', 'Tinto', 'Branco', 'Rosé', 'Espumante', 'Outros', 'Cave'];
+    const types = ['Todos', 'Tinto', 'Branco', 'Rosé', 'Espumante', 'Cave', 'Azeite', 'Licores / Destilados', 'Outros'];
     const priceRanges = ['Todos', '0-30€', '30-50€', '50-100€', '100+€'];
 
     useEffect(() => {
@@ -79,6 +80,21 @@ function LojaContent() {
                     (p as any).is_cave === true ||
                     pName.includes('cave') ||
                     pDesc.includes('cave')
+                );
+            });
+        } else if (selLower === 'azeite') {
+            filteredProducts = filteredProducts.filter(p => {
+                const pType = (p.type || '').toLowerCase();
+                const pName = (p.name || '').toLowerCase();
+                return pType.includes('azeite') || pName.includes('azeite');
+            });
+        } else if (selLower.includes('licor') || selLower.includes('destilad')) {
+            filteredProducts = filteredProducts.filter(p => {
+                const pType = (p.type || '').toLowerCase();
+                const pName = (p.name || '').toLowerCase();
+                return (
+                    pType.includes('licor') || pType.includes('destilad') || pType.includes('spirit') ||
+                    pName.includes('licor') || pName.includes('destilad')
                 );
             });
         } else {
@@ -182,55 +198,65 @@ function LojaContent() {
                             </div>
                         ) : (
                             <div className="products-grid">
-                                {filteredProducts.map(product => (
-                                    <div key={product.id} className="product-card" onClick={() => setSelectedProduct(product)}>
+                                {filteredProducts.map(product => {
+                                    const tax = calculateProductTax(product.price, product.type);
+                                    return (
+                                        <div key={product.id} className="product-card" onClick={() => setSelectedProduct(product)}>
 
-                                        <div className="product-image-wrapper">
-                                            {product.featured && (
-                                                <div className="product-badge">Destaque</div>
-                                            )}
-                                            <div className="product-image-placeholder">
-                                                <Image
-                                                    src={product.image || '/images/products/douro-2018.png'}
-                                                    alt={product.name}
-                                                    fill
-                                                    style={{ objectFit: 'contain', padding: '1rem' }}
-                                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                                />
+                                            <div className="product-image-wrapper">
+                                                {product.featured && (
+                                                    <div className="product-badge">Destaque</div>
+                                                )}
+                                                <div className="product-image-placeholder">
+                                                    <Image
+                                                        src={product.image || '/images/products/douro-2018.png'}
+                                                        alt={product.name}
+                                                        fill
+                                                        style={{ objectFit: 'contain', padding: '1rem' }}
+                                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="product-content">
+                                                <div className="product-header">
+                                                    <h3 className="product-name">{product.name}</h3>
+                                                    <span className="product-type">{product.type}</span>
+                                                </div>
+
+                                                <div className="product-meta">
+                                                    <span className="product-region">📍 {product.region || 'Portugal'}</span>
+                                                    <span className="product-year">📅 {product.year}</span>
+                                                </div>
+
+                                                <p className="product-description">{product.description}</p>
+
+                                                <div className="product-footer">
+                                                    <div className="product-price-container">
+                                                        <div className="product-final-price">
+                                                            {tax.formattedFinal} <span className="tax-badge-inc">IVA incl.</span>
+                                                        </div>
+                                                        <div className="product-tax-detail">
+                                                            {tax.formattedBase} s/ IVA · (+{tax.taxPercent}% IVA: {tax.formattedTax})
+                                                        </div>
+                                                    </div>
+                                                    <button
+                                                        className="btn-add-cart"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            addToCart(product);
+                                                        }}
+                                                    >
+                                                        <svg className="cart-icon-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                                        </svg>
+                                                        Adicionar
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
-
-                                        <div className="product-content">
-                                            <div className="product-header">
-                                                <h3 className="product-name">{product.name}</h3>
-                                                <span className="product-type">{product.type}</span>
-                                            </div>
-
-                                            <div className="product-meta">
-                                                <span className="product-region">📍 {product.region || 'Portugal'}</span>
-                                                <span className="product-year">📅 {product.year}</span>
-                                            </div>
-
-                                            <p className="product-description">{product.description}</p>
-
-                                            <div className="product-footer">
-                                                <span className="product-price">€{product.price.toFixed(2)}</span>
-                                                <button
-                                                    className="btn-add-cart"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        addToCart(product);
-                                                    }}
-                                                >
-                                                    <svg className="cart-icon-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                                                    </svg>
-                                                    Adicionar
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         )}
 
@@ -245,55 +271,65 @@ function LojaContent() {
                 </section>
             </main>
 
-            {selectedProduct && (
-                <div className="modal-overlay" onClick={() => setSelectedProduct(null)}>
-                    <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <button className="modal-close-btn" onClick={() => setSelectedProduct(null)}>
-                            &times;
-                        </button>
-                        <div className="modal-body">
-                            <div className="modal-image-container">
-                                <Image
-                                    src={selectedProduct.image || '/images/products/douro-2018.png'}
-                                    alt={selectedProduct.name}
-                                    fill
-                                    style={{ objectFit: 'contain', padding: '2rem' }}
-                                    sizes="(max-width: 768px) 100vw, 50vw"
-                                />
-                            </div>
-                            <div className="modal-info">
-                                <div className="modal-header">
-                                    <h2>{selectedProduct.name}</h2>
-                                    <span className="product-type">{selectedProduct.type}</span>
+            {selectedProduct && (() => {
+                const tax = calculateProductTax(selectedProduct.price, selectedProduct.type);
+                return (
+                    <div className="modal-overlay" onClick={() => setSelectedProduct(null)}>
+                        <div className="modal-content" onClick={e => e.stopPropagation()}>
+                            <button className="modal-close-btn" onClick={() => setSelectedProduct(null)}>
+                                &times;
+                            </button>
+                            <div className="modal-body">
+                                <div className="modal-image-container">
+                                    <Image
+                                        src={selectedProduct.image || '/images/products/douro-2018.png'}
+                                        alt={selectedProduct.name}
+                                        fill
+                                        style={{ objectFit: 'contain', padding: '2rem' }}
+                                        sizes="(max-width: 768px) 100vw, 50vw"
+                                    />
                                 </div>
+                                <div className="modal-info">
+                                    <div className="modal-header">
+                                        <h2>{selectedProduct.name}</h2>
+                                        <span className="product-type">{selectedProduct.type}</span>
+                                    </div>
 
-                                <div className="product-meta" style={{ marginBottom: '1.5rem' }}>
-                                    <span className="product-region">📍 {selectedProduct.region || 'Portugal'}</span>
-                                    <span className="product-year">📅 {selectedProduct.year}</span>
-                                </div>
+                                    <div className="product-meta" style={{ marginBottom: '1.5rem' }}>
+                                        <span className="product-region">📍 {selectedProduct.region || 'Portugal'}</span>
+                                        <span className="product-year">📅 {selectedProduct.year}</span>
+                                    </div>
 
-                                <p className="modal-description">{selectedProduct.description}</p>
+                                    <p className="modal-description">{selectedProduct.description}</p>
 
-                                <div className="modal-footer">
-                                    <span className="product-price" style={{ fontSize: '2rem' }}>€{selectedProduct.price.toFixed(2)}</span>
-                                    <button
-                                        className="btn-add-cart"
-                                        onClick={() => {
-                                            addToCart(selectedProduct);
-                                            setSelectedProduct(null);
-                                        }}
-                                    >
-                                        <svg className="cart-icon-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                                        </svg>
-                                        Adicionar ao Carrinho
-                                    </button>
+                                    <div className="modal-footer">
+                                        <div className="modal-price-container">
+                                            <div className="product-final-price" style={{ fontSize: '1.8rem' }}>
+                                                {tax.formattedFinal} <span className="tax-badge-inc">IVA incluído</span>
+                                            </div>
+                                            <div className="product-tax-detail" style={{ fontSize: '0.85rem' }}>
+                                                {tax.formattedBase} sem IVA · (+{tax.taxPercent}% IVA: {tax.formattedTax})
+                                            </div>
+                                        </div>
+                                        <button
+                                            className="btn-add-cart"
+                                            onClick={() => {
+                                                addToCart(selectedProduct);
+                                                setSelectedProduct(null);
+                                            }}
+                                        >
+                                            <svg className="cart-icon-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                            </svg>
+                                            Adicionar ao Carrinho
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            )}
+                );
+            })()}
 
             <Footer />
         </>

@@ -1,4 +1,5 @@
 'use client';
+import { getTaxRate, calculateProductTax, formatEuro } from '@/utils/tax';
 
 import { useCart } from '@/context/CartContext';
 import Image from 'next/image';
@@ -44,11 +45,26 @@ export default function CartPage() {
         }
 
         try {
-            const currentSubtotal = cart.reduce((total, item) => total + item.price * (item.quantity || 1), 0);
-            const IVA_RATE = 0.23;
-            const ivaAmount = currentSubtotal * IVA_RATE;
-            const subtotalWithIva = currentSubtotal + ivaAmount;
-            const shippingCharge = (deliveryMethod === 'pickup' || currentSubtotal >= 150) ? 0 : 12.50;
+            let orderBase = 0;
+            let orderTax = 0;
+            const orderTaxBreakdown: { [key: number]: { base: number; tax: number } } = {};
+
+            cart.forEach(item => {
+                const qty = item.quantity || 1;
+                const itemBase = item.price * qty;
+                const rate = getTaxRate(item.type);
+                const itemTax = itemBase * rate;
+                const pct = Math.round(rate * 100);
+
+                orderBase += itemBase;
+                orderTax += itemTax;
+                if (!orderTaxBreakdown[pct]) orderTaxBreakdown[pct] = { base: 0, tax: 0 };
+                orderTaxBreakdown[pct].base += itemBase;
+                orderTaxBreakdown[pct].tax += itemTax;
+            });
+
+            const subtotalWithIva = orderBase + orderTax;
+            const shippingCharge = (deliveryMethod === 'pickup' || orderBase >= 150) ? 0 : 12.50;
             const finalTotal = subtotalWithIva + shippingCharge;
 
             const orderData = {
@@ -60,7 +76,8 @@ export default function CartPage() {
                 delivery_method: deliveryMethod,
                 shipping_cost: shippingCharge,
                 items: cart,
-                subtotal: currentSubtotal,
+                subtotal: orderBase,
+                iva_breakdown: orderTaxBreakdown,
                 iva: ivaAmount,
                 total: finalTotal,
                 status: 'por enviar',

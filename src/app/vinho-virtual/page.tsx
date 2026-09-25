@@ -134,8 +134,12 @@ export default function VinhoVirtualPage() {
 
                                 <div className="purchase-section">
                                     <div className="price-container">
-                                        <div className="price-tag">€22,50</div>
-                                        <p className="iva-text">IVA incluído</p>
+                                        <div className="price-tag" style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                                            €25,43 <span style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)', fontWeight: '600' }}>(IVA incl.)</span>
+                                        </div>
+                                        <p className="iva-text" style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)' }}>
+                                            €22,50 sem IVA · (+13% IVA: €2,93)
+                                        </p>
                                     </div>
                                     
                                     <button className="buy-button" onClick={handleAddToCart}>

@@ -549,3 +549,39 @@
         padding: var(--spacing-lg);
     }
 }
+
+/* Tax & Price Display */
+.product-price-container, .modal-price-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.product-final-price {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--color-dark);
+    font-family: var(--font-display);
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    line-height: 1.1;
+}
+
+.tax-badge-inc {
+    font-size: 0.68rem;
+    font-family: var(--font-body);
+    font-weight: 700;
+    color: var(--color-primary);
+    background: rgba(139, 21, 56, 0.08);
+    padding: 1px 6px;
+    border-radius: var(--radius-sm);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.product-tax-detail {
+    font-size: 0.75rem;
+    color: #6b7280;
+    line-height: 1.2;
+}
