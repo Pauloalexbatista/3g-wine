@@ -292,52 +292,70 @@ export default function CartPage() {
                                             Remover
                                         </button>
                                     </div>
-                                    <div className="cart-item-price-qty" style={{ textAlign: 'right' }}>
-                                        <div style={{ fontWeight: 600, fontSize: '1.1rem', marginBottom: '0.5rem' }}>€{item.price.toFixed(2)}</div>
-                                        <div style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'flex-end',
-                                            gap: '0.75rem',
-                                            backgroundColor: '#f3f4f6',
-                                            padding: '0.25rem 0.5rem',
-                                            borderRadius: 'var(--radius-sm)'
-                                        }}>
-                                            <button
-                                                className="qty-btn"
-                                                onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                                style={{
-                                                    border: 'none',
-                                                    background: 'none',
-                                                    cursor: 'pointer',
-                                                    fontWeight: 'bold',
-                                                    fontSize: '1.2rem',
-                                                    color: 'var(--color-gray-600)',
-                                                    padding: '0 5px'
-                                                }}
-                                            >
-                                                -
-                                            </button>
-                                            <span style={{ fontWeight: 600, minWidth: '20px', textAlign: 'center' }}>
-                                                {item.quantity}
-                                            </span>
-                                            <button
-                                                className="qty-btn"
-                                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                                style={{
-                                                    border: 'none',
-                                                    background: 'none',
-                                                    cursor: 'pointer',
-                                                    fontWeight: 'bold',
-                                                    fontSize: '1.2rem',
-                                                    color: 'var(--color-gray-600)',
-                                                    padding: '0 5px'
-                                                }}
-                                            >
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
+                                    {(() => {
+                                        const itemTax = calculateProductTax(item.price, item.type);
+                                        const qty = item.quantity || 1;
+                                        const itemBaseTotal = item.price * qty;
+                                        const itemTaxTotal = itemTax.taxAmount * qty;
+                                        const itemFinalTotal = itemTax.finalPrice * qty;
+
+                                        return (
+                                            <div className="cart-item-price-qty" style={{ textAlign: 'right', minWidth: '170px' }}>
+                                                <div style={{ fontWeight: 800, fontSize: '1.2rem', color: 'var(--color-dark)', lineHeight: 1.1 }}>
+                                                    €{itemFinalTotal.toFixed(2)}
+                                                    <span style={{ fontSize: '0.65rem', color: 'var(--color-primary)', fontWeight: 700, marginLeft: '5px', textTransform: 'uppercase', background: 'rgba(139, 21, 56, 0.08)', padding: '1px 5px', borderRadius: '3px' }}>
+                                                        IVA incl.
+                                                    </span>
+                                                </div>
+                                                <div style={{ fontSize: '0.74rem', color: '#6b7280', marginTop: '3px', marginBottom: '0.5rem' }}>
+                                                    €{itemBaseTotal.toFixed(2)} s/ IVA · (+{itemTax.taxPercent}% IVA: €{itemTaxTotal.toFixed(2)})
+                                                </div>
+                                                <div style={{
+                                                    display: 'inline-flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'flex-end',
+                                                    gap: '0.75rem',
+                                                    backgroundColor: '#f3f4f6',
+                                                    padding: '0.25rem 0.6rem',
+                                                    borderRadius: 'var(--radius-sm)'
+                                                }}>
+                                                    <button
+                                                        className="qty-btn"
+                                                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                                        style={{
+                                                            border: 'none',
+                                                            background: 'none',
+                                                            cursor: 'pointer',
+                                                            fontWeight: 'bold',
+                                                            fontSize: '1.2rem',
+                                                            color: 'var(--color-gray-600)',
+                                                            padding: '0 5px'
+                                                        }}
+                                                    >
+                                                        -
+                                                    </button>
+                                                    <span style={{ fontWeight: 600, minWidth: '20px', textAlign: 'center' }}>
+                                                        {item.quantity}
+                                                    </span>
+                                                    <button
+                                                        className="qty-btn"
+                                                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                                        style={{
+                                                            border: 'none',
+                                                            background: 'none',
+                                                            cursor: 'pointer',
+                                                            fontWeight: 'bold',
+                                                            fontSize: '1.2rem',
+                                                            color: 'var(--color-gray-600)',
+                                                            padding: '0 5px'
+                                                        }}
+                                                    >
+                                                        +
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        );
+                                    })()}
                                 </div>
                             ))}
                         </div>
