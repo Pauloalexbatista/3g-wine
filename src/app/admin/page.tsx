@@ -1,5 +1,5 @@
 'use client';
-import { getTaxRate } from '@/utils/tax';
+import { getTaxRate, getAllTypeTaxRates, saveTypeTaxRates, TypeTaxRate, DEFAULT_TYPE_TAX_RATES } from '@/utils/tax';
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
@@ -23,7 +23,11 @@ interface Product {
 export default function AdminPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
-    const [view, setView] = useState<'list' | 'form'>('list');
+    const [view, setView] = useState<'list' | 'form' | 'taxes'>('list');
+    const [typeTaxRates, setTypeTaxRates] = useState<TypeTaxRate[]>(DEFAULT_TYPE_TAX_RATES);
+    const [newTypeName, setNewTypeName] = useState('');
+    const [newTypeRate, setNewTypeRate] = useState<number>(13);
+    const [taxSaveSuccess, setTaxSaveSuccess] = useState(false);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null); // null = checking, false = prompt, true = access
     const [password, setPassword] = useState('');
@@ -52,6 +56,7 @@ export default function AdminPage() {
         checkAuth();
         fetchProducts();
         fetchImages();
+        setTypeTaxRates(getAllTypeTaxRates());
     }, []);
 
     async function checkAuth() {
@@ -159,6 +164,40 @@ export default function AdminPage() {
         fetchImages();
     }
 
+    function handleSaveTaxRate(type: string, rate: number) {
+        const updated = typeTaxRates.map(item => item.type === type ? { ...item, rate } : item);
+        setTypeTaxRates(updated);
+        saveTypeTaxRates(updated);
+        setTaxSaveSuccess(true);
+        setTimeout(() => setTaxSaveSuccess(false), 3000);
+    }
+
+    function handleDeleteType(type: string) {
+        if (!confirm('Tem a certeza que deseja remover o tipo ' + type + '?')) return;
+        const updated = typeTaxRates.filter(item => item.type !== type);
+        setTypeTaxRates(updated);
+        saveTypeTaxRates(updated);
+    }
+
+    function handleAddType(e: React.FormEvent) {
+        e.preventDefault();
+        const trimmed = newTypeName.trim();
+        if (!trimmed) return;
+        if (typeTaxRates.some(t => t.type.toLowerCase() === trimmed.toLowerCase())) {
+            alert('Este tipo de produto já existe!');
+            return;
+        }
+        const updated = [
+            ...typeTaxRates,
+            { type: trimmed, rate: newTypeRate, description: trimmed + ' (' + newTypeRate + '%)' }
+        ];
+        setTypeTaxRates(updated);
+        saveTypeTaxRates(updated);
+        setNewTypeName('');
+        setNewTypeRate(13);
+        setTaxSaveSuccess(true);
+        setTimeout(() => setTaxSaveSuccess(false), 3000);
+    }
     function handleCreate() {
         setEditingProduct(null);
         setFormData({
@@ -321,7 +360,7 @@ export default function AdminPage() {
 
     // Filter State
     const [filterType, setFilterType] = useState('Todos');
-    const types = ['Todos', 'Tinto', 'Branco', 'Rosé', 'Espumante', 'Cave', 'Azeite', 'Licores / Destilados', 'Outros'];
+    const types = ['Todos', ...typeTaxRates.map(t => t.type)];
 
     // Filtered Products
     const filteredProducts = products.filter(product => {
@@ -414,6 +453,154 @@ export default function AdminPage() {
                             {isAuthenticating ? 'A entrar...' : 'Entrar na Garrafeira'}
                         </button>
                     </form>
+                </div>
+            </div>
+        );
+    }
+
+        if (view === 'taxes') {
+        return (
+            <div style={styles.pageContainer}>
+                <button
+                    onClick={() => setView('list')}
+                    style={{
+                        marginBottom: '1.5rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        color: 'var(--color-gray-700)',
+                        cursor: 'pointer',
+                        background: 'none',
+                        border: 'none',
+                        fontSize: '0.95rem'
+                    }}
+                >
+                    ← Voltar aos Produtos
+                </button>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem' }}>
+                    <div>
+                        <h1 className="text-3xl" style={{ color: 'var(--color-primary)', marginBottom: '0.5rem' }}>
+                            Gestão de Tipos & Taxas de IVA
+                        </h1>
+                        <p style={{ color: '#6b7280', maxWidth: '700px', fontSize: '0.95rem', lineHeight: '1.5' }}>
+                            Defina a percentagem de IVA associada a cada tipo de produto. Quando alterar uma taxa, todos os cálculos da loja, do carrinho e das encomendas atualizam-se automaticamente.
+                        </p>
+                    </div>
+                </div>
+
+                {taxSaveSuccess && (
+                    <div style={{ backgroundColor: '#ecfdf5', color: '#065f46', padding: '0.875rem 1.25rem', borderRadius: '8px', marginBottom: '1.5rem', border: '1px solid #a7f3d0', fontWeight: 600 }}>
+                        ✓ Alterações salvas com sucesso!
+                    </div>
+                )}
+
+                <div style={styles.card}>
+                    <h2 className="text-xl" style={{ marginBottom: '1.5rem' }}>Taxas de IVA por Tipo de Produto</h2>
+                    
+                    <div style={{ overflowX: 'auto' }}>
+                        <table style={styles.table}>
+                            <thead>
+                                <tr>
+                                    <th style={styles.th}>Tipo / Categoria</th>
+                                    <th style={styles.th}>Taxa de IVA (%)</th>
+                                    <th style={styles.th}>Descrição / Enquadramento</th>
+                                    <th style={{ ...styles.th, textAlign: 'right' }}>Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {typeTaxRates.map((t) => (
+                                    <tr key={t.type} style={{ borderBottom: '1px solid #e5e7eb' }}>
+                                        <td style={{ ...styles.td, fontWeight: 700, fontSize: '1rem', color: 'var(--color-dark)' }}>
+                                            {t.type}
+                                        </td>
+                                        <td style={styles.td}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                <input
+                                                    type="number"
+                                                    min="0"
+                                                    max="100"
+                                                    value={t.rate}
+                                                    onChange={(e) => {
+                                                        const val = parseFloat(e.target.value) || 0;
+                                                        setTypeTaxRates(typeTaxRates.map(item => item.type === t.type ? { ...item, rate: val } : item));
+                                                    }}
+                                                    style={{
+                                                        width: '80px',
+                                                        padding: '6px 10px',
+                                                        border: '1px solid #d1d5db',
+                                                        borderRadius: '4px',
+                                                        fontSize: '0.95rem',
+                                                        fontWeight: 600
+                                                    }}
+                                                />
+                                                <span style={{ fontWeight: 600, color: '#4b5563' }}>%</span>
+                                            </div>
+                                        </td>
+                                        <td style={{ ...styles.td, color: '#6b7280', fontSize: '0.9rem' }}>
+                                            {t.description || `Taxa associada a ${t.type}`}
+                                        </td>
+                                        <td style={{ ...styles.td, textAlign: 'right' }}>
+                                            <button
+                                                onClick={() => handleSaveTaxRate(t.type, t.rate)}
+                                                className="btn btn-outline"
+                                                style={{ padding: '4px 10px', fontSize: '0.78rem', marginRight: '0.5rem' }}
+                                            >
+                                                Salvar
+                                            </button>
+                                            {!['Tinto', 'Branco', 'Rosé', 'Espumante'].includes(t.type) && (
+                                                <button
+                                                    onClick={() => handleDeleteType(t.type)}
+                                                    style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '0.85rem' }}
+                                                >
+                                                    Eliminar
+                                                </button>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* Adicionar Novo Tipo */}
+                    <div style={{ marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid #e5e7eb' }}>
+                        <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--color-dark)' }}>
+                            + Adicionar Novo Tipo de Produto
+                        </h3>
+                        <form onSubmit={handleAddType} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+                            <div style={{ flex: '1', minWidth: '200px' }}>
+                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#374151', marginBottom: '0.4rem' }}>
+                                    Nome do Tipo
+                                </label>
+                                <input
+                                    type="text"
+                                    placeholder="Ex: Gin, Vinho do Porto, etc."
+                                    required
+                                    className="input"
+                                    value={newTypeName}
+                                    onChange={(e) => setNewTypeName(e.target.value)}
+                                />
+                            </div>
+                            <div style={{ width: '130px' }}>
+                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#374151', marginBottom: '0.4rem' }}>
+                                    Taxa de IVA (%)
+                                </label>
+                                <input
+                                    type="number"
+                                    min="0"
+                                    max="100"
+                                    required
+                                    className="input"
+                                    value={newTypeRate}
+                                    onChange={(e) => setNewTypeRate(parseFloat(e.target.value) || 0)}
+                                />
+                            </div>
+                            <button type="submit" className="btn btn-primary" style={{ padding: '0.65rem 1.25rem' }}>
+                                + Adicionar Tipo
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         );
