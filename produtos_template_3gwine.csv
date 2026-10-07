@@ -1,0 +1,7 @@
+﻿Nome;Tipo;Regiao;Ano;Preco;Descricao;Foto_Ficheiro;Destaque;Destaque_Semana
+Reserva do Douro 2018;Tinto;Douro;2018;45.00;Vinho encorpado com notas de frutos silvestres maduros e estágio em carvalho francês.;douro-2018.png;SIM;SIM
+Quinta do Alentejo 2019;Branco;Alentejo;2019;38.00;Fresco e mineral, com aromas a citrinos e flores brancas. Final longo e persistente.;alentejo-2019.png;SIM;NAO
+Grande Reserva Dão 2015;Tinto;Dão;2015;85.00;Complexo e aveludado, notas de cedro e especiarias com taninos nobres.;grande-reserva-2015.png;SIM;NAO
+Espumante Bruto Bairrada;Espumante;Bairrada;2021;28.50;Bolha fina e persistente, excelente frescura e acidez crocante ideal para mariscos.;espumante-bairrada.png;NAO;NAO
+Azeite Virgem Extra Premium 500ml;Azeite;Trás-os-Montes;2024;16.00;Azeite de colheita precoce com notas verdes de folha de oliveira e maçã.;azeite-premium.png;NAO;NAO
+Licor de Ginja Tradicional;Licores / Destilados;Óbidos;2023;22.00;Licor artesanal de ginja com frutos selecionados e receita secular.;ginja-tradicional.png;NAO;NAO
