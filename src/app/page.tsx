@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -41,7 +41,7 @@ export default function Home() {
               alt="Garrafeira 3GWINE Barbearia"
               fill
               priority
-              style={{ objectFit: 'cover', objectPosition: 'center' }}
+              style={{ objectFit: 'cover', objectPosition: 'center top' }}
               quality={90}
             />
             <div className="hero-overlay-redesign"></div>
