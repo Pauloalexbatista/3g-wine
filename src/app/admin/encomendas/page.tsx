@@ -20,6 +20,7 @@ interface Order {
     customer_zipcode: string;
     customer_city: string;
     customer_phone: string;
+    customer_nif?: string;
     delivery_method: 'delivery' | 'pickup';
     shipping_cost: number;
     items: OrderItem[];
@@ -28,12 +29,17 @@ interface Order {
     total: number;
     status: 'por enviar' | 'enviada' | 'pendente' | 'cancelada';
     payment_method: string;
+    payment_status?: 'pendente' | 'pago' | 'cancelado' | 'expirado';
+    payment_entity?: string;
+    payment_reference?: string;
+    paid_at?: string;
 }
 
 export default function OrdersAdminPage() {
     const [orders, setOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(true);
     const [filterStatus, setFilterStatus] = useState<string>('todos');
+    const [filterPayment, setFilterPayment] = useState<string>('todos');
     const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
     const [startDate, setStartDate] = useState<string>('');
     const [endDate, setEndDate] = useState<string>('');
@@ -84,6 +90,28 @@ export default function OrdersAdminPage() {
         }
     };
 
+    const updatePaymentStatus = async (id: string, payment_status: 'pago' | 'pendente') => {
+        try {
+            const { error } = await supabase
+                .from('orders')
+                .update({
+                    payment_status,
+                    paid_at: payment_status === 'pago' ? new Date().toISOString() : null
+                })
+                .eq('id', id);
+
+            if (error) throw error;
+
+            setOrders(orders.map(o => o.id === id ? {
+                ...o,
+                payment_status,
+                paid_at: payment_status === 'pago' ? new Date().toISOString() : undefined
+            } : o));
+        } catch (error) {
+            console.error('Erro ao atualizar pagamento:', error);
+        }
+    };
+
     const handlePrintSelection = () => {
         if (selectedOrders.length === 0) {
             alert('Por favor, selecione pelo menos uma encomenda para imprimir.');
@@ -94,12 +122,13 @@ export default function OrdersAdminPage() {
 
     const filteredOrders = orders.filter(order => {
         const matchesStatus = filterStatus === 'todos' || order.status === filterStatus;
+        const matchesPayment = filterPayment === 'todos' || (order.payment_status || 'pendente') === filterPayment;
 
         const orderDate = new Date(order.created_at).toISOString().split('T')[0];
         const matchesStart = !startDate || orderDate >= startDate;
         const matchesEnd = !endDate || orderDate <= endDate;
 
-        return matchesStatus && matchesStart && matchesEnd;
+        return matchesStatus && matchesPayment && matchesStart && matchesEnd;
     });
 
     const styles = {
@@ -118,7 +147,16 @@ export default function OrdersAdminPage() {
             backgroundColor: status === 'enviada' ? '#dcfce7' : status === 'por enviar' ? '#fef9c3' : '#f3f4f6',
             color: status === 'enviada' ? '#166534' : status === 'por enviar' ? '#854d0e' : '#374151',
         }),
-        printOnly: { display: 'none' }, // Configurado via @media print no CSS global ou abaixo
+        paymentBadge: (status?: string) => ({
+            padding: '4px 8px',
+            borderRadius: '4px',
+            fontSize: '0.75rem',
+            fontWeight: 700,
+            textTransform: 'uppercase' as const,
+            backgroundColor: status === 'pago' ? '#dcfce7' : status === 'cancelado' ? '#fee2e2' : '#fef3c7',
+            color: status === 'pago' ? '#15803d' : status === 'cancelado' ? '#b91c1c' : '#b45309',
+            display: 'inline-block',
+        }),
     };
 
     if (loading) return <div style={styles.container}>A carregar encomendas...</div>;
@@ -148,12 +186,20 @@ export default function OrdersAdminPage() {
                 <div style={styles.card}>
                     <div style={styles.filters}>
                         <div>
-                            <label style={{ display: 'block', fontSize: '0.8rem', marginBottom: '4px' }}>Estado</label>
+                            <label style={{ display: 'block', fontSize: '0.8rem', marginBottom: '4px' }}>Envio</label>
                             <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}>
-                                <option value="todos">Todos os Estados</option>
+                                <option value="todos">Todos os Envios</option>
                                 <option value="por enviar">Por Enviar</option>
                                 <option value="enviada">Enviada</option>
                                 <option value="cancelada">Cancelada</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style={{ display: 'block', fontSize: '0.8rem', marginBottom: '4px' }}>Pagamento</label>
+                            <select value={filterPayment} onChange={e => setFilterPayment(e.target.value)} style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}>
+                                <option value="todos">Todos os Pagamentos</option>
+                                <option value="pago">Pagas</option>
+                                <option value="pendente">Pendentes</option>
                             </select>
                         </div>
                         <div>
@@ -190,7 +236,8 @@ export default function OrdersAdminPage() {
                                 <th style={styles.th}>Cliente</th>
                                 <th style={styles.th}>Localidade</th>
                                 <th style={styles.th}>Total</th>
-                                <th style={styles.th}>Estado</th>
+                                <th style={styles.th}>Pagamento (IFTHENPAY)</th>
+                                <th style={styles.th}>Envio</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -207,10 +254,30 @@ export default function OrdersAdminPage() {
                                     <td style={styles.td}>
                                         <strong>{order.customer_name}</strong><br />
                                         <small>{order.customer_phone}</small>
+                                        {order.customer_nif && (
+                                            <div><small style={{ color: '#6b7280' }}>NIF: {order.customer_nif}</small></div>
+                                        )}
                                     </td>
                                     <td style={styles.td}>{order.customer_city}</td>
-                                    <td style={styles.td}>€{order.total.toFixed(2)}</td>
-                                    <td style={styles.td}><span style={styles.statusBadge(order.status)}>{order.status}</span></td>
+                                    <td style={styles.td}><strong>€{order.total.toFixed(2)}</strong></td>
+                                    <td style={styles.td}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'flex-start' }}>
+                                            <span style={styles.paymentBadge(order.payment_status)}>
+                                                {order.payment_status === 'pago' ? '✓ PAGO' : '⏳ PENDENTE'}
+                                            </span>
+                                            <small style={{ color: '#4b5563', textTransform: 'uppercase', fontWeight: 600 }}>
+                                                {order.payment_method}
+                                            </small>
+                                            {order.payment_reference && (
+                                                <small style={{ color: '#9ca3af', fontFamily: 'monospace' }}>
+                                                    Ref: {order.payment_reference}
+                                                </small>
+                                            )}
+                                        </div>
+                                    </td>
+                                    <td style={styles.td}>
+                                        <span style={styles.statusBadge(order.status)}>{order.status}</span>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -224,7 +291,7 @@ export default function OrdersAdminPage() {
                     <div key={order.id} className="order-card-print">
                         <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '2px solid #333', paddingBottom: '10px', marginBottom: '20px' }}>
                             <h2 style={{ margin: 0 }}>3GWINE - Guia de Envio</h2>
-                            <span>Encomenda: {order.id.slice(0, 8)}</span>
+                            <span>Encomenda: #{order.id}</span>
                         </div>
 
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', marginBottom: '30px' }}>
@@ -234,12 +301,13 @@ export default function OrdersAdminPage() {
                                 <p style={{ margin: '5px 0' }}>{order.customer_address}</p>
                                 <p style={{ margin: '5px 0' }}>{order.customer_zipcode} {order.customer_city}</p>
                                 <p style={{ margin: '15px 0' }}>Tel: {order.customer_phone}</p>
+                                {order.customer_nif && <p style={{ margin: '5px 0' }}>NIF: {order.customer_nif}</p>}
                             </div>
                             <div>
                                 <h3 style={{ borderBottom: '1px solid #ccc' }}>Detalhes</h3>
                                 <p>Data: {new Date(order.created_at).toLocaleString('pt-PT')}</p>
-                                <p>Método: {order.delivery_method === 'pickup' ? 'Levantamento em Loja' : 'Entrega ao Domicílio'}</p>
-                                <p>Pagamento: {order.payment_method?.toUpperCase()}</p>
+                                <p>Método Envio: {order.delivery_method === 'pickup' ? 'Levantamento em Loja' : 'Entrega ao Domicílio'}</p>
+                                <p>Pagamento: {order.payment_method?.toUpperCase()} ({order.payment_status?.toUpperCase() || 'PENDENTE'})</p>
                             </div>
                         </div>
 
@@ -252,7 +320,7 @@ export default function OrdersAdminPage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {order.items.map((item, i) => (
+                                {order.items?.map((item, i) => (
                                     <tr key={i}>
                                         <td style={{ padding: '8px', border: '1px solid #ccc' }}>{item.name}</td>
                                         <td style={{ padding: '8px', border: '1px solid #ccc', textAlign: 'center' }}>{item.quantity}</td>
@@ -263,8 +331,8 @@ export default function OrdersAdminPage() {
                         </table>
 
                         <div style={{ marginTop: '20px', textAlign: 'right' }}>
-                            <p>Portes: €{order.shipping_cost.toFixed(2)}</p>
-                            <p style={{ fontSize: '1.4rem' }}><strong>TOTAL: €{order.total.toFixed(2)}</strong></p>
+                            <p>Portes: €{Number(order.shipping_cost || 0).toFixed(2)}</p>
+                            <p style={{ fontSize: '1.4rem' }}><strong>TOTAL: €{Number(order.total || 0).toFixed(2)}</strong></p>
                         </div>
 
                         <div style={{ marginTop: '40px', fontSize: '0.8rem', color: '#666', fontStyle: 'italic' }}>
