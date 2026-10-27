@@ -1,4 +1,4 @@
-/* ============================================
+﻿/* ============================================
    Home Page Styles - 3G Wine
    ============================================ */
 
@@ -17,8 +17,8 @@
     display: flex;
     align-items: center;
     overflow: hidden;
-    background: #ffffff;
-    color: var(--color-dark);
+    background: #0d0d0d;
+    color: #ffffff;
 }
 
 .hero-background {
@@ -32,9 +32,9 @@
     inset: 0;
     background: linear-gradient(
         to right,
-        rgba(0, 0, 0, 0.6) 0%,   /* Reduced from 0.8 */
-        rgba(0, 0, 0, 0.2) 50%,  /* Reduced from 0.4 */
-        rgba(0, 0, 0, 0.5) 100%  /* Reduced from 0.7 */
+        rgba(8, 8, 8, 0.85) 0%,
+        rgba(8, 8, 8, 0.60) 50%,
+        rgba(8, 8, 8, 0.78) 100%  /* Reduced from 0.7 */
     );
     z-index: 1;
 }
@@ -66,8 +66,9 @@
     font-size: clamp(2.5rem, 5vw, 4.2rem);
     line-height: 1.1;
     margin-bottom: 2rem;
-    color: var(--color-dark);
+    color: #ffffff;
     font-weight: 800;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
 
 .hero-title span {
@@ -76,7 +77,7 @@
 
 .hero-subtitle {
     font-size: 1.25rem;
-    color: var(--color-gray-700);
+    color: rgba(255, 255, 255, 0.88);
     margin-bottom: 3rem;
     line-height: 1.6;
     max-width: 550px;

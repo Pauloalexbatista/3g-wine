@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -35,8 +35,17 @@ export default function Home() {
       <main className="home-page">
         {/* Nova Hero Section Reestruturada com Fundo Total */}
         <section className="hero-modern-redesign">
-          
-          
+          <div className="hero-background">
+            <Image
+              src="/images/brand/3gwine-barbearia-bg.jpg"
+              alt="Garrafeira 3GWINE Barbearia"
+              fill
+              priority
+              style={{ objectFit: 'cover', objectPosition: 'center' }}
+              quality={90}
+            />
+            <div className="hero-overlay-redesign"></div>
+          </div>
           <div className="container hero-grid-redesign">
             {/* Coluna Esquerda: Texto e Botões */}
             <div className="hero-text-side">
@@ -50,7 +59,7 @@ export default function Home() {
               </p>
               <div className="hero-buttons animate-fadeIn">
                 <Link href="/loja" className="btn btn-primary">Loja</Link>
-                <Link href="/sobre" className="btn btn-outline-dark">
+                <Link href="/sobre" className="btn btn-outline-white">
                   A Nossa História
                 </Link>
               </div>
