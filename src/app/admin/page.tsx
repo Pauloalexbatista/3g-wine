@@ -2,7 +2,7 @@
 import { getTaxRate, getAllTypeTaxRates, saveTypeTaxRates, TypeTaxRate, DEFAULT_TYPE_TAX_RATES } from '@/utils/tax';
 
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
+// Ligação à API PostgreSQL da VPS
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -72,7 +72,7 @@ export default function AdminPage() {
             } else {
                 setIsAuthenticated(false);
             }
-        } catch (error) {
+        } catch (error: any) {
             setIsAuthenticated(false);
         }
     }
@@ -95,7 +95,7 @@ export default function AdminPage() {
                 const data = await res.json();
                 setAuthError(data.error || 'Password incorreta');
             }
-        } catch (error) {
+        } catch (error: any) {
             setAuthError('Erro ao verificar a password.');
         } finally {
             setIsAuthenticating(false);
@@ -105,16 +105,16 @@ export default function AdminPage() {
     async function fetchProducts() {
         try {
             setLoading(true);
-            const { data, error } = await supabase
-                .from('products')
-                .select('*')
-                .order('id', { ascending: true });
-
-            if (error) throw error;
-            if (data) setProducts(data);
-        } catch (error) {
+            const res = await fetch('/api/products');
+            const data = await res.json();
+            if (data.success && data.products) {
+                setProducts(data.products);
+            } else {
+                throw new Error(data.error || 'Erro ao carregar produtos');
+            }
+        } catch (error: any) {
             console.error('Erro ao buscar produtos:', error);
-            alert('Erro ao carregar produtos do Supabase');
+            alert('Erro ao carregar produtos da base de dados.');
         } finally {
             setLoading(false);
         }
@@ -127,7 +127,7 @@ export default function AdminPage() {
             if (data.images) {
                 setAvailableImages(data.images);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Erro ao buscar imagens:', error);
         }
     }
@@ -136,16 +136,15 @@ export default function AdminPage() {
         if (!confirm('Tem a certeza que deseja apagar este produto?')) return;
 
         try {
-            const { error } = await supabase
-                .from('products')
-                .delete()
-                .eq('id', id);
-
-            if (error) throw error;
+            const res = await fetch('/api/products?id=' + id, {
+                method: 'DELETE',
+            });
+            const data = await res.json();
+            if (!res.ok || !data.success) throw new Error(data.error || 'Erro ao apagar');
 
             setProducts(products.filter(p => p.id !== id));
             alert('Produto removido com sucesso!');
-        } catch (error) {
+        } catch (error: any) {
             console.error('Erro ao apagar:', error);
             alert('Erro ao apagar produto.');
         }
@@ -225,7 +224,6 @@ export default function AdminPage() {
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
 
-        // Validate Image
         if (!formData.image) {
             alert('Por favor selecione uma imagem.');
             return;
@@ -233,29 +231,30 @@ export default function AdminPage() {
 
         try {
             if (editingProduct) {
-                // Update
-                const { error } = await supabase
-                    .from('products')
-                    .update(formData)
-                    .eq('id', editingProduct.id);
-
-                if (error) throw error;
+                const res = await fetch('/api/products', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ...formData, id: editingProduct.id }),
+                });
+                const data = await res.json();
+                if (!res.ok || !data.success) throw new Error(data.error || 'Erro ao atualizar');
                 alert('Produto atualizado com sucesso!');
             } else {
-                // Create
-                const { error } = await supabase
-                    .from('products')
-                    .insert([formData]);
-
-                if (error) throw error;
+                const res = await fetch('/api/products', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData),
+                });
+                const data = await res.json();
+                if (!res.ok || !data.success) throw new Error(data.error || 'Erro ao criar');
                 alert('Produto criado com sucesso!');
             }
 
             fetchProducts();
             setView('list');
-        } catch (error) {
+        } catch (error: any) {
             console.error('Erro ao salvar:', error);
-            alert('Erro ao salvar produto.');
+            alert(error.message || 'Erro ao salvar produto.');
         }
     }
 

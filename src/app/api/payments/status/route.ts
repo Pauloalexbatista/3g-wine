@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { query } from '@/lib/db';
 import { checkMbwayStatus } from '@/lib/ifthenpay';
 
 export async function GET(req: Request) {
@@ -11,13 +11,13 @@ export async function GET(req: Request) {
   }
 
   try {
-    const { data: order, error } = await supabase
-      .from('orders')
-      .select('id, payment_status, payment_method, payment_request_id, paid_at')
-      .eq('id', orderId)
-      .single();
+    const res = await query(
+      'SELECT id, payment_status, payment_method, payment_request_id, paid_at FROM orders WHERE id = $1',
+      [orderId]
+    );
 
-    if (error || !order) {
+    const order = res.rows[0];
+    if (!order) {
       return NextResponse.json({ error: 'Encomenda não encontrada' }, { status: 404 });
     }
 
@@ -31,19 +31,19 @@ export async function GET(req: Request) {
       const liveStatus = await checkMbwayStatus(order.payment_request_id);
 
       if (liveStatus.status === 'paid') {
-        await supabase
-          .from('orders')
-          .update({ payment_status: 'pago', paid_at: new Date().toISOString() })
-          .eq('id', orderId);
+        await query(
+          'UPDATE orders SET payment_status = $1, paid_at = NOW() WHERE id = $2',
+          ['pago', orderId]
+        );
 
         return NextResponse.json({ status: 'pago', paid: true });
       }
 
       if (liveStatus.status === 'rejected' || liveStatus.status === 'expired') {
-        await supabase
-          .from('orders')
-          .update({ payment_status: liveStatus.status })
-          .eq('id', orderId);
+        await query(
+          'UPDATE orders SET payment_status = $1 WHERE id = $2',
+          [liveStatus.status, orderId]
+        );
 
         return NextResponse.json({ status: liveStatus.status, paid: false, message: liveStatus.message });
       }
@@ -65,12 +65,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'orderId obrigatório' }, { status: 400 });
     }
 
-    const { error } = await supabase
-      .from('orders')
-      .update({ payment_status: 'pago', paid_at: new Date().toISOString() })
-      .eq('id', orderId);
-
-    if (error) throw error;
+    await query(
+      'UPDATE orders SET payment_status = $1, paid_at = NOW() WHERE id = $2',
+      ['pago', orderId]
+    );
 
     return NextResponse.json({ success: true, message: 'Pagamento simulado com sucesso!' });
   } catch (err: any) {

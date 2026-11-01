@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { query } from '@/lib/db';
 import { generateMultibanco, requestMbway } from '@/lib/ifthenpay';
 
 export async function POST(req: Request) {
@@ -31,37 +31,40 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Dados de cliente incompletos' }, { status: 400 });
     }
 
-    // 1. Inserir encomenda inicial na base de dados
-    const orderPayload = {
-      customer_name,
-      customer_address: delivery_method === 'pickup' ? 'Levantamento em Loja' : customer_address,
-      customer_zipcode: delivery_method === 'pickup' ? '-' : customer_zipcode,
-      customer_city: delivery_method === 'pickup' ? '-' : customer_city,
-      customer_phone,
-      customer_nif: customer_nif || null,
-      delivery_method,
-      shipping_cost: Number(shipping_cost) || 0,
-      items,
-      subtotal: Number(subtotal) || 0,
-      iva_breakdown: iva_breakdown || {},
-      iva: Number(iva) || 0,
-      total: Number(total) || 0,
-      status: 'por enviar',
-      payment_method,
-      payment_status: 'pendente',
-    };
+    // 1. Inserir encomenda inicial na base de dados PostgreSQL
+    const addr = delivery_method === 'pickup' ? 'Levantamento em Loja' : customer_address;
+    const zip = delivery_method === 'pickup' ? '-' : customer_zipcode;
+    const city = delivery_method === 'pickup' ? '-' : customer_city;
 
-    const { data: newOrder, error: insertError } = await supabase
-      .from('orders')
-      .insert([orderPayload])
-      .select()
-      .single();
+    const res = await query(
+      `INSERT INTO orders (
+        customer_name, customer_address, customer_zipcode, customer_city,
+        customer_phone, customer_nif, delivery_method, shipping_cost,
+        items, subtotal, iva_breakdown, iva, total, status,
+        payment_method, payment_status
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+      RETURNING *`,
+      [
+        customer_name,
+        addr,
+        zip,
+        city,
+        customer_phone,
+        customer_nif || null,
+        delivery_method,
+        Number(shipping_cost) || 0,
+        JSON.stringify(items),
+        Number(subtotal) || 0,
+        JSON.stringify(iva_breakdown || {}),
+        Number(iva) || 0,
+        Number(total) || 0,
+        'por enviar',
+        payment_method,
+        'pendente'
+      ]
+    );
 
-    if (insertError) {
-      console.error('Erro ao guardar encomenda:', insertError);
-      return NextResponse.json({ error: 'Erro ao guardar encomenda na base de dados' }, { status: 500 });
-    }
-
+    const newOrder = res.rows[0];
     const orderId = newOrder.id;
 
     // 2. Processar de acordo com o método escolhido
@@ -79,14 +82,14 @@ export async function POST(req: Request) {
       }
 
       // Atualizar a encomenda com a entidade e referência
-      await supabase
-        .from('orders')
-        .update({
-          payment_entity: mbResult.entity,
-          payment_reference: mbResult.reference,
-          payment_details: mbResult,
-        })
-        .eq('id', orderId);
+      await query(
+        `UPDATE orders SET 
+          payment_entity = $1,
+          payment_reference = $2,
+          payment_details = $3
+        WHERE id = $4`,
+        [mbResult.entity, mbResult.reference, JSON.stringify(mbResult), orderId]
+      );
 
       return NextResponse.json({
         success: true,
@@ -116,13 +119,13 @@ export async function POST(req: Request) {
         }, { status: 502 });
       }
 
-      await supabase
-        .from('orders')
-        .update({
-          payment_request_id: mbwayResult.requestId,
-          payment_details: mbwayResult,
-        })
-        .eq('id', orderId);
+      await query(
+        `UPDATE orders SET 
+          payment_request_id = $1,
+          payment_details = $2
+        WHERE id = $3`,
+        [mbwayResult.requestId, JSON.stringify(mbwayResult), orderId]
+      );
 
       return NextResponse.json({
         success: true,

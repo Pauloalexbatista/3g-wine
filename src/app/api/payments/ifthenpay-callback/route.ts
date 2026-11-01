@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { query } from '@/lib/db';
 
 async function handleCallback(params: {
   chave?: string | null;
@@ -23,24 +23,17 @@ async function handleCallback(params: {
   }
 
   try {
-    let query = supabase.from('orders').update({
-      payment_status: 'pago',
-      paid_at: new Date().toISOString(),
-    });
-
     if (id) {
-      query = query.eq('id', id);
+      await query(
+        'UPDATE orders SET payment_status = $1, paid_at = NOW() WHERE id = $2',
+        ['pago', id]
+      );
     } else if (referencia) {
-      // Normalizar referência (sem espaços)
       const cleanRef = referencia.replace(/\s+/g, '');
-      query = query.or(`payment_reference.eq.${referencia},payment_reference.eq.${cleanRef}`);
-    }
-
-    const { error } = await query;
-
-    if (error) {
-      console.error('[IFTHENPAY CALLBACK] Erro ao atualizar encomenda:', error);
-      return new NextResponse('Database Error', { status: 500 });
+      await query(
+        'UPDATE orders SET payment_status = $1, paid_at = NOW() WHERE payment_reference = $2 OR payment_reference = $3',
+        ['pago', referencia, cleanRef]
+      );
     }
 
     console.log(`[IFTHENPAY CALLBACK] Pagamento confirmado com sucesso para Encomenda ID=${id}, Ref=${referencia}, Valor=${valor}`);
@@ -64,17 +57,15 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json().catch(() => ({}));
-    const { searchParams } = new URL(req.url);
-
+    const body = await req.json();
     return handleCallback({
-      chave: body.chave || searchParams.get('chave'),
-      entidade: body.entidade || searchParams.get('entidade'),
-      referencia: body.referencia || searchParams.get('referencia'),
-      valor: body.valor || searchParams.get('valor'),
-      id: body.id || searchParams.get('id'),
+      chave: body.chave,
+      entidade: body.entidade,
+      referencia: body.referencia,
+      valor: body.valor,
+      id: body.id,
     });
-  } catch (err) {
-    return new NextResponse('Invalid Request Body', { status: 400 });
+  } catch {
+    return new NextResponse('Bad Request', { status: 400 });
   }
 }

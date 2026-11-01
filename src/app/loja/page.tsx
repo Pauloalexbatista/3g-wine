@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useCart } from '@/context/CartContext';
-import { supabase } from '@/lib/supabase';
+// Base de Dados PostgreSQL local da VPS
 import { calculateProductTax } from '@/utils/tax';
 import './page.css';
 
@@ -52,12 +52,11 @@ function LojaContent() {
     async function fetchProducts() {
         try {
             setLoading(true);
-            const { data, error } = await supabase
-                .from('products')
-                .select('*');
-
-            if (error) throw error;
-            if (data) setProducts(data);
+            const res = await fetch('/api/products');
+            const data = await res.json();
+            if (data.success && data.products) {
+                setProducts(data.products);
+            }
         } catch (error) {
             console.error('Erro ao carregar produtos:', error);
         } finally {

@@ -24,12 +24,12 @@ export default function AuthForm() {
                 // Credenciais de Administrador da 3GWINE
                 if (
                     (normalizedEmail === '3gwine@gmail.com' || normalizedEmail === 'admin@3gwine.pt') &&
-                    (password === '3GWINE' || password === '3gwine2026')
+                    (password === 'Gemeos-3GWine' || password === '3GWINE' || password === '3gwine2026')
                 ) {
                     const res = await fetch('/api/verify-password', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ password: '3GWINE' })
+                        body: JSON.stringify({ password: 'Gemeos-3GWine' })
                     });
                     if (res.ok) {
                         router.push('/admin');

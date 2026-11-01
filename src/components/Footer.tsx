@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { supabase } from '@/lib/supabase';
 import './Footer.css';
 
 export default function Footer() {
@@ -18,17 +17,15 @@ export default function Footer() {
         setMessage('');
 
         try {
-            const { error } = await supabase
-                .from('newsletter_subscribers')
-                .insert([{ email }]);
+            const res = await fetch('/api/newsletter', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
 
-            if (error) {
-                if (error.code === '23505') { // Unique violation
-                    setStatus('error');
-                    setMessage('Este email já está registado.');
-                    return;
-                }
-                throw error;
+            const data = await res.json();
+            if (!res.ok || !data.success) {
+                throw new Error(data.error || 'Erro ao subscrever.');
             }
 
             setStatus('success');
@@ -46,7 +43,7 @@ export default function Footer() {
         { href: '/loja', label: 'Loja' },
         { href: '/sobre', label: 'Sobre Nós' },
         { href: '/contactos', label: 'Contactos' },
-        { href: '/admin', label: 'Admin (Dev)' },
+        { href: '/admin', label: 'Administração' },
     ];
 
     const socialLinks = [
@@ -94,14 +91,40 @@ export default function Footer() {
                     </div>
 
                     <div className="footer-section">
-                        <h4 className="footer-title">Contacto</h4>
+                        <h4 className="footer-title">Onde Estamos & Contacto</h4>
                         <ul className="footer-info">
                             <li>
                                 <span className="info-icon">📍</span>
-                                Rua António França Borges N-14 B<br />
-                                2625-187 Póvoa de Santa Iria
+                                <div>
+                                    <strong style={{ color: '#D4AF37' }}>3GBARBEARIA / 3GWINE</strong><br />
+                                    Rua António França Borges N-14 B<br />
+                                    2625-187 Póvoa de Santa Iria
+                                    <div style={{ marginTop: '0.65rem' }}>
+                                        <a
+                                            href="https://www.google.com/maps/dir/?api=1&destination=Rua+Ant%C3%B3nio+Fran%C3%A7a+Borges+N-14+B+2625-187+P%C3%B3voa+de+Santa+Iria"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{
+                                                display: 'inline-flex',
+                                                alignItems: 'center',
+                                                gap: '6px',
+                                                padding: '6px 12px',
+                                                backgroundColor: 'rgba(212, 175, 55, 0.15)',
+                                                border: '1px solid #D4AF37',
+                                                borderRadius: '6px',
+                                                color: '#FFD700',
+                                                fontSize: '0.75rem',
+                                                fontWeight: 700,
+                                                textDecoration: 'none',
+                                                letterSpacing: '0.5px'
+                                            }}
+                                        >
+                                            🗺️ Ver Trajeto no Google Maps
+                                        </a>
+                                    </div>
+                                </div>
                             </li>
-                            <li>
+                            <li style={{ marginTop: '0.5rem' }}>
                                 <span className="info-icon">📧</span>
                                 3gwine@gmail.com<br />
                                 Virtual.mm.wines@gmail.com

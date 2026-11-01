@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { supabase } from '@/lib/supabase';
 import './page.css';
 
 export default function ContactosPage() {
@@ -24,11 +23,16 @@ export default function ContactosPage() {
         setError(null);
 
         try {
-            const { error: supabaseError } = await supabase
-                .from('contact_messages')
-                .insert([formData]);
+            const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
 
-            if (supabaseError) throw supabaseError;
+            const data = await res.json();
+            if (!res.ok || !data.success) {
+                throw new Error(data.error || 'Erro ao enviar mensagem.');
+            }
 
             setSubmitted(true);
             setFormData({ name: '', email: '', phone: '', message: '' });
@@ -38,7 +42,7 @@ export default function ContactosPage() {
             }, 5000);
         } catch (err: any) {
             console.error('Error submitting form:', err);
-            setError('Ocorreu um erro ao enviar a sua mensagem. Por favor, tente novamente.');
+            setError(err.message || 'Ocorreu um erro ao enviar a sua mensagem. Por favor, tente novamente.');
         } finally {
             setIsSubmitting(false);
         }
@@ -167,6 +171,7 @@ export default function ContactosPage() {
                                         <div className="info-content">
                                             <h3 className="info-card-title">Localização</h3>
                                             <p className="info-card-text">
+                                                <strong>3GBARBEARIA / 3GWINE</strong><br />
                                                 Rua António França Borges N-14 B<br />
                                                 2625-187 Póvoa de Santa Iria
                                             </p>
@@ -225,16 +230,27 @@ export default function ContactosPage() {
 
                 {/* Map Section */}
                 <section className="map-section">
+                    <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+                        <a
+                            href="https://www.google.com/maps/dir/?api=1&destination=Rua+Ant%C3%B3nio+Fran%C3%A7a+Borges+N-14+B+2625-187+P%C3%B3voa+de+Santa+Iria"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-primary"
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '0.85rem 1.75rem', textDecoration: 'none', fontWeight: 700, borderRadius: '8px', fontSize: '0.95rem' }}
+                        >
+                            🗺️ Abrir Trajeto no Google Maps (Navegação GPS)
+                        </a>
+                    </div>
                     <div className="map-container">
                         <iframe
-                            src="https://maps.google.com/maps?width=100%25&height=450&hl=en&q=Rua%20Ant%C3%B3nio%20Fran%C3%A7a%20Borges%20N-14%20B%202625-187%20P%C3%B3voa%20de%20Santa%20Iria+(3G%20Wine)&t=&z=16&ie=UTF8&iwloc=B&output=embed"
+                            src="https://maps.google.com/maps?width=100%25&height=450&hl=pt&q=Rua%20Ant%C3%B3nio%20Fran%C3%A7a%20Borges%20N-14%20B%202625-187%20P%C3%B3voa%20de%20Santa%20Iria+(3G%20Wine)&t=&z=16&ie=UTF8&iwloc=B&output=embed"
                             width="100%"
                             height="450"
                             className="map-iframe"
                             allowFullScreen
                             loading="lazy"
                             referrerPolicy="no-referrer-when-downgrade"
-                            title="3G Wine Location"
+                            title="Localização 3GWINE Barbearia"
                         ></iframe>
                     </div>
                 </section>

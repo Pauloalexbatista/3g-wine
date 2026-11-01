@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
+// Ligação direta à API local
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -51,13 +51,11 @@ export default function OrdersAdminPage() {
     async function fetchOrders() {
         try {
             setLoading(true);
-            const { data, error } = await supabase
-                .from('orders')
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (error) throw error;
-            if (data) setOrders(data);
+            const res = await fetch('/api/orders');
+            const data = await res.json();
+            if (data.success && data.orders) {
+                setOrders(data.orders);
+            }
         } catch (error) {
             console.error('Erro ao buscar encomendas:', error);
         } finally {
@@ -75,12 +73,13 @@ export default function OrdersAdminPage() {
         if (selectedOrders.length === 0) return;
 
         try {
-            const { error } = await supabase
-                .from('orders')
-                .update({ status })
-                .in('id', selectedOrders);
-
-            if (error) throw error;
+            for (const id of selectedOrders) {
+                await fetch('/api/orders', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, status })
+                });
+            }
 
             setOrders(orders.map(o => selectedOrders.includes(o.id) ? { ...o, status } : o));
             setSelectedOrders([]);
@@ -92,15 +91,13 @@ export default function OrdersAdminPage() {
 
     const updatePaymentStatus = async (id: string, payment_status: 'pago' | 'pendente') => {
         try {
-            const { error } = await supabase
-                .from('orders')
-                .update({
-                    payment_status,
-                    paid_at: payment_status === 'pago' ? new Date().toISOString() : null
-                })
-                .eq('id', id);
-
-            if (error) throw error;
+            const res = await fetch('/api/orders', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, payment_status })
+            });
+            const data = await res.json();
+            if (!res.ok || !data.success) throw new Error(data.error);
 
             setOrders(orders.map(o => o.id === id ? {
                 ...o,

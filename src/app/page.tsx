@@ -5,27 +5,34 @@ import Footer from '@/components/Footer';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
 import './page.css';
 
 export default function Home() {
   const [weeklyHighlight, setWeeklyHighlight] = useState<any>(null);
+  const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
 
   useEffect(() => {
-    async function fetchWeeklyHighlight() {
+    async function loadData() {
       try {
-        const { data, error } = await supabase
-          .from('products')
-          .select('*')
-          .eq('is_weekly_highlight', true)
-          .maybeSingle();
+        const [weeklyRes, featuredRes] = await Promise.all([
+          fetch('/api/products?weekly=true'),
+          fetch('/api/products?featured=true')
+        ]);
 
-        if (data) setWeeklyHighlight(data);
+        const weeklyData = await weeklyRes.json();
+        if (weeklyData.success && weeklyData.product) {
+          setWeeklyHighlight(weeklyData.product);
+        }
+
+        const featuredData = await featuredRes.json();
+        if (featuredData.success && featuredData.products) {
+          setFeaturedProducts(featuredData.products);
+        }
       } catch (err) {
-        console.error("Erro ao carregar destaque:", err);
+        console.error("Erro ao carregar dados da homepage:", err);
       }
     }
-    fetchWeeklyHighlight();
+    loadData();
   }, []);
 
   return (
@@ -73,16 +80,16 @@ export default function Home() {
                   <div className="highlight-image-container">
                     <Image
                       src={weeklyHighlight?.weekly_highlight_image || weeklyHighlight?.image || "/images/products/douro-2018.png"}
-                      alt={weeklyHighlight?.name || "Destaque da Semana"}
+                      alt={weeklyHighlight?.name || "Garrafeira 3GWINE"}
                       fill
                       style={{ objectFit: 'contain' }}
                       priority
                     />
                   </div>
                   <div className="highlight-info">
-                    <h3>{weeklyHighlight?.name || "Vinho Premium"}</h3>
-                    <p>{weeklyHighlight?.description ? weeklyHighlight.description.substring(0, 50) + '...' : "Um clássico reinterpretado para os paladares mais exigentes."}</p>
-                    <Link href="/loja" className="btn-details">Ver Detalhes</Link>
+                    <h3>{weeklyHighlight?.name || "Garrafeira 3GWINE"}</h3>
+                    <p>{weeklyHighlight?.description ? weeklyHighlight.description.substring(0, 50) + '...' : "Uma seleção de excelência para os paladares mais exigentes."}</p>
+                    <Link href="/loja" className="btn-details">Ver Catálogo</Link>
                   </div>
                 </div>
               </div>
@@ -101,94 +108,57 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="products-grid">
-              {/* Product 1 */}
-              <div className="product-card">
-                <div className="product-image-wrapper">
-                  <div className="product-badge">Novo</div>
-                  <div className="product-image-placeholder">
-                    <Image
-                      src="/images/products/douro-2018.png"
-                      alt="Reserva do Douro 2018"
-                      fill
-                      style={{ objectFit: 'contain', padding: '1rem' }}
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                    />
+            {featuredProducts.length > 0 ? (
+              <div className="products-grid">
+                {featuredProducts.map((p) => (
+                  <div key={p.id} className="product-card">
+                    <div className="product-image-wrapper">
+                      {p.featured && <div className="product-badge">Destaque</div>}
+                      <div className="product-image-placeholder">
+                        <Image
+                          src={p.image || '/images/products/douro-2018.png'}
+                          alt={p.name}
+                          fill
+                          style={{ objectFit: 'contain', padding: '1rem' }}
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                        />
+                      </div>
+                    </div>
+                    <div className="product-content">
+                      <h3 className="product-name">{p.name}</h3>
+                      <p className="product-type">{p.type} {p.year ? `| ${p.year}` : ''}</p>
+                      <p className="product-description">{p.description}</p>
+                      <div className="product-footer">
+                        <span className="product-price">€{Number(p.price).toFixed(2)}</span>
+                        <Link href="/loja" className="btn-add-cart" style={{ textDecoration: 'none' }}>
+                          Ver na Loja
+                        </Link>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div className="product-content">
-                  <h3 className="product-name">Reserva do Douro 2018</h3>
-                  <p className="product-type">Vinho Tinto</p>
-                  <p className="product-description">
-                    Um vinho robusto com notas de frutas maduras e carvalho
-                  </p>
-                  <div className="product-footer">
-                    <span className="product-price">€45,00</span>
-                    <button className="btn-add-cart">Adicionar</button>
-                  </div>
-                </div>
+                ))}
               </div>
-
-              {/* Product 2 */}
-              <div className="product-card">
-                <div className="product-image-wrapper">
-                  <div className="product-badge badge-exclusive">Exclusivo</div>
-                  <div className="product-image-placeholder">
-                    <Image
-                      src="/images/products/alentejo-2019.png"
-                      alt="Quinta do Alentejo 2019"
-                      fill
-                      style={{ objectFit: 'contain', padding: '1rem' }}
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                    />
-                  </div>
-                </div>
-                <div className="product-content">
-                  <h3 className="product-name">Quinta do Alentejo 2019</h3>
-                  <p className="product-type">Vinho Branco</p>
-                  <p className="product-description">
-                    Elegante e fresco, com aromas a citrinos e flores brancas
-                  </p>
-                  <div className="product-footer">
-                    <span className="product-price">€38,00</span>
-                    <button className="btn-add-cart">Adicionar</button>
-                  </div>
-                </div>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '3.5rem 1rem', backgroundColor: '#fcfcfc', borderRadius: '12px', border: '1px solid #f0f0f0' }}>
+                <p style={{ fontSize: '1.15rem', color: '#4b5563', marginBottom: '1rem', fontWeight: 500 }}>
+                  🍷 O catálogo oficial está pronto a receber os vinhos selecionados da nossa garrafeira.
+                </p>
+                <p style={{ fontSize: '0.9rem', color: '#9ca3af', marginBottom: '1.75rem' }}>
+                  Explore a nossa história ou visite-nos na Póvoa de Santa Iria.
+                </p>
+                <Link href="/loja" className="btn btn-secondary">
+                  Explorar a Loja
+                </Link>
               </div>
+            )}
 
-              {/* Product 3 */}
-              <div className="product-card">
-                <div className="product-image-wrapper">
-                  <div className="product-badge">Premium</div>
-                  <div className="product-image-placeholder">
-                    <Image
-                      src="/images/products/grande-reserva-2015.png"
-                      alt="Grande Reserva 2015"
-                      fill
-                      style={{ objectFit: 'contain', padding: '1rem' }}
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                    />
-                  </div>
-                </div>
-                <div className="product-content">
-                  <h3 className="product-name">Grande Reserva 2015</h3>
-                  <p className="product-type">Vinho Tinto</p>
-                  <p className="product-description">
-                    Complexo e elegante, ideal para ocasiões especiais
-                  </p>
-                  <div className="product-footer">
-                    <span className="product-price">€85,00</span>
-                    <button className="btn-add-cart">Adicionar</button>
-                  </div>
-                </div>
+            {featuredProducts.length > 0 && (
+              <div className="section-cta">
+                <Link href="/loja" className="btn btn-secondary">
+                  Ver Toda a Coleção
+                </Link>
               </div>
-            </div>
-
-            <div className="section-cta">
-              <Link href="/loja" className="btn btn-secondary">
-                Ver Toda a Coleção
-              </Link>
-            </div>
+            )}
           </div>
         </section>
 
@@ -240,7 +210,27 @@ export default function Home() {
                 Subscreva a nossa newsletter e fique a par de lançamentos exclusivos,
                 promoções especiais e eventos.
               </p>
-              <form className="newsletter-form-main">
+              <form 
+                className="newsletter-form-main"
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  const target = e.target as HTMLFormElement;
+                  const input = target.querySelector('input') as HTMLInputElement;
+                  if (input && input.value) {
+                    try {
+                      await fetch('/api/newsletter', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: input.value })
+                      });
+                      alert('Obrigado pela sua subscrição!');
+                      input.value = '';
+                    } catch (err) {
+                      console.error(err);
+                    }
+                  }
+                }}
+              >
                 <input
                   type="email"
                   placeholder="O seu endereço de email"
