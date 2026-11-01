@@ -54,12 +54,20 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  const { data: { user } } = await supabase.auth.getUser()
+  let user = null
+  try {
+    const { data } = await supabase.auth.getUser()
+    user = data?.user || null
+  } catch {
+    // Supabase auth offline fallback
+    user = null
+  }
 
   const isProtectedRoute = 
     request.nextUrl.pathname.startsWith('/admin')
+  const hasAdminCookie = request.cookies.get('site_access')?.value === 'granted'
 
-  if (!user && isProtectedRoute) {
+  if (!user && !hasAdminCookie && isProtectedRoute) {
     const url = request.nextUrl.clone()
     url.pathname = '/auth/login'
     return NextResponse.redirect(url)

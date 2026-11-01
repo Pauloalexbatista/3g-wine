@@ -41,7 +41,7 @@ export default function Home() {
               alt="Garrafeira 3GWINE Barbearia"
               fill
               priority
-              style={{ objectFit: 'cover', objectPosition: 'center top' }}
+              style={{ objectFit: 'cover', objectPosition: '28% top' }}
               quality={90}
             />
             <div className="hero-overlay-redesign"></div>

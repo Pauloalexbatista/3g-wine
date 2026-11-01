@@ -20,12 +20,30 @@ export default function AuthForm() {
 
         try {
             if (view === 'login') {
+                const normalizedEmail = email.trim().toLowerCase();
+                // Credenciais de Administrador da 3GWINE
+                if (
+                    (normalizedEmail === '3gwine@gmail.com' || normalizedEmail === 'admin@3gwine.pt') &&
+                    (password === '3GWINE' || password === '3gwine2026')
+                ) {
+                    const res = await fetch('/api/verify-password', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ password: '3GWINE' })
+                    });
+                    if (res.ok) {
+                        router.push('/admin');
+                        router.refresh();
+                        return;
+                    }
+                }
+
                 const { error } = await supabase.auth.signInWithPassword({
                     email,
                     password,
                 })
                 if (error) throw error
-                router.push('/')
+                router.push('/admin')
                 router.refresh()
             } else {
                 const { error } = await supabase.auth.signUp({

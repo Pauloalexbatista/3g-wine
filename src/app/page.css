@@ -1,4 +1,4 @@
-﻿/* ============================================
+/* ============================================
    Home Page Styles - 3G Wine
    ============================================ */
 
@@ -115,12 +115,17 @@
 }
 
 /* === Destaque da Semana (Moldura Premium) === */
+.hero-highlight-side {
+    display: flex;
+    justify-content: flex-end;
+}
+
 .weekly-highlight-box {
     position: relative;
     padding: 1rem;
     z-index: 5;
     max-width: 360px;
-    margin: 0 auto;
+    margin: 0 0 0 auto;
     width: 100%;
 }
 
