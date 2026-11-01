@@ -1,37 +1,48 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const SITE_PASSWORD = 'Gemeos-3GWine';
+const ADMIN_PASSWORD = 'Gemeos-3GWine';
 
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { password, checkOnly } = body;
+        const { password, checkOnly, logout } = body;
 
-        // Verificar se apenas queremos validar a sessão existente
+        // Se for pedido de logout, limpar a sessão de admin
+        if (logout) {
+            const response = NextResponse.json({ success: true });
+            response.cookies.set('admin_access', '', { maxAge: 0, path: '/' });
+            response.cookies.set('site_access', '', { maxAge: 0, path: '/' });
+            return response;
+        }
+
+        // Verificar se tem sessão ativa de admin
         if (checkOnly) {
-            const hasAccess = request.cookies.get('site_access')?.value === 'granted';
-            if (hasAccess) {
+            const hasAdminAccess = request.cookies.get('admin_access')?.value === 'granted';
+            if (hasAdminAccess) {
                 return NextResponse.json({ success: true });
             }
             return NextResponse.json({ success: false }, { status: 401 });
         }
 
-        if (password === SITE_PASSWORD || password === '3GWINE') {
+        // Validação estrita da nova palavra-passe
+        if (password === ADMIN_PASSWORD) {
             const response = NextResponse.json({ success: true });
-            // Cookie válido por 7 dias, só acessível pelo servidor (HttpOnly)
-            response.cookies.set('site_access', 'granted', {
+            // Cookie de sessão de administração (24 horas)
+            response.cookies.set('admin_access', 'granted', {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'lax',
-                maxAge: 60 * 60 * 24 * 7, // 7 dias
+                maxAge: 60 * 60 * 24, // 24 horas
                 path: '/',
             });
+            // Limpa o cookie antigo do site para não misturar sessões
+            response.cookies.set('site_access', '', { maxAge: 0, path: '/' });
             return response;
         }
 
         return NextResponse.json(
-            { success: false, error: 'Password incorreta.' },
+            { success: false, error: 'Palavra-passe incorreta.' },
             { status: 401 }
         );
     } catch {

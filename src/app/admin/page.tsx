@@ -102,6 +102,20 @@ export default function AdminPage() {
         }
     }
 
+    async function handleLogout() {
+        try {
+            await fetch('/api/verify-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ logout: true })
+            });
+            setIsAuthenticated(false);
+            setPassword('');
+        } catch (error) {
+            console.error('Erro ao sair:', error);
+        }
+    }
+
     async function fetchProducts() {
         try {
             setLoading(true);
@@ -863,9 +877,14 @@ export default function AdminPage() {
                         📦 Gestão de Encomendas
                     </Link>
                 </div>
-                <Link href="/loja" className="btn btn-outline">
-                    Voltar à Loja
-                </Link>
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                    <button onClick={handleLogout} className="btn btn-outline" style={{ borderColor: '#ef4444', color: '#ef4444' }}>
+                        🔒 Bloquear Admin
+                    </button>
+                    <Link href="/loja" className="btn btn-outline">
+                        Voltar à Loja
+                    </Link>
+                </div>
             </div>
 
             <div style={styles.card}>

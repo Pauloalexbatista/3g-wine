@@ -63,13 +63,13 @@ export async function updateSession(request: NextRequest) {
     user = null
   }
 
-  const isProtectedRoute = 
-    request.nextUrl.pathname.startsWith('/admin')
-  const hasAdminCookie = request.cookies.get('site_access')?.value === 'granted'
+  const hasAdminCookie = request.cookies.get('admin_access')?.value === 'granted'
+  const { pathname } = request.nextUrl
 
-  if (!user && !hasAdminCookie && isProtectedRoute) {
+  // Se tentar aceder a subrotas como /admin/encomendas sem sessão de admin, redirecionar para /admin
+  if (!hasAdminCookie && pathname.startsWith('/admin/') && pathname !== '/admin') {
     const url = request.nextUrl.clone()
-    url.pathname = '/auth/login'
+    url.pathname = '/admin'
     return NextResponse.redirect(url)
   }
 
