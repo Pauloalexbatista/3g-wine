@@ -101,7 +101,7 @@ export default function Footer() {
                             <li>
                                 <span className="info-icon">📍</span>
                                 <div>
-                                    <strong style={{ color: '#D4AF37' }}>3GBARBEARIA / 3GWINE</strong><br />
+                                    <strong style={{ color: '#D4AF37' }}>Garrafeira 3GWINE</strong><br />
                                     Rua António França Borges N-14 B<br />
                                     2625-187 Póvoa de Santa Iria
                                     <div style={{ marginTop: '0.65rem' }}>
@@ -236,9 +236,9 @@ export default function Footer() {
                                 <p>
                                     Este website é propriedade e operado por:
                                     <br /><strong>Titular:</strong> Mário Jorge dos Santos Medeiros (Empresário em Nome Individual)
-                                    <br /><strong>Nome Comercial:</strong> 3GWINE / 3GBARBEARIA
+                                    <br /><strong>Nome Comercial:</strong> 3GWINE
                                     <br /><strong>NIF:</strong> 223412899
-                                    <br /><strong>CAE Principal / Secundário:</strong> 96210 (Atividades de Salões de Cabeleireiro e Barbeiros) / 47250 (Comércio a Retalho de Bebidas)
+                                    <br /><strong>Atividade:</strong> CAE 47250 (Comércio a Retalho de Bebidas)
                                     <br /><strong>Estabelecimento Aberto ao Público:</strong> Rua António França Borges N-14 B, 2625-187 Póvoa de Santa Iria
                                     <br /><strong>Contactos:</strong> 3gwine@gmail.com | 963 908 617
                                 </p>

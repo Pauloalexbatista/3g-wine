@@ -46,9 +46,8 @@ export default function SobrePage() {
                                 <h2 className="section-title">Como Tudo Começou</h2>
                                 <div className="divider-gold" style={{ margin: 'var(--spacing-md) 0' }}></div>
                                 <p className="story-text">
-                                    A <strong className="brand-3gwine">3GWINE</strong> nasceu em 2016 de uma paixão profunda pelo mundo do vinho.
-                                    Criada dentro da 3GBARBEARIA, foi o primeiro projeto deste género em Portugal,
-                                    focado em oferecer vinhos únicos e diferenciados que não se encontram nos circuitos comerciais habituais.
+                                    A <strong className="brand-3gwine">3GWINE</strong> nasceu em 2016 de uma paixão profunda pelo mundo do vinho,
+                                    focada em oferecer vinhos únicos e diferenciados que não se encontram nos circuitos comerciais habituais.
                                 </p>
                                 <p className="story-text">
                                     Com a curadoria rigorosa de Mário Medeiros, cada garrafa na nossa coleção é escolhida a dedo.
@@ -194,7 +193,7 @@ export default function SobrePage() {
                             </h2>
                             <div className="divider-gold"></div>
                             <p style={{ color: '#ccc', marginBottom: '2rem' }}>
-                                A <strong className="brand-3gwine">3GWINE</strong> e a <strong style={{ color: '#fff' }}>3GBARBEARIA</strong> operam com total conformidade e rigor perante a legislação comercial e fiscal portuguesa.
+                                A <strong className="brand-3gwine">3GWINE</strong> opera com total conformidade e rigor perante a legislação comercial e fiscal portuguesa.
                             </p>
 
                             <div style={{
@@ -216,7 +215,7 @@ export default function SobrePage() {
                                 <div>
                                     <div style={{ color: 'var(--color-primary)', fontWeight: 600, fontSize: '0.85rem', textTransform: 'uppercase', marginBottom: '0.35rem' }}>Identificação Fiscal & CAE</div>
                                     <div style={{ color: '#fff', fontSize: '1rem', fontWeight: 500 }}>NIF: 223412899</div>
-                                    <div style={{ color: '#aaa', fontSize: '0.85rem' }}>CAE 47250 (Bebidas) / 96210 (Barbeiros)</div>
+                                    <div style={{ color: '#aaa', fontSize: '0.85rem' }}>CAE 47250 (Comércio a Retalho de Bebidas)</div>
                                 </div>
 
                                 <div>

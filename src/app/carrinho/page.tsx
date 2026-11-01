@@ -284,7 +284,7 @@ export default function CartPage() {
                                 style={dynamicStyles.methodBtn(deliveryMethod === 'pickup')}
                                 onClick={() => setDeliveryMethod('pickup')}
                             >
-                                Levantamento em Loja (Barbearia)
+                                Levantamento na Garrafeira (Loja Física)
                             </button>
                         </div>
 
@@ -534,7 +534,7 @@ export default function CartPage() {
                                 border: '1px dashed #D4AF37'
                             }}>
                                 📞 <strong>Para encomendas imediatas:</strong><br />
-                                Contacte a garrafeira diretamente ou visite-nos na <strong style={{ color: '#D4AF37' }}>3GBARBEARIA</strong>.
+                                Contacte a garrafeira diretamente ou visite a nossa loja física na <strong style={{ color: '#D4AF37' }}>3GWINE</strong>.
                             </div>
                         </div>
 

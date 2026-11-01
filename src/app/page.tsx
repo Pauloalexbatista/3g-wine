@@ -45,7 +45,7 @@ export default function Home() {
           <div className="hero-background">
             <Image
               src="/images/brand/3gwine-barbearia-bg.jpg"
-              alt="Garrafeira 3GWINE Barbearia"
+              alt="Garrafeira 3GWINE"
               fill
               priority
               style={{ objectFit: 'cover', objectPosition: '28% top' }}
@@ -188,9 +188,8 @@ export default function Home() {
               </h2>
               <div className="divider-gold" style={{ margin: 'var(--spacing-md) 0' }}></div>
               <p className="about-text">
-                A <span className="brand-3gwine" style={{ fontSize: '0.9em' }}>3GWINE</span> nasceu em 2016 de uma paixão profunda pelo mundo do vinho.
-                Criada dentro da 3GBARBEARIA, foi o primeiro projeto deste género
-                em Portugal, focado em oferecer vinhos únicos e diferenciados.
+                A <span className="brand-3gwine" style={{ fontSize: '0.9em' }}>3GWINE</span> nasceu em 2016 de uma paixão profunda pelo mundo do vinho,
+                focada em oferecer vinhos únicos e diferenciados que não se encontram nos circuitos comerciais habituais.
               </p>
               <p className="about-text">
                 Com a curadoria de Mário Medeiros, proporcionamos um ambiente

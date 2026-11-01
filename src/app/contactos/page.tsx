@@ -193,7 +193,7 @@ export default function ContactosPage() {
                                         <div className="info-content">
                                             <h3 className="info-card-title">Localização</h3>
                                             <p className="info-card-text">
-                                                <strong>3GBARBEARIA / 3GWINE</strong><br />
+                                                <strong>Garrafeira 3GWINE</strong><br />
                                                 Rua António França Borges N-14 B<br />
                                                 2625-187 Póvoa de Santa Iria
                                             </p>
@@ -284,7 +284,7 @@ export default function ContactosPage() {
                             allowFullScreen
                             loading="lazy"
                             referrerPolicy="no-referrer-when-downgrade"
-                            title="Localização 3GWINE Barbearia"
+                            title="Localização Garrafeira 3GWINE"
                         ></iframe>
                     </div>
                 </section>
