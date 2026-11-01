@@ -27,7 +27,9 @@ export default function SobrePage() {
                     </div>
                     <div className="container">
                         <div className="sobre-hero-content">
-                            <h1 className="sobre-hero-title">A Nossa História</h1>
+                            <h1 className="sobre-hero-title" style={{ color: '#FFD700', textShadow: '0 4px 20px rgba(0, 0, 0, 0.95), 0 2px 6px rgba(0, 0, 0, 0.8)' }}>
+                                A Nossa História
+                            </h1>
                             <div className="divider-gold"></div>
                             <p className="sobre-hero-subtitle">
                                 Paixão que Atravessa Gerações
@@ -187,7 +189,9 @@ export default function SobrePage() {
                 <section style={{ padding: '4rem 0', backgroundColor: 'var(--color-background-alt, #150f14)', borderTop: '1px solid rgba(212, 175, 55, 0.2)' }}>
                     <div className="container">
                         <div style={{ maxWidth: '850px', margin: '0 auto', textAlign: 'center' }}>
-                            <h2 className="section-title text-center">Transparência & Identificação Legal</h2>
+                            <h2 className="section-title text-center" style={{ color: '#FFD700', textShadow: '0 3px 12px rgba(0, 0, 0, 0.8)', fontSize: '2.25rem' }}>
+                                Transparência & Identificação Legal
+                            </h2>
                             <div className="divider-gold"></div>
                             <p style={{ color: '#ccc', marginBottom: '2rem' }}>
                                 A <strong className="brand-3gwine">3GWINE</strong> e a <strong style={{ color: '#fff' }}>3GBARBEARIA</strong> operam com total conformidade e rigor perante a legislação comercial e fiscal portuguesa.

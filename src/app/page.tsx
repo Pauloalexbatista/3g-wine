@@ -79,7 +79,11 @@ export default function Home() {
                 <div className="highlight-frame">
                   <div className="highlight-image-container">
                     <Image
-                      src={weeklyHighlight?.weekly_highlight_image || weeklyHighlight?.image || "/images/products/douro-2018.png"}
+                      src={
+                        (weeklyHighlight?.weekly_highlight_image && weeklyHighlight.weekly_highlight_image.trim()) 
+                        || (weeklyHighlight?.image && weeklyHighlight.image.trim()) 
+                        || "/images/products/douro-2018.png"
+                      }
                       alt={weeklyHighlight?.name || "Garrafeira 3GWINE"}
                       fill
                       style={{ objectFit: 'contain' }}

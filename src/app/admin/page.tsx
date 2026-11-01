@@ -1281,8 +1281,8 @@ export default function AdminPage() {
                                             <div style={{ fontSize: '0.8rem', color: 'var(--color-secondary)', textTransform: 'uppercase' }}>{product.type}</div>
                                         </td>
                                         <td style={styles.td}>
-                                                <div><strong>€{(product.price * (1 + getTaxRate(product.type))).toFixed(2)}</strong> <span style={{ fontSize: '0.7rem', color: 'var(--color-primary)', fontWeight: 600 }}>C/ IVA</span></div>
-                                                <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>€{product.price.toFixed(2)} s/ IVA ({Math.round(getTaxRate(product.type) * 100)}%)</div>
+                                                <div><strong>€{(Number(product.price) * (1 + getTaxRate(product.type))).toFixed(2)}</strong> <span style={{ fontSize: '0.7rem', color: 'var(--color-primary)', fontWeight: 600 }}>C/ IVA</span></div>
+                                                <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>€{Number(product.price).toFixed(2)} s/ IVA ({Math.round(getTaxRate(product.type) * 100)}%)</div>
                                             </td>
                                         <td style={{ ...styles.td, textAlign: 'right' }}>
                                             <button

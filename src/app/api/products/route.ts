@@ -2,6 +2,20 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { query } from '@/lib/db';
 
+function formatProduct(row: any) {
+    if (!row) return null;
+    return {
+        ...row,
+        id: Number(row.id),
+        price: Number(row.price) || 0,
+        year: row.year ? Number(row.year) : new Date().getFullYear(),
+        featured: Boolean(row.featured),
+        is_weekly_highlight: Boolean(row.is_weekly_highlight),
+        image: row.image || '/images/products/douro-2018.png',
+        weekly_highlight_image: row.weekly_highlight_image || ''
+    };
+}
+
 export async function GET(request: NextRequest) {
     try {
         const { searchParams } = new URL(request.url);
@@ -12,18 +26,18 @@ export async function GET(request: NextRequest) {
             const res = await query(
                 'SELECT * FROM products WHERE is_weekly_highlight = TRUE LIMIT 1'
             );
-            return NextResponse.json({ success: true, product: res.rows[0] || null });
+            return NextResponse.json({ success: true, product: formatProduct(res.rows[0]) });
         }
 
         if (featured === 'true') {
             const res = await query(
                 'SELECT * FROM products WHERE featured = TRUE ORDER BY id ASC'
             );
-            return NextResponse.json({ success: true, products: res.rows });
+            return NextResponse.json({ success: true, products: res.rows.map(formatProduct) });
         }
 
         const res = await query('SELECT * FROM products ORDER BY id ASC');
-        return NextResponse.json({ success: true, products: res.rows });
+        return NextResponse.json({ success: true, products: res.rows.map(formatProduct) });
     } catch (error: any) {
         console.error('Erro ao buscar produtos da BD local:', error);
         return NextResponse.json(
@@ -72,7 +86,7 @@ export async function POST(request: NextRequest) {
                 type || 'Tinto',
                 region || '',
                 year || new Date().getFullYear(),
-                price,
+                Number(price) || 0,
                 description || '',
                 featured || false,
                 image || '/images/products/douro-2018.png',
@@ -81,7 +95,7 @@ export async function POST(request: NextRequest) {
             ]
         );
 
-        return NextResponse.json({ success: true, product: res.rows[0] });
+        return NextResponse.json({ success: true, product: formatProduct(res.rows[0]) });
     } catch (error: any) {
         console.error('Erro ao criar produto:', error);
         return NextResponse.json(
@@ -138,7 +152,7 @@ export async function PUT(request: NextRequest) {
                 type,
                 region,
                 year,
-                price,
+                Number(price) || 0,
                 description,
                 featured,
                 image,
@@ -155,7 +169,7 @@ export async function PUT(request: NextRequest) {
             );
         }
 
-        return NextResponse.json({ success: true, product: res.rows[0] });
+        return NextResponse.json({ success: true, product: formatProduct(res.rows[0]) });
     } catch (error: any) {
         console.error('Erro ao atualizar produto:', error);
         return NextResponse.json(

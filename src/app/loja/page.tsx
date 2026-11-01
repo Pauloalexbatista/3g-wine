@@ -103,21 +103,22 @@ function LojaContent() {
 
     if (priceRange !== 'Todos') {
         filteredProducts = filteredProducts.filter(p => {
-            if (priceRange === '0-30€') return p.price <= 30;
-            if (priceRange === '30-50€') return p.price > 30 && p.price <= 50;
-            if (priceRange === '50-100€') return p.price > 50 && p.price <= 100;
-            if (priceRange === '100+€') return p.price > 100;
+            const price = Number(p.price) || 0;
+            if (priceRange === '0-30€') return price <= 30;
+            if (priceRange === '30-50€') return price > 30 && price <= 50;
+            if (priceRange === '50-100€') return price > 50 && price <= 100;
+            if (priceRange === '100+€') return price > 100;
             return true;
         });
     }
 
     // Sort products
     if (sortBy === 'price-asc') {
-        filteredProducts.sort((a, b) => a.price - b.price);
+        filteredProducts.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
     } else if (sortBy === 'price-desc') {
-        filteredProducts.sort((a, b) => b.price - a.price);
+        filteredProducts.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
     } else if (sortBy === 'name') {
-        filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+        filteredProducts.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
     } else if (sortBy === 'featured') {
         filteredProducts.sort((a, b) => (b.featured === a.featured ? 0 : b.featured ? 1 : -1));
     }

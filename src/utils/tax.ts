@@ -87,8 +87,9 @@ export function getTaxRate(type?: string): number {
     return 0.13;
 }
 
-export function formatEuro(value: number): string {
-    return '€' + value.toFixed(2).replace('.', ',');
+export function formatEuro(value: number | string): string {
+    const num = typeof value === 'number' ? value : Number(value) || 0;
+    return '€' + num.toFixed(2).replace('.', ',');
 }
 
 export interface TaxInfo {
@@ -102,18 +103,19 @@ export interface TaxInfo {
     formattedFinal: string;
 }
 
-export function calculateProductTax(basePrice: number, type?: string): TaxInfo {
+export function calculateProductTax(basePrice: number | string, type?: string): TaxInfo {
+    const numBase = typeof basePrice === 'number' ? basePrice : Number(basePrice) || 0;
     const rate = getTaxRate(type);
-    const taxAmount = Number((basePrice * rate).toFixed(2));
-    const finalPrice = Number((basePrice + taxAmount).toFixed(2));
+    const taxAmount = Number((numBase * rate).toFixed(2));
+    const finalPrice = Number((numBase + taxAmount).toFixed(2));
 
     return {
-        basePrice,
+        basePrice: numBase,
         taxRate: rate,
         taxPercent: Math.round(rate * 100),
         taxAmount,
         finalPrice,
-        formattedBase: formatEuro(basePrice),
+        formattedBase: formatEuro(numBase),
         formattedTax: formatEuro(taxAmount),
         formattedFinal: formatEuro(finalPrice),
     };
