@@ -75,6 +75,11 @@ export default function Footer() {
                         <p className="footer-description">
                             Vinhos premium selecionados com paixão e dedicação para os verdadeiros apreciadores.
                         </p>
+                        <div style={{ marginTop: '1rem', fontSize: '0.78rem', color: '#888', lineHeight: '1.4' }}>
+                            <strong style={{ color: '#aaa' }}>Titular Legal:</strong><br />
+                            Mário Jorge dos Santos Medeiros (ENI)<br />
+                            <strong>NIF:</strong> 223412899 | <strong>CAE:</strong> 47250
+                        </div>
                     </div>
 
                     <div className="footer-section">
@@ -160,6 +165,9 @@ export default function Footer() {
                                 {status === 'loading' ? '...' : status === 'success' ? '✓' : 'Subscrever'}
                             </button>
                         </form>
+                        <p style={{ fontSize: '0.72rem', color: '#888', marginTop: '0.4rem', lineHeight: '1.3' }}>
+                            Ao subscrever, concorda com a nossa Política de Privacidade (RGPD). Pode cancelar quando desejar.
+                        </p>
                         {message && (
                             <p style={{
                                 marginTop: '0.5rem',
@@ -194,12 +202,24 @@ export default function Footer() {
                         © {currentYear} <span className="brand-3gwine" style={{ fontSize: '1em' }}>3GWINE</span>. Todos os direitos reservados.
                     </p>
 
-                    <button 
-                        onClick={() => setShowLegalModal(true)} 
-                        className="legal-modal-trigger"
-                    >
-                        Termos e Privacidade
-                    </button>
+                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <a
+                            href="https://www.livroreclamacoes.pt"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ color: '#aaa', fontSize: '0.78rem', textDecoration: 'none' }}
+                        >
+                            Livro de Reclamações
+                        </a>
+                        <span style={{ color: '#555' }}>|</span>
+                        <button 
+                            onClick={() => setShowLegalModal(true)} 
+                            className="legal-modal-trigger"
+                            style={{ margin: 0, padding: 0 }}
+                        >
+                            Termos & Privacidade (RGPD)
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -209,29 +229,55 @@ export default function Footer() {
                         <button className="modal-close" onClick={() => setShowLegalModal(false)}>✕</button>
                         
                         <div className="modal-body">
-                            <h2 className="marcellus text-secondary">Termos e Privacidade</h2>
+                            <h2 className="marcellus text-secondary">Identificação Legal, Termos e Privacidade</h2>
                             
                             <section>
-                                <h3>1. Idade Legal</h3>
-                                <p>A venda de bebidas alcoólicas é proibida a menores de 18 anos. Ao navegar e comprar neste site, declara ter a idade legal necessária.</p>
+                                <h3>1. Identificação da Entidade Titular</h3>
+                                <p>
+                                    Este website é propriedade e operado por:
+                                    <br /><strong>Titular:</strong> Mário Jorge dos Santos Medeiros (Empresário em Nome Individual)
+                                    <br /><strong>Nome Comercial:</strong> 3GWINE / 3GBARBEARIA
+                                    <br /><strong>NIF:</strong> 223412899
+                                    <br /><strong>CAE Principal / Secundário:</strong> 96210 (Atividades de Salões de Cabeleireiro e Barbeiros) / 47250 (Comércio a Retalho de Bebidas)
+                                    <br /><strong>Estabelecimento Aberto ao Público:</strong> Rua António França Borges N-14 B, 2625-187 Póvoa de Santa Iria
+                                    <br /><strong>Contactos:</strong> 3gwine@gmail.com | 963 908 617
+                                </p>
                             </section>
 
                             <section>
-                                <h3>2. Proteção de Dados (RGPD)</h3>
-                                <p>A 3G Wine respeita a sua privacidade. Os seus dados são utilizados apenas para processar encomendas e melhorar a sua experiência. Nunca partilhamos os seus dados com terceiros sem consentimento.</p>
+                                <h3>2. Idade Legal</h3>
+                                <p>A venda e consumo de bebidas alcoólicas é expressamente proibida a menores de 18 anos (Decreto-Lei n.º 106/2015). Ao navegar e efetuar compras neste website, o utilizador declara ter atingido a idade legal permitida por lei.</p>
                             </section>
 
                             <section>
-                                <h3>3. Termos de Venda</h3>
-                                <p>Todos os preços incluem IVA. As entregas são feitas com o máximo cuidado. Em caso de litígio, o consumidor pode recorrer a uma entidade de resolução alternativa.</p>
+                                <h3>3. Proteção de Dados Pessoais (RGPD)</h3>
+                                <p>
+                                    Em estrito cumprimento do Regulamento Geral sobre a Proteção de Dados (Regulamento UE 2016/679) e da Lei n.º 58/2019:
+                                    <br />• <strong>Finalidade:</strong> Os dados recolhidos (nome, morada, contacto telefónico, email e NIF) destinam-se única e exclusivamente ao processamento das suas encomendas, cumprimento de obrigações fiscais/legais e resposta a mensagens ou pedidos de contacto submetidos.
+                                    <br />• <strong>Confidencialidade:</strong> Os dados nunca são cedidos, vendidos ou disponibilizados a terceiros com fins publicitários.
+                                    <br />• <strong>Direitos do Titular (ARCO):</strong> O titular dos dados pode a qualquer momento solicitar o acesso, retificação, limitação ou a eliminação dos seus dados (Direito ao Esquecimento) mediante envio de comunicação para o email oficial: <strong>3gwine@gmail.com</strong>.
+                                </p>
                             </section>
 
                             <section>
-                                <h3>4. Cookies</h3>
-                                <p>Utilizamos cookies para garantir que lhe oferecemos a melhor experiência profissional no nosso site.</p>
+                                <h3>4. Preços, Venda e Métodos de Pagamento</h3>
+                                <p>Todos os preços apresentados na loja incluem IVA à taxa legal em vigor em Portugal. As modalidades de pagamento disponibilizadas são seguras e processadas através de canais bancários certificados (IFTHENPAY - Multibanco e MB WAY).</p>
+                            </section>
+
+                            <section>
+                                <h3>5. Resolução Alternativa de Litígios (RAL) e Livro de Reclamações</h3>
+                                <p>
+                                    Em caso de litígio de consumo, nos termos da Lei n.º 144/2015, o consumidor pode recorrer ao <strong>Centro de Arbitragem de Conflitos de Consumo de Lisboa (CACCL)</strong> disponível em <em>www.centroarbitragemlisboa.pt</em>.
+                                    <br />Dispomos igualmente de Livro de Reclamações Eletrónico acessível em <em>www.livroreclamacoes.pt</em>.
+                                </p>
+                            </section>
+
+                            <section>
+                                <h3>6. Cookies</h3>
+                                <p>Utilizamos cookies essenciais de navegação para assegurar o correto funcionamento da loja online, carrinho de compras e autenticação de segurança.</p>
                             </section>
                             
-                            <p className="modal-footer-text">Para questões detalhadas, contacte-nos através dos canais oficiais.</p>
+                            <p className="modal-footer-text">Última atualização: Novembro de 2026. Para qualquer esclarecimento, contacte-nos através de 3gwine@gmail.com.</p>
                         </div>
                     </div>
                 </div>

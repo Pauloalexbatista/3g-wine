@@ -6,6 +6,21 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+interface Subscriber {
+    id: number;
+    email: string;
+    created_at: string;
+}
+
+interface ContactMessage {
+    id: number;
+    name: string;
+    email: string;
+    subject: string;
+    message: string;
+    created_at: string;
+}
+
 interface Product {
     id: number;
     name: string;
@@ -23,7 +38,11 @@ interface Product {
 export default function AdminPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
-    const [view, setView] = useState<'list' | 'form' | 'taxes'>('list');
+    const [view, setView] = useState<'list' | 'form' | 'taxes' | 'newsletter' | 'contacts'>('list');
+    const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
+    const [messages, setMessages] = useState<ContactMessage[]>([]);
+    const [loadingSubscribers, setLoadingSubscribers] = useState(false);
+    const [loadingMessages, setLoadingMessages] = useState(false);
     const [typeTaxRates, setTypeTaxRates] = useState<TypeTaxRate[]>(DEFAULT_TYPE_TAX_RATES);
     const [newTypeName, setNewTypeName] = useState('');
     const [newTypeRate, setNewTypeRate] = useState<number>(13);
@@ -56,6 +75,8 @@ export default function AdminPage() {
         checkAuth();
         fetchProducts();
         fetchImages();
+        fetchSubscribers();
+        fetchMessages();
         setTypeTaxRates(getAllTypeTaxRates());
     }, []);
 
@@ -132,6 +153,80 @@ export default function AdminPage() {
         } finally {
             setLoading(false);
         }
+    }
+
+    async function fetchSubscribers() {
+        try {
+            setLoadingSubscribers(true);
+            const res = await fetch('/api/newsletter');
+            const data = await res.json();
+            if (data.success && data.subscribers) {
+                setSubscribers(data.subscribers);
+            }
+        } catch (err) {
+            console.error('Erro ao buscar newsletter:', err);
+        } finally {
+            setLoadingSubscribers(false);
+        }
+    }
+
+    async function fetchMessages() {
+        try {
+            setLoadingMessages(true);
+            const res = await fetch('/api/contact');
+            const data = await res.json();
+            if (data.success && data.messages) {
+                setMessages(data.messages);
+            }
+        } catch (err) {
+            console.error('Erro ao buscar mensagens:', err);
+        } finally {
+            setLoadingMessages(false);
+        }
+    }
+
+    async function handleDeleteSubscriber(id: number) {
+        if (!confirm('Tem a certeza que deseja remover este email da lista?')) return;
+        try {
+            const res = await fetch('/api/newsletter?id=' + id, { method: 'DELETE' });
+            if (res.ok) {
+                setSubscribers(prev => prev.filter(s => s.id !== id));
+                alert('Email removido com sucesso.');
+            }
+        } catch (err) {
+            alert('Erro ao remover email.');
+        }
+    }
+
+    async function handleDeleteMessage(id: number) {
+        if (!confirm('Tem a certeza que deseja apagar esta mensagem de contacto?')) return;
+        try {
+            const res = await fetch('/api/contact?id=' + id, { method: 'DELETE' });
+            if (res.ok) {
+                setMessages(prev => prev.filter(m => m.id !== id));
+                alert('Mensagem apagada com sucesso.');
+            }
+        } catch (err) {
+            alert('Erro ao apagar mensagem.');
+        }
+    }
+
+    function handleExportNewsletterCSV() {
+        if (subscribers.length === 0) {
+            alert('Não existem subscritores para exportar.');
+            return;
+        }
+        const headers = 'ID,Email,Data Subscricao\n';
+        const rows = subscribers
+            .map(s => `${s.id},"${s.email}","${new Date(s.created_at).toLocaleString('pt-PT')}"`)
+            .join('\n');
+        const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `3gwine_newsletter_subscritores_${new Date().toISOString().slice(0, 10)}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
     }
 
     async function fetchImages() {
@@ -404,6 +499,47 @@ export default function AdminPage() {
         }
     };
 
+    
+    const renderNavTabs = () => (
+        <div style={{ display: 'flex', gap: '0.65rem', flexWrap: 'wrap', alignItems: 'center' }}>
+            <button
+                onClick={() => setView('list')}
+                className={`btn ${view === 'list' ? 'btn-primary' : 'btn-outline'}`}
+                style={{ padding: '0.45rem 0.9rem', fontSize: '0.9rem' }}
+            >
+                🍷 Produtos ({products.length})
+            </button>
+            <button
+                onClick={() => { setView('newsletter'); fetchSubscribers(); }}
+                className={`btn ${view === 'newsletter' ? 'btn-primary' : 'btn-outline'}`}
+                style={{ padding: '0.45rem 0.9rem', fontSize: '0.9rem' }}
+            >
+                📧 Newsletter ({subscribers.length})
+            </button>
+            <button
+                onClick={() => { setView('contacts'); fetchMessages(); }}
+                className={`btn ${view === 'contacts' ? 'btn-primary' : 'btn-outline'}`}
+                style={{ padding: '0.45rem 0.9rem', fontSize: '0.9rem' }}
+            >
+                💬 Contactos ({messages.length})
+            </button>
+            <button
+                onClick={() => setView('taxes')}
+                className={`btn ${view === 'taxes' ? 'btn-primary' : 'btn-outline'}`}
+                style={{ padding: '0.45rem 0.9rem', fontSize: '0.9rem' }}
+            >
+                🏷️ Taxas de IVA
+            </button>
+            <Link
+                href="/admin/encomendas"
+                className="btn btn-outline"
+                style={{ padding: '0.45rem 0.9rem', fontSize: '0.9rem', textDecoration: 'none' }}
+            >
+                📦 Encomendas
+            </Link>
+        </div>
+    );
+
     if (isAuthenticated === null) {
         return (
             <div style={authStyles.overlay}>
@@ -471,25 +607,214 @@ export default function AdminPage() {
         );
     }
 
+        
+    if (view === 'newsletter') {
+        return (
+            <div style={styles.pageContainer}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
+                    {renderNavTabs()}
+                    <div style={{ display: 'flex', gap: '0.75rem' }}>
+                        <button onClick={handleLogout} className="btn btn-outline" style={{ borderColor: '#ef4444', color: '#ef4444' }}>
+                            🔒 Bloquear Admin
+                        </button>
+                        <Link href="/loja" className="btn btn-outline">
+                            Voltar à Loja
+                        </Link>
+                    </div>
+                </div>
+
+                <div style={styles.card}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                        <div>
+                            <h2 className="text-xl" style={{ fontWeight: 700, color: 'var(--color-primary)' }}>
+                                Subscritores da Newsletter ({subscribers.length})
+                            </h2>
+                            <p style={{ color: '#6b7280', fontSize: '0.9rem' }}>
+                                Emails registados através do rodapé do site para novidades e promoções.
+                            </p>
+                        </div>
+                        <div style={{ display: 'flex', gap: '0.75rem' }}>
+                            <button
+                                onClick={handleExportNewsletterCSV}
+                                className="btn btn-primary"
+                                style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                            >
+                                📥 Descarregar Lista CSV / Excel
+                            </button>
+                            <button onClick={() => setView('list')} className="btn btn-outline">
+                                ← Voltar aos Produtos
+                            </button>
+                        </div>
+                    </div>
+
+                    {loadingSubscribers ? (
+                        <div className="text-center" style={{ padding: '3rem' }}>
+                            <p style={{ color: '#6b7280' }}>A carregar subscritores...</p>
+                        </div>
+                    ) : subscribers.length === 0 ? (
+                        <div className="text-center" style={{ padding: '3rem', backgroundColor: 'var(--color-gray-50)', borderRadius: '8px' }}>
+                            <p style={{ color: '#6b7280' }}>Ainda não existem emails subscritos na newsletter.</p>
+                        </div>
+                    ) : (
+                        <div style={{ overflowX: 'auto' }}>
+                            <table style={styles.table}>
+                                <thead>
+                                    <tr>
+                                        <th style={styles.th}>ID</th>
+                                        <th style={styles.th}>Email</th>
+                                        <th style={styles.th}>Data de Subscrição</th>
+                                        <th style={{ ...styles.th, textAlign: 'right' }}>Ação</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {subscribers.map((sub) => (
+                                        <tr key={sub.id}>
+                                            <td style={styles.td}>#{sub.id}</td>
+                                            <td style={{ ...styles.td, fontWeight: 600 }}>{sub.email}</td>
+                                            <td style={styles.td}>{new Date(sub.created_at).toLocaleString('pt-PT')}</td>
+                                            <td style={{ ...styles.td, textAlign: 'right' }}>
+                                                <button
+                                                    onClick={() => handleDeleteSubscriber(sub.id)}
+                                                    style={{ color: '#ef4444', fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer' }}
+                                                >
+                                                    🗑️ Remover
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
+    }
+
+    if (view === 'contacts') {
+        return (
+            <div style={styles.pageContainer}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
+                    {renderNavTabs()}
+                    <div style={{ display: 'flex', gap: '0.75rem' }}>
+                        <button onClick={handleLogout} className="btn btn-outline" style={{ borderColor: '#ef4444', color: '#ef4444' }}>
+                            🔒 Bloquear Admin
+                        </button>
+                        <Link href="/loja" className="btn btn-outline">
+                            Voltar à Loja
+                        </Link>
+                    </div>
+                </div>
+
+                <div style={styles.card}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                        <div>
+                            <h2 className="text-xl" style={{ fontWeight: 700, color: 'var(--color-primary)' }}>
+                                Pedidos de Contacto Recebidos ({messages.length})
+                            </h2>
+                            <p style={{ color: '#6b7280', fontSize: '0.9rem' }}>
+                                Mensagens enviadas pelos clientes através da página /contactos.
+                            </p>
+                        </div>
+                        <button onClick={() => setView('list')} className="btn btn-outline">
+                            ← Voltar aos Produtos
+                        </button>
+                    </div>
+
+                    {loadingMessages ? (
+                        <div className="text-center" style={{ padding: '3rem' }}>
+                            <p style={{ color: '#6b7280' }}>A carregar mensagens...</p>
+                        </div>
+                    ) : messages.length === 0 ? (
+                        <div className="text-center" style={{ padding: '3rem', backgroundColor: 'var(--color-gray-50)', borderRadius: '8px' }}>
+                            <p style={{ color: '#6b7280' }}>Nenhum pedido de contacto recebido até ao momento.</p>
+                        </div>
+                    ) : (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                            {messages.map((msg) => (
+                                <div
+                                    key={msg.id}
+                                    style={{
+                                        border: '1px solid #e5e7eb',
+                                        borderRadius: '10px',
+                                        padding: '1.25rem',
+                                        backgroundColor: '#fafafa'
+                                    }}
+                                >
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                                        <div>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                <strong style={{ fontSize: '1.1rem', color: '#111' }}>{msg.name}</strong>
+                                                <span style={{ fontSize: '0.8rem', color: '#6b7280' }}>
+                                                    • {new Date(msg.created_at).toLocaleString('pt-PT')}
+                                                </span>
+                                            </div>
+                                            <div style={{ fontSize: '0.88rem', color: '#374151', marginTop: '0.25rem' }}>
+                                                <strong>Email:</strong>{' '}
+                                                <a href={`mailto:${msg.email}`} style={{ color: 'var(--color-primary)', textDecoration: 'underline' }}>
+                                                    {msg.email}
+                                                </a>
+                                                {msg.subject && (
+                                                    <span style={{ marginLeft: '1.25rem' }}>
+                                                        <strong>Telefone / Assunto:</strong> {msg.subject}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                            <a
+                                                href={`mailto:${msg.email}?subject=Resposta 3GWine ao seu contacto`}
+                                                className="btn btn-primary"
+                                                style={{ padding: '0.35rem 0.75rem', fontSize: '0.82rem' }}
+                                            >
+                                                ✉️ Responder
+                                            </a>
+                                            <button
+                                                onClick={() => handleDeleteMessage(msg.id)}
+                                                className="btn btn-outline"
+                                                style={{ padding: '0.35rem 0.75rem', fontSize: '0.82rem', borderColor: '#ef4444', color: '#ef4444' }}
+                                            >
+                                                🗑️ Apagar
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div style={{
+                                        backgroundColor: '#fff',
+                                        border: '1px solid #e5e7eb',
+                                        padding: '1rem',
+                                        borderRadius: '6px',
+                                        fontSize: '0.92rem',
+                                        color: '#1f2937',
+                                        whiteSpace: 'pre-wrap',
+                                        lineHeight: '1.5'
+                                    }}>
+                                        {msg.message}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
+    }
+
         if (view === 'taxes') {
         return (
             <div style={styles.pageContainer}>
-                <button
-                    onClick={() => setView('list')}
-                    style={{
-                        marginBottom: '1.5rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        color: 'var(--color-gray-700)',
-                        cursor: 'pointer',
-                        background: 'none',
-                        border: 'none',
-                        fontSize: '0.95rem'
-                    }}
-                >
-                    ← Voltar aos Produtos
-                </button>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
+                    {renderNavTabs()}
+                    <div style={{ display: 'flex', gap: '0.75rem' }}>
+                        <button onClick={handleLogout} className="btn btn-outline" style={{ borderColor: '#ef4444', color: '#ef4444' }}>
+                            🔒 Bloquear Admin
+                        </button>
+                        <Link href="/loja" className="btn btn-outline">
+                            Voltar à Loja
+                        </Link>
+                    </div>
+                </div>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem' }}>
                     <div>
@@ -870,13 +1195,8 @@ export default function AdminPage() {
 
     return (
         <div style={styles.pageContainer}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                <div style={{ display: 'flex', gap: '2rem', alignItems: 'baseline' }}>
-                    <h1 className="text-3xl" style={{ color: 'var(--color-primary)' }}>Admin - Produtos</h1>
-                    <Link href="/admin/encomendas" style={{ fontSize: '1.1rem', color: '#666', textDecoration: 'none', fontWeight: 500 }}>
-                        📦 Gestão de Encomendas
-                    </Link>
-                </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
+                {renderNavTabs()}
                 <div style={{ display: 'flex', gap: '0.75rem' }}>
                     <button onClick={handleLogout} className="btn btn-outline" style={{ borderColor: '#ef4444', color: '#ef4444' }}>
                         🔒 Bloquear Admin

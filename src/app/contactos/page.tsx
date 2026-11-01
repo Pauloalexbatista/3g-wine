@@ -13,12 +13,18 @@ export default function ContactosPage() {
         message: '',
     });
 
+    const [rgpdConsent, setRgpdConsent] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!rgpdConsent) {
+            setError('Por favor assinale a caixa de consentimento de tratamento de dados (RGPD).');
+            return;
+        }
+
         setIsSubmitting(true);
         setError(null);
 
@@ -151,6 +157,22 @@ export default function ContactosPage() {
                                         ></textarea>
                                     </div>
 
+                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.65rem', margin: '1.25rem 0' }}>
+                                        <input
+                                            type="checkbox"
+                                            id="rgpd"
+                                            name="rgpd"
+                                            required
+                                            checked={rgpdConsent}
+                                            onChange={(e) => setRgpdConsent(e.target.checked)}
+                                            style={{ marginTop: '0.2rem', cursor: 'pointer', width: '18px', height: '18px', accentColor: 'var(--color-primary)' }}
+                                            disabled={isSubmitting}
+                                        />
+                                        <label htmlFor="rgpd" style={{ fontSize: '0.82rem', color: '#666', lineHeight: '1.45', cursor: 'pointer' }}>
+                                            Li e aceito a <strong>Política de Privacidade (RGPD)</strong>, autorizando o tratamento destes dados exclusivamente para dar resposta ao meu pedido de contacto. *
+                                        </label>
+                                    </div>
+
                                     <button 
                                         type="submit" 
                                         className="btn btn-primary btn-submit"
@@ -174,6 +196,18 @@ export default function ContactosPage() {
                                                 <strong>3GBARBEARIA / 3GWINE</strong><br />
                                                 Rua António França Borges N-14 B<br />
                                                 2625-187 Póvoa de Santa Iria
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="info-card">
+                                        <div className="info-icon">🏛️</div>
+                                        <div className="info-content">
+                                            <h3 className="info-card-title">Identificação Legal</h3>
+                                            <p className="info-card-text">
+                                                <strong>Mário Jorge dos Santos Medeiros (ENI)</strong><br />
+                                                NIF: 223412899<br />
+                                                CAE: 47250 (Comércio a Retalho de Bebidas)
                                             </p>
                                         </div>
                                     </div>
