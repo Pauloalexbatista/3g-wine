@@ -44,7 +44,7 @@ export default function Home() {
         <section className="hero-modern-redesign">
           <div className="hero-background">
             <Image
-              src="/images/brand/3gwine-barbearia-bg.jpg"
+              src="/images/brand/3gwine-hero-bg.jpg"
               alt="Garrafeira 3GWINE"
               fill
               priority
