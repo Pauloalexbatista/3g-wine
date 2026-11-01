@@ -229,7 +229,9 @@ export default function Footer() {
                         <button className="modal-close" onClick={() => setShowLegalModal(false)}>✕</button>
                         
                         <div className="modal-body">
-                            <h2 className="marcellus text-secondary">Identificação Legal, Termos e Privacidade</h2>
+                            <h2 style={{ color: '#FFD700', fontSize: '1.85rem', textAlign: 'center', marginBottom: '1.5rem', fontFamily: 'var(--font-logo)' }}>
+                                Identificação Legal, Termos e Privacidade
+                            </h2>
                             
                             <section>
                                 <h3>1. Identificação da Entidade Titular</h3>
