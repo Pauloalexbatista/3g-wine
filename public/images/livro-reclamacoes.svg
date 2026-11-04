@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="160" height="40" style="background:#ffffff; border-radius:6px; box-shadow:0 2px 4px rgba(0,0,0,0.15); display:inline-block; vertical-align:middle;">
+  <rect width="320" height="80" rx="6" fill="#FFFFFF"/>
+  <rect x="2" y="2" width="316" height="76" rx="4" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="2"/>
+  <!-- Book Icon Badge -->
+  <g transform="translate(18, 14)">
+    <rect width="52" height="52" rx="6" fill="#C41E3A"/>
+    <!-- Book pages icon -->
+    <path d="M12 16 C16 14, 23 14, 26 17 C29 14, 36 14, 40 16 L40 37 C36 35, 29 35, 26 38 C23 35, 16 35, 12 37 Z" fill="#FFFFFF"/>
+    <line x1="26" y1="18" x2="26" y2="38" stroke="#C41E3A" stroke-width="2"/>
+    <path d="M14 22 C18 20.5, 22 20.5, 24 22" stroke="#C41E3A" stroke-width="1.5" fill="none"/>
+    <path d="M14 26 C18 24.5, 22 24.5, 24 26" stroke="#C41E3A" stroke-width="1.5" fill="none"/>
+    <path d="M28 22 C30 20.5, 34 20.5, 38 22" stroke="#C41E3A" stroke-width="1.5" fill="none"/>
+    <path d="M28 26 C30 24.5, 34 24.5, 38 26" stroke="#C41E3A" stroke-width="1.5" fill="none"/>
+  </g>
+  <!-- Text -->
+  <text x="82" y="34" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" font-weight="900" fill="#111827" letter-spacing="0.5">LIVRO DE RECLAMAÇÕES</text>
+  <text x="82" y="52" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" font-weight="800" fill="#C41E3A" letter-spacing="0.5">ELETRÓNICO</text>
+  <text x="82" y="67" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" font-weight="600" fill="#6B7280">www.livroreclamacoes.pt</text>
+</svg>

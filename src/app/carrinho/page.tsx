@@ -24,6 +24,7 @@ export default function CartPage() {
     const [copied, setCopied] = useState(false);
     const [paymentModal, setPaymentModal] = useState<PaymentModalState | null>(null);
     const [countdown, setCountdown] = useState(300); // 5 minutos MB WAY
+    const [acceptedLegal, setAcceptedLegal] = useState(false);
 
     const [shippingInfo, setShippingInfo] = useState({
         fullName: '',
@@ -75,6 +76,11 @@ export default function CartPage() {
 
         if (!validateShippingInfo()) {
             alert('Por favor, preencha todos os campos obrigatórios dos dados de envio.');
+            return;
+        }
+
+        if (!acceptedLegal) {
+            alert('Por favor, confirme a aceitação dos Termos e Condições, Envios e Política de Privacidade e declare ter mais de 18 anos de idade.');
             return;
         }
 
@@ -509,53 +515,161 @@ export default function CartPage() {
                             <span style={{ color: '#D4AF37' }}>€{finalTotal.toFixed(2)}</span>
                         </div>
 
-                        {/* Aviso de Pagamento em Construção / Ativação Bancária */}
-                        <div style={{
-                            marginTop: '2rem',
-                            padding: '1.25rem',
-                            backgroundColor: '#1a1a1a',
-                            border: '1px solid #D4AF37',
-                            borderRadius: '8px',
-                            textAlign: 'center',
-                            color: '#fff'
-                        }}>
-                            <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>💳 ⏳</div>
-                            <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#D4AF37', marginBottom: '0.4rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                                Pagamentos Online em Ativação
-                            </h3>
-                            <p style={{ fontSize: '0.82rem', color: '#ccc', lineHeight: '1.5', marginBottom: '1rem' }}>
-                                A nossa garrafeira está aberta e visível para todos! Os pagamentos automáticos por <strong>Multibanco</strong> e <strong>MB WAY</strong> encontram-se temporariamente em homologação e ativação bancária com a <strong>IFTHENPAY</strong>.
-                            </p>
-                            <div style={{
-                                backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                        {/* Seleção do Método de Pagamento IFTHENPAY */}
+                        <div style={{ marginTop: '1.5rem' }}>
+                            <span style={{
+                                display: 'block',
+                                fontSize: '0.8rem',
+                                color: 'var(--color-gray-500)',
+                                textTransform: 'uppercase',
+                                letterSpacing: '1px',
+                                marginBottom: '0.75rem',
+                                fontWeight: 700
+                            }}>
+                                Escolha o Método de Pagamento (IFTHENPAY)
+                            </span>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                <button
+                                    type="button"
+                                    style={dynamicStyles.paymentSelectBtn(selectedPayment === 'mbway')}
+                                    onClick={() => setSelectedPayment('mbway')}
+                                >
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <div>
+                                            <span style={{ display: 'block', fontWeight: 800, fontSize: '1rem' }}>MB WAY</span>
+                                            <small style={{ opacity: 0.8, fontSize: '0.75rem' }}>Aprovação imediata no telemóvel</small>
+                                        </div>
+                                        <span style={{
+                                            backgroundColor: '#e20613',
+                                            color: 'white',
+                                            padding: '3px 8px',
+                                            borderRadius: '4px',
+                                            fontWeight: 800,
+                                            fontSize: '0.75rem'
+                                        }}>
+                                            MB WAY
+                                        </span>
+                                    </div>
+                                </button>
+
+                                {selectedPayment === 'mbway' && (
+                                    <div style={{
+                                        backgroundColor: '#f9fafb',
+                                        padding: '0.75rem',
+                                        borderRadius: '6px',
+                                        border: '1px solid #e5e7eb'
+                                    }}>
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#4b5563', marginBottom: '0.25rem' }}>
+                                            N.º de Telemóvel MB WAY
+                                        </label>
+                                        <input
+                                            type="tel"
+                                            value={mbwayPhone || shippingInfo.phone}
+                                            onChange={(e) => setMbwayPhone(e.target.value)}
+                                            placeholder="9xx xxx xxx"
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.5rem',
+                                                border: '1px solid #d1d5db',
+                                                borderRadius: '4px',
+                                                fontSize: '0.9rem',
+                                                fontWeight: 600,
+                                            }}
+                                        />
+                                    </div>
+                                )}
+
+                                <button
+                                    type="button"
+                                    style={dynamicStyles.paymentSelectBtn(selectedPayment === 'multibanco')}
+                                    onClick={() => setSelectedPayment('multibanco')}
+                                >
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <div>
+                                            <span style={{ display: 'block', fontWeight: 800, fontSize: '1rem' }}>Multibanco</span>
+                                            <small style={{ opacity: 0.8, fontSize: '0.75rem' }}>Entidade, Referência e Montante</small>
+                                        </div>
+                                        <span style={{
+                                            backgroundColor: '#004fe5',
+                                            color: 'white',
+                                            padding: '3px 8px',
+                                            borderRadius: '4px',
+                                            fontWeight: 800,
+                                            fontSize: '0.75rem'
+                                        }}>
+                                            MB
+                                        </span>
+                                    </div>
+                                </button>
+                            </div>
+
+                            {/* Checkbox de Aceitação Legal Obrigatória */}
+                            <label style={{
+                                display: 'flex',
+                                alignItems: 'flex-start',
+                                gap: '0.65rem',
+                                marginTop: '1.25rem',
+                                fontSize: '0.8rem',
+                                color: '#374151',
+                                cursor: 'pointer',
+                                textAlign: 'left',
+                                lineHeight: '1.45',
+                                background: '#f9fafb',
                                 padding: '0.75rem',
                                 borderRadius: '6px',
-                                fontSize: '0.8rem',
-                                border: '1px dashed #D4AF37'
+                                border: '1px solid #e5e7eb'
                             }}>
-                                📞 <strong>Para encomendas imediatas:</strong><br />
-                                Contacte a garrafeira diretamente ou visite a nossa loja física na <strong style={{ color: '#D4AF37' }}>3GWINE</strong>.
+                                <input
+                                    type="checkbox"
+                                    checked={acceptedLegal}
+                                    onChange={(e) => setAcceptedLegal(e.target.checked)}
+                                    style={{ marginTop: '0.2rem', accentColor: '#8B1538', cursor: 'pointer', width: '16px', height: '16px', flexShrink: 0 }}
+                                    required
+                                />
+                                <span>
+                                    Declaro que li e aceito os <Link href="/termos" target="_blank" style={{ color: '#8B1538', fontWeight: 700, textDecoration: 'underline' }}>Termos e Condições</Link>, os <Link href="/envios-e-devolucoes" target="_blank" style={{ color: '#8B1538', fontWeight: 700, textDecoration: 'underline' }}>Prazos de Entrega e Devoluções</Link> e a <Link href="/privacidade" target="_blank" style={{ color: '#8B1538', fontWeight: 700, textDecoration: 'underline' }}>Política de Privacidade</Link>. Confirmo ter mais de 18 anos de idade (DL 106/2015).
+                                </span>
+                            </label>
+
+                            <button
+                                className="btn btn-primary w-full"
+                                style={{
+                                    marginTop: '1.25rem',
+                                    padding: '1rem',
+                                    fontSize: '1rem',
+                                    fontWeight: 800,
+                                    width: '100%',
+                                    backgroundColor: selectedPayment === 'mbway' ? '#e20613' : '#004fe5',
+                                    border: 'none',
+                                    cursor: isProcessing || !acceptedLegal ? 'not-allowed' : 'pointer',
+                                    opacity: isProcessing || !acceptedLegal ? 0.7 : 1,
+                                    transition: 'all 0.2s ease',
+                                }}
+                                disabled={isProcessing || !acceptedLegal}
+                                onClick={() => handleCheckout(selectedPayment)}
+                            >
+                                {isProcessing
+                                    ? 'A Processar Pagamento...'
+                                    : !acceptedLegal
+                                        ? 'Aceite os Termos para Finalizar'
+                                        : selectedPayment === 'mbway'
+                                            ? `Pagar €${finalTotal.toFixed(2)} com MB WAY`
+                                            : `Gerar Referência Multibanco (€${finalTotal.toFixed(2)})`}
+                            </button>
+
+                            <div style={{
+                                marginTop: '0.85rem',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '6px',
+                                fontSize: '0.75rem',
+                                color: '#6b7280'
+                            }}>
+                                <span>🔒 Pagamentos certificados e seguros via IFTHENPAY</span>
                             </div>
                         </div>
-
-                        <button
-                            className="btn btn-primary w-full"
-                            style={{
-                                marginTop: '1.25rem',
-                                padding: '1rem',
-                                fontSize: '0.95rem',
-                                fontWeight: 800,
-                                width: '100%',
-                                backgroundColor: '#2a2a2a',
-                                color: '#D4AF37',
-                                border: '1px solid #D4AF37',
-                                cursor: 'not-allowed',
-                                opacity: 0.9,
-                            }}
-                            disabled={true}
-                        >
-                            Pagamento Online Brevemente Disponível
-                        </button>
 
                         <Link
                             href="/loja"

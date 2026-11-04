@@ -49,16 +49,21 @@ Este documento serve como memória técnica e ponto de partida para qualquer ses
 * **🏷️ Taxas de IVA:** Parametrização e ajuste dinâmico das taxas por tipo de produto.
 * **📦 Encomendas:** Gestão de encomendas, filtros de envio e emissão de guias de impressão.
 
-### 4. Conformidade Legal & RGPD (Decreto-Lei n.º 24/2014 & UE 2016/679)
-* **Identificação Legal no Rodapé e Sobre Nós:** Exibição clara e transparente do titular Mário Jorge dos Santos Medeiros, NIF 223412899, CAE 47250 e morada do estabelecimento comercial.
-* **Links Legais Obrigatórios:**
-  - Link direto para o **Livro de Reclamações Eletrónico** (`https://www.livroreclamacoes.pt`).
-  - Menção à entidade de **Resolução Alternativa de Litígios (RAL)**: Centro de Arbitragem de Conflitos de Consumo de Lisboa (CACCL).
-* **Consentimento RGPD:**
-  - Checkbox de consentimento obrigatória no formulário `/contactos`.
-  - Aviso legal na subscrição da newsletter no rodapé.
-* **Modal de Termos & Privacidade:**
-  - Reestruturado em cartões elegantes verticais sequenciais (1 a 6) de alto contraste com títulos em amarelo dourado (`#FFD700`).
+### 4. Conformidade Legal & RGPD (Decreto-Lei n.º 24/2014 & UE 2016/679) - Requisitos IFTHENPAY
+* **Identificação Legal no Rodapé e Páginas Dedicadas:** Exibição clara e transparente do titular Mário Jorge dos Santos Medeiros, NIF 223412899, CAE 47250 e morada do estabelecimento comercial na Póvoa de Santa Iria.
+* **Páginas Dedicadas e Rotas Canónicas Criadas:**
+  - `/termos` (e `/termos-e-condicoes`): Termos e Condições Gerais de Venda com identificação completa (art. 4.º, 1-a do DL 24/2014), idade legal (18 anos - DL 106/2015), métodos de pagamento IFTHENPAY, prazos de entrega e direito de livre resolução.
+  - `/envios-e-devolucoes`: Prazos detalhados para Continente (24h-72h) e Ilhas (3-8d), portes (€12.50 / Grátis ≥ €150), levantamento em loja física gratuito (24h), acondicionamento anti-choque e verificação na entrega.
+  - `/privacidade` (e `/politica-de-privacidade`): Política de Privacidade RGPD (Regulamento UE 2016/679 e Lei 58/2019), direitos ARCO com contacto `3gwine@gmail.com` e autoridade CNPD.
+  - `/ral` (e `/livro-reclamacoes`): Entidades de Resolução Alternativa de Litígios (CACCL Lisboa, CNIACC e ODR) e acesso direto ao Livro de Reclamações Eletrónico.
+* **Direito de Livre Resolução (Artigo 10.º do DL 24/2014):**
+  - Informação legal completa sobre o prazo de 14 dias sem justificação.
+  - Disponibilização do **Modelo Legal de Formulário de Livre Resolução** pronto a preencher.
+* **Livro de Reclamações Eletrónico:**
+  - Banner oficial e link direto no rodapé e nas páginas legais para `https://www.livroreclamacoes.pt`.
+* **Checkout Transparente e Ativo no Carrinho (`/carrinho`):**
+  - Processo de compra reativado com simulação/sandbox IFTHENPAY totalmente operacional (Multibanco e MB WAY).
+  - Checkbox obrigatória de confirmação dos Termos e Condições, Envios, Privacidade e maioridade legal (18 anos).
 
 ### 5. Marca 100% Exclusiva 3GWINE
 * Eliminadas todas as menções anteriores a "3GBARBEARIA" de todo o website, formulários, rodapé, textos da história e carrinho de compras.
@@ -68,9 +73,10 @@ Este documento serve como memória técnica e ponto de partida para qualquer ses
 ---
 
 ## 🔜 Próximos Passos
-1. **Ativação Final IFTHENPAY:**
-   - Aguardar a conclusão do processo de validação comercial da conta pelo IFTHENPAY.
-   - Assim que as chaves forem fornecidas pela entidade bancária, preencher no ficheiro `.env` do VPS:
+1. **Reanálise e Ativação Final IFTHENPAY:**
+   - Efetuar deploy para produção (`git commit` e push para Coolify na VPS Hostinger).
+   - Responder ao email da IFTHENPAY indicando os URLs das páginas de conformidade implementadas.
+   - Assim que as chaves de produção forem fornecidas pela entidade bancária, preencher no ficheiro `.env` do VPS:
      * `IFTHENPAY_MB_KEY`
      * `IFTHENPAY_ENTIDADE`
      * `IFTHENPAY_SUBENTIDADE`
@@ -80,4 +86,4 @@ Este documento serve como memória técnica e ponto de partida para qualquer ses
    - O cliente já pode aceder ao Admin (`https://3gwine.pt/admin`) com a password `Gemeos-3GWine` e começar a inserir as referências reais da garrafeira.
 
 ---
-**Data da Última Atualização:** 1 de Novembro de 2026 (Deploy `6a71d06` ativo em produção)
+**Data da Última Atualização:** 4 de Novembro de 2026 (Adequação Total aos Requisitos Legais IFTHENPAY)
