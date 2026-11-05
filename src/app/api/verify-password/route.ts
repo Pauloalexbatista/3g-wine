@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const ADMIN_PASSWORD = 'Gemeos-3GWine';
-
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
@@ -25,8 +23,10 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ success: false }, { status: 401 });
         }
 
-        // Validação estrita da nova palavra-passe
-        if (password === ADMIN_PASSWORD) {
+        const adminPassword = process.env.ADMIN_PASSWORD;
+
+        // Validação estrita da palavra-passe de admin via variável de ambiente
+        if (adminPassword && password === adminPassword) {
             const response = NextResponse.json({ success: true });
             // Cookie de sessão de administração (24 horas)
             response.cookies.set('admin_access', 'granted', {

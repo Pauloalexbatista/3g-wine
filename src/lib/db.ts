@@ -1,9 +1,7 @@
 import { Pool } from 'pg';
 
-// Ligação direta à base de dados PostgreSQL na VPS (sem qualquer dependência de Supabase)
-const connectionString = 
-    process.env.DATABASE_URL || 
-    'postgresql://wine3g_user:H04e5JwxRzXgC7hj29dGNBIP@3gwine-postgres:5432/wine3g_prod';
+// Ligação direta à base de dados PostgreSQL através de variável de ambiente segura
+const connectionString = process.env.DATABASE_URL;
 
 let pool: Pool | null = null;
 

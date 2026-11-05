@@ -70,6 +70,16 @@ Este documento serve como memória técnica e ponto de partida para qualquer ses
 * Opção de entrega atualizada para: `Levantamento na Garrafeira (Loja Física)`.
 * Cores dos títulos ("A Nossa História" e "Transparência & Identificação Legal") ajustadas para amarelo dourado de alto contraste.
 
+### 6. Saneamento de Segurança & Resolução do Alerta GitGuardian (5 de Novembro de 2026)
+* **Remoção de Credenciais Hardcoded:**
+  - `src/lib/db.ts`: Eliminada a string de fallback com a URI e password do PostgreSQL. A ligação agora lê estritamente `process.env.DATABASE_URL`.
+  - `src/app/api/verify-password/route.ts`: Eliminada a palavra-passe hardcoded. A verificação agora lê estritamente `process.env.ADMIN_PASSWORD`.
+  - `src/components/AuthForm.tsx`: Eliminadas todas as palavras-passe e validações em texto claro do código do cliente, delegando a verificação na totalidade para a API de backend.
+* **Ambiente de Produção Blindado (Coolify na VPS):**
+  - Variáveis `DATABASE_URL` e `ADMIN_PASSWORD` injetadas de forma encriptada na base de dados de orquestração do Coolify e no ficheiro `.env` da aplicação.
+* **Modelo de Configuração (`.env.example`):**
+  - Criado ficheiro de exemplo com placeholders sem exposição de segredos reais.
+
 ---
 
 ## 🔜 Próximos Passos
@@ -83,7 +93,9 @@ Este documento serve como memória técnica e ponto de partida para qualquer ses
      * `IFTHENPAY_MBWAY_KEY`
      * Alterar `IFTHENPAY_SANDBOX=false`
 2. **Inserção do Catálogo Real:**
-   - O cliente já pode aceder ao Admin (`https://3gwine.pt/admin`) com a password `Gemeos-3GWine` e começar a inserir as referências reais da garrafeira.
+   - O cliente já pode aceder ao Admin (`https://3gwine.pt/admin`) com a sua password de administração e começar a inserir as referências reais da garrafeira.
+3. **Resolução no Painel GitGuardian / GitHub:**
+   - No alerta recebido por email ou no GitHub / GitGuardian dashboard, marcar o incidente como resolvido (*Remediated / Resolved*).
 
 ---
-**Data da Última Atualização:** 4 de Novembro de 2026 (Adequação Total aos Requisitos Legais IFTHENPAY)
+**Data da Última Atualização:** 5 de Novembro de 2026 (Saneamento Completo de Credenciais e Blindagem por Variáveis de Ambiente)
