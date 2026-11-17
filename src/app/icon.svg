@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="46" fill="#8B1538" stroke="#D4AF37" stroke-width="4" />
+  <circle cx="50" cy="50" r="40" fill="none" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="1.5" />
+  <g transform="translate(12, 12) scale(0.76)">
+    <path d="M50 9 C50 9 45 19 45 23.5 A5 5 0 0 0 55 23.5 C55 19 50 9 50 9 Z" fill="#FFFFFF" />
+    <path d="M22 24 L37 24 Q42 24 42 29 Q42 32.5 38 33.5 Q42 34.5 42 38 Q42 43 36 43 L24 43 L27 38.5 L35 38.5 Q37 38.5 37 36.5 Q37 35 34 35 L29 35 L29 31.5 L34 31.5 Q37 31.5 37 29.8 Q37 28 34.5 28 L25 28 Z" fill="#FFFFFF" />
+    <path d="M78 24 L64 24 Q58 24 58 33.5 Q58 43 65 43 L74 43 Q78 43 78 38 L78 32.5 L68 32.5 L68 36 L73.5 36 L73.5 38.5 Q73.5 39.2 72 39.2 L65.5 39.2 Q62.8 39.2 62.8 33.5 Q62.8 28 65.5 28 L75.5 28 Z" fill="#FFFFFF" />
+    <path d="M47 32 L53 32 L53 42 Q53 46 57.5 50 L57.5 85 Q57.5 88 54.5 88 L45.5 88 Q42.5 88 42.5 85 L42.5 50 Q47 46 47 42 Z" fill="#FFFFFF" />
+    <text x="50" y="69" text-anchor="middle" transform="rotate(-90 50 69)" font-family="Georgia, serif" font-size="8.5" font-weight="bold" letter-spacing="1.2" fill="#8B1538">WINE</text>
+    <path d="M24 54 L38 54 Q38 66 31 68 L31 85 L36 85 L36 88 L26 88 L26 85 L29.5 85 L29.5 68 Q24 66 24 54 Z" fill="#FFFFFF" />
+    <path d="M62 54 L76 54 Q76 66 69 68 L69 85 L74 85 L74 88 L64 88 L64 85 L67.5 85 L67.5 68 Q62 66 62 54 Z" fill="#FFFFFF" />
+  </g>
+</svg>
