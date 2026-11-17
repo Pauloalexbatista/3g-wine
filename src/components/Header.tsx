@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useCart } from '@/context/CartContext';
 import UserMenu from '@/components/UserMenu';
+import { BrandCrest } from '@/components/BrandSeal';
 import './Header.css';
 
 export default function Header() {
@@ -35,6 +36,7 @@ export default function Header() {
                     {/* Logo */}
                     <Link href="/" className="header-logo">
                         <div className="logo-container">
+                            <BrandCrest className="header-crest" />
                             <span className="logo-text brand-3gwine">3GWINE</span>
                         </div>
                     </Link>

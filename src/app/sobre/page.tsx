@@ -185,47 +185,45 @@ export default function SobrePage() {
                 </section>
 
                 {/* Legal Entity & Store Section */}
-                <section style={{ padding: '4rem 0', backgroundColor: 'var(--color-background-alt, #150f14)', borderTop: '1px solid rgba(212, 175, 55, 0.2)' }}>
+                <section style={{ padding: '4rem 0', backgroundColor: 'var(--color-cellar-burgundy)', borderTop: '1px solid rgba(212, 175, 55, 0.25)', borderBottom: '1px solid rgba(212, 175, 55, 0.25)' }}>
                     <div className="container">
                         <div style={{ maxWidth: '850px', margin: '0 auto', textAlign: 'center' }}>
-                            <h2 className="section-title text-center" style={{ color: '#FFD700', textShadow: '0 3px 12px rgba(0, 0, 0, 0.8)', fontSize: '2.25rem' }}>
-                                Transparência & Identificação Legal
+                            <h2 className="section-title text-center" style={{ color: 'var(--color-secondary)', fontSize: '2.25rem' }}>
+                                Transparência &amp; Identificação Legal
                             </h2>
                             <div className="divider-gold"></div>
-                            <p style={{ color: '#ccc', marginBottom: '2rem' }}>
+                            <p style={{ color: 'rgba(245, 239, 230, 0.8)', marginBottom: '2rem' }}>
                                 A <strong className="brand-3gwine">3GWINE</strong> opera com total conformidade e rigor perante a legislação comercial e fiscal portuguesa.
                             </p>
 
-                            <div style={{
+                            <div className="double-gold-frame" style={{
                                 display: 'grid',
                                 gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
                                 gap: '1.5rem',
                                 textAlign: 'left',
-                                backgroundColor: 'rgba(255, 255, 255, 0.03)',
-                                border: '1px solid rgba(212, 175, 55, 0.3)',
-                                borderRadius: '12px',
+                                backgroundColor: '#0A0A0A',
                                 padding: '2rem'
                             }}>
                                 <div>
-                                    <div style={{ color: 'var(--color-primary)', fontWeight: 600, fontSize: '0.85rem', textTransform: 'uppercase', marginBottom: '0.35rem' }}>Entidade Proprietária</div>
+                                    <div style={{ color: 'var(--color-secondary)', fontWeight: 600, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '0.35rem' }}>Entidade Proprietária</div>
                                     <div style={{ color: '#fff', fontSize: '1rem', fontWeight: 500 }}>Mário Jorge dos Santos Medeiros</div>
                                     <div style={{ color: '#aaa', fontSize: '0.85rem' }}>Empresário em Nome Individual</div>
                                 </div>
 
                                 <div>
-                                    <div style={{ color: 'var(--color-primary)', fontWeight: 600, fontSize: '0.85rem', textTransform: 'uppercase', marginBottom: '0.35rem' }}>Identificação Fiscal & CAE</div>
+                                    <div style={{ color: 'var(--color-secondary)', fontWeight: 600, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '0.35rem' }}>Identificação Fiscal &amp; CAE</div>
                                     <div style={{ color: '#fff', fontSize: '1rem', fontWeight: 500 }}>NIF: 223412899</div>
                                     <div style={{ color: '#aaa', fontSize: '0.85rem' }}>CAE 47250 (Comércio a Retalho de Bebidas)</div>
                                 </div>
 
                                 <div>
-                                    <div style={{ color: 'var(--color-primary)', fontWeight: 600, fontSize: '0.85rem', textTransform: 'uppercase', marginBottom: '0.35rem' }}>Espaço Físico & Morada</div>
+                                    <div style={{ color: 'var(--color-secondary)', fontWeight: 600, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '0.35rem' }}>Espaço Físico &amp; Morada</div>
                                     <div style={{ color: '#fff', fontSize: '0.95rem' }}>Rua António França Borges N-14 B</div>
                                     <div style={{ color: '#aaa', fontSize: '0.85rem' }}>2625-187 Póvoa de Santa Iria</div>
                                 </div>
 
                                 <div>
-                                    <div style={{ color: 'var(--color-primary)', fontWeight: 600, fontSize: '0.85rem', textTransform: 'uppercase', marginBottom: '0.35rem' }}>Contactos Oficiais</div>
+                                    <div style={{ color: 'var(--color-secondary)', fontWeight: 600, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '0.35rem' }}>Contactos Oficiais</div>
                                     <div style={{ color: '#fff', fontSize: '0.95rem' }}>3gwine@gmail.com</div>
                                     <div style={{ color: '#aaa', fontSize: '0.85rem' }}>963 908 617 | 21 959 15 22</div>
                                 </div>

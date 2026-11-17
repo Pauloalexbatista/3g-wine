@@ -1,20 +1,26 @@
+/* ============================================
+   Sobre Nós Page - Cave Clássica & Pergaminho 3GWINE
+   ============================================ */
+
 .sobre-page {
     min-height: 100vh;
 }
 
 /* ============================================
-   Hero Section
+   Hero Section (Cave Escura)
    ============================================ */
 
 .sobre-hero {
     position: relative;
-    height: 45vh; /* Narrower as requested */
-    min-height: 350px;
+    height: 44vh;
+    min-height: 340px;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    margin-top: 70px;
+    margin-top: 66px;
+    background: #0a0a0a;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
 }
 
 .sobre-hero-image {
@@ -26,9 +32,7 @@
 .sobre-hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg,
-            rgba(10, 10, 10, 0.3) 0%,
-            rgba(10, 10, 10, 0.5) 100%);
+    background: radial-gradient(circle at 50% 45%, rgba(92, 14, 32, 0.38) 0%, rgba(10, 10, 10, 0.78) 100%);
     z-index: 1;
 }
 
@@ -36,64 +40,43 @@
     position: relative;
     z-index: 2;
     text-align: center;
-    color: var(--color-light);
+    color: #f5efe6;
 }
 
 .sobre-hero-title {
-    font-size: 3.5rem;
-    font-family: var(--font-display, 'Marcellus', serif);
-    color: #FFD700 !important;
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.95), 0 2px 6px rgba(0, 0, 0, 0.8);
+    font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+    font-family: var(--font-display);
+    color: var(--color-secondary) !important;
+    text-shadow: 0 3px 16px rgba(0, 0, 0, 0.85);
     font-weight: 700;
     margin-bottom: 0.5rem;
-    letter-spacing: 1px;
+    letter-spacing: 0.08em;
 }
 
 .sobre-hero-subtitle {
-    font-size: 1.35rem;
-    color: #ffffff;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
-    font-weight: 500;
-}
-
-.sobre-badge {
-    display: inline-block;
-    padding: var(--spacing-xs) var(--spacing-lg);
-    background: rgba(212, 175, 55, 0.2);
-    border: 2px solid var(--color-secondary);
-    color: var(--color-secondary);
-    font-size: var(--text-sm);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    border-radius: var(--radius-full);
-    margin-bottom: var(--spacing-lg);
-}
-
-.sobre-title {
-    font-size: var(--text-6xl);
-    font-family: var(--font-logo); /* Use Marcellus font as in header */
-    color: var(--color-secondary); /* Solid color might be clearer on lighter bg */
-    margin-bottom: var(--spacing-md);
-    letter-spacing: -2px;
-}
-
-.sobre-tagline {
-    font-size: var(--text-4xl);
-    color: #fff;
     font-family: var(--font-display);
-    font-weight: 700;
-    text-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    margin-top: 1rem;
+    font-style: italic;
+    font-size: 1.25rem;
+    color: rgba(245, 239, 230, 0.9);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
+}
+
+.divider-gold {
+    width: 72px;
+    height: 1px;
+    background: var(--color-secondary);
+    margin: 0.9rem auto;
 }
 
 /* ============================================
-   Story Section
+   Story Section (Pergaminho Creme)
    ============================================ */
 
 .story-section {
     padding: var(--spacing-3xl) 0;
-    background: var(--color-light);
+    background-color: var(--color-cream);
+    background-image: radial-gradient(circle at 50% 0%, #FAF4E8 0%, #EADBC2 100%);
+    border-bottom: 1px solid rgba(110, 71, 43, 0.3);
 }
 
 .story-grid {
@@ -109,135 +92,126 @@
     gap: var(--spacing-md);
 }
 
+.story-content .section-title {
+    font-family: var(--font-display);
+    color: #2c180e;
+}
+
 .story-text {
     font-size: var(--text-base);
-    color: var(--color-gray-700);
+    color: var(--color-brown-dark);
     line-height: 1.8;
 }
 
 .story-text strong {
-    color: var(--color-dark);
-    font-weight: 700;
-}
-
-.story-text em {
     color: var(--color-primary);
-    font-style: italic;
+    font-weight: 700;
 }
 
 .story-image {
     position: relative;
-    height: 500px;
-    border-radius: var(--radius-lg);
+    min-height: 400px;
+    border: 1px solid var(--color-brown);
+    box-shadow: 0 14px 30px rgba(59, 35, 20, 0.18);
     overflow: hidden;
-    box-shadow: var(--shadow-xl);
 }
 
 /* ============================================
-   Values Section
+   Values Section (Cave Escura Borgonha)
    ============================================ */
 
 .values-section {
     padding: var(--spacing-3xl) 0;
-    background: var(--color-gray-50);
+    background: var(--color-cellar-burgundy);
+    color: #f5efe6;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+}
+
+.values-section .section-title {
+    font-family: var(--font-display);
+    color: var(--color-secondary);
 }
 
 .values-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--spacing-xl);
-    margin-top: var(--spacing-2xl);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.5rem;
 }
 
 .value-card {
-    background: var(--color-light);
-    padding: var(--spacing-xl);
-    border-radius: var(--radius-lg);
+    background: var(--color-cream-card);
+    color: var(--color-brown-dark);
+    border: 1px solid var(--color-brown);
+    box-shadow: inset 0 0 0 4px var(--color-cream-card), inset 0 0 0 5px rgba(110, 71, 43, 0.4);
+    padding: 2rem 1.5rem;
     text-align: center;
-    box-shadow: var(--shadow-md);
-    transition: all var(--transition-base);
-    border: 1px solid var(--color-gray-200);
+    transition: transform 0.25s ease;
 }
 
 .value-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-xl);
-    border-color: var(--color-secondary);
+    transform: translateY(-4px);
 }
 
-.value-icon {
-    font-size: 60px;
-    margin-bottom: var(--spacing-md);
+.value-icon.gold-icon {
+    color: var(--color-primary);
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 80px;
-}
-
-.gold-icon {
-    color: var(--color-secondary);
-    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.3));
-    transition: all var(--transition-base);
-}
-
-.value-card:hover .gold-icon {
-    transform: scale(1.1);
-    filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.5));
+    margin-bottom: 1rem;
 }
 
 .value-title {
-    font-size: var(--text-xl);
-    color: var(--color-dark);
-    margin-bottom: var(--spacing-sm);
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: #2c180e;
+    margin-bottom: 0.6rem;
 }
 
 .value-description {
-    font-size: var(--text-sm);
-    color: var(--color-gray-700);
+    font-size: 0.88rem;
+    color: var(--color-brown-muted);
     line-height: 1.6;
 }
 
 /* ============================================
-   Cellar Section
+   Cellar Section (Pergaminho Creme)
    ============================================ */
 
 .cellar-section {
-    background: var(--color-dark);
-    color: var(--color-light);
+    padding: var(--spacing-3xl) 0;
+    background-color: var(--color-cream);
+    background-image: radial-gradient(circle at 50% 0%, #FAF4E8 0%, #EADBC2 100%);
+    border-bottom: 1px solid rgba(110, 71, 43, 0.3);
 }
 
 .cellar-grid {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
     display: grid;
-    grid-template-columns: 1.2fr 0.8fr; /* More space for text, less for image */
-    min-height: 700px;
-    background: var(--color-dark);
-}
-
-.cellar-content {
-    padding: var(--spacing-3xl);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-3xl);
+    align-items: center;
 }
 
 .cellar-content .section-title {
-    color: var(--color-light);
+    font-family: var(--font-display);
+    color: #2c180e;
 }
 
 .cellar-text {
-    font-size: var(--text-base);
-    color: var(--color-gray-300);
+    color: var(--color-brown-dark);
     line-height: 1.8;
-    margin-bottom: var(--spacing-md);
+    margin-bottom: 2rem;
 }
 
 .cellar-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-lg);
-    margin-top: var(--spacing-2xl);
-    padding-top: var(--spacing-2xl);
-    border-top: 1px solid rgba(212, 175, 55, 0.2);
+    gap: 1rem;
+    padding: 1.25rem;
+    background: var(--color-cream-card);
+    border: 1px solid var(--color-brown);
 }
 
 .stat-item {
@@ -245,107 +219,79 @@
 }
 
 .stat-number {
-    font-size: var(--text-4xl);
-    font-weight: 900;
     font-family: var(--font-display);
-    background: var(--gradient-gold);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: var(--spacing-xs);
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: var(--color-primary);
 }
 
 .stat-label {
-    font-size: var(--text-sm);
-    color: var(--color-gray-300);
+    font-size: 0.72rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.14em;
+    color: var(--color-brown-muted);
 }
 
 .cellar-image {
     position: relative;
+    min-height: 400px;
+    border: 1px solid var(--color-brown);
+    box-shadow: 0 14px 30px rgba(59, 35, 20, 0.18);
     overflow: hidden;
-    background: #0a0a0a; /* Deep black to blend with image edges if contain is used */
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 /* ============================================
-   CTA Section
+   CTA Section (Pergaminho Creme)
    ============================================ */
 
 .cta-section {
     padding: var(--spacing-3xl) 0;
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-burgundy-dark) 100%);
+    background-color: var(--color-cream);
+    background-image: radial-gradient(circle at 50% 0%, #FAF4E8 0%, #EADBC2 100%);
     text-align: center;
-    color: var(--color-light);
 }
 
 .cta-content {
-    max-width: 700px;
+    max-width: 650px;
     margin: 0 auto;
 }
 
 .cta-title {
-    font-size: var(--text-4xl);
-    color: var(--color-light);
-    margin-bottom: var(--spacing-md);
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    color: #2c180e;
+    margin-bottom: 0.75rem;
 }
 
 .cta-text {
-    font-size: var(--text-lg);
-    color: var(--color-gray-200);
-    margin-bottom: var(--spacing-xl);
-    line-height: 1.6;
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--color-brown-muted);
+    margin-bottom: 1.75rem;
 }
 
 /* ============================================
-   Responsive Design
+   Responsive
    ============================================ */
 
 @media (max-width: 1024px) {
+    .values-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 
     .story-grid,
     .cellar-grid {
         grid-template-columns: 1fr;
-        gap: var(--spacing-2xl);
-    }
-
-    .story-image,
-    .cellar-image {
-        min-height: 400px;
-    }
-
-    .cellar-content {
-        padding: var(--spacing-2xl);
     }
 }
 
-@media (max-width: 768px) {
-    .sobre-hero {
-        height: 50vh;
-        margin-top: 60px;
-    }
-
-    .sobre-title {
-        font-size: var(--text-4xl);
-    }
-
+@media (max-width: 640px) {
     .values-grid {
         grid-template-columns: 1fr;
     }
 
-    .cellar-stats {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-md);
-    }
-
-    .stat-number {
-        font-size: var(--text-3xl);
-    }
-
-    .cta-title {
-        font-size: var(--text-3xl);
+    .story-image,
+    .cellar-image {
+        min-height: 280px;
     }
 }

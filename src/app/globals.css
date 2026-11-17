@@ -18,6 +18,12 @@
   --color-accent: #C41E3A;
   /* Deep Crimson */
   --color-burgundy-dark: #5C0E20;
+  --color-cream: #F2E8D5;
+  --color-cream-card: #FAF4E8;
+  --color-brown: #6E472B;
+  --color-brown-dark: #3B2314;
+  --color-brown-muted: #5C3A21;
+  --color-cellar-burgundy: #18080D;
 
   /* Neutral Palette */
   --color-gray-50: #F9FAFB;
@@ -35,9 +41,9 @@
   --gradient-card: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
 
   /* Typography */
-  --font-display: 'Playfair Display', serif;
+  --font-display: 'Palatino Linotype', 'Book Antiqua', 'Playfair Display', Georgia, serif;
   --font-body: 'Lato', sans-serif;
-  --font-logo: 'Marcellus', serif;
+  --font-logo: 'Palatino Linotype', 'Book Antiqua', 'Cinzel', Georgia, serif;
 
   /* Font Sizes */
   --text-xs: 0.75rem;
@@ -173,16 +179,16 @@ button {
 .text-gold { color: var(--color-secondary) !important; }
 .text-white { color: var(--color-light) !important; }
 
-/* Global Brand Consistency: 3GWINE */
+/* Global Brand Consistency: 3GWINE (3 com a mesma altura das letras) */
 .brand-3gwine {
-  font-family: var(--font-logo) !important; /* Forces Marcellus */
-  font-variant-numeric: lining-nums !important; /* Forces uniform number height */
+  font-family: var(--font-logo) !important;
+  font-variant-numeric: lining-nums !important;
   font-feature-settings: "lnum" 1 !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.14em;
   display: inline-block;
-  vertical-align: middle;
-  line-height: normal;
+  vertical-align: baseline;
+  line-height: 1;
 }
 
 .flex { display: flex; }
@@ -203,31 +209,41 @@ button {
   align-items: center;
   justify-content: center;
   gap: var(--spacing-xs);
-  padding: var(--spacing-sm) var(--spacing-lg);
-  font-size: var(--text-base);
-  font-weight: 600;
-  border-radius: var(--radius-md);
+  padding: 0.85rem 1.75rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border-radius: 2px;
   transition: all var(--transition-base);
   cursor: pointer;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.18em;
 }
 
 .btn-primary {
-  background: var(--gradient-gold);
-  color: var(--color-dark);
-  box-shadow: var(--shadow-gold);
+  background: var(--color-primary);
+  color: #FAF4E8;
+  border-color: rgba(212, 175, 55, 0.55);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 25px rgba(212, 175, 55, 0.4);
+  background: var(--color-burgundy-dark);
+  border-color: var(--color-secondary);
+  color: #FFFFFF;
+  transform: translateY(-1px);
 }
 
 .btn-secondary {
+  background-color: var(--color-brown-dark);
+  color: var(--color-cream-card);
+  border-color: var(--color-brown);
+}
+
+.btn-secondary:hover {
   background-color: var(--color-primary);
-  color: var(--color-light);
+  color: #FFFFFF;
+  border-color: var(--color-primary);
 }
 
 .btn-outline {
@@ -237,9 +253,35 @@ button {
 }
 
 .btn-outline:hover {
-  background: var(--gradient-gold);
+  background: var(--color-secondary);
   color: var(--color-dark);
   border-color: var(--color-secondary);
+}
+
+/* Classic Parchment & Label Utilities */
+.parchment-bg {
+  background-color: var(--color-cream);
+  background-image: radial-gradient(circle at 50% 0%, #FAF4E8 0%, #EADBC2 100%);
+  color: var(--color-brown-dark);
+}
+
+.diecut-label {
+  clip-path: polygon(
+    14px 0%, calc(100% - 14px) 0%,
+    100% 14px, 100% calc(100% - 14px),
+    calc(100% - 14px) 100%, 14px 100%,
+    0% calc(100% - 14px), 0% 14px
+  );
+}
+
+.double-brown-frame {
+  border: 1px solid var(--color-brown);
+  box-shadow: inset 0 0 0 5px var(--color-cream-card), inset 0 0 0 6px rgba(110, 71, 43, 0.45);
+}
+
+.double-gold-frame {
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  box-shadow: inset 0 0 0 4px var(--color-dark), inset 0 0 0 5px rgba(212, 175, 55, 0.25);
 }
 
 /* Glassmorphism */

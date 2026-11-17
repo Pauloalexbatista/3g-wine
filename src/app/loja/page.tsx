@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { RedWaxSeal } from '@/components/BrandSeal';
 import { useCart } from '@/context/CartContext';
 // Base de Dados PostgreSQL local da VPS
 import { calculateProductTax } from '@/utils/tax';
@@ -123,11 +124,40 @@ function LojaContent() {
         filteredProducts.sort((a, b) => (b.featured === a.featured ? 0 : b.featured ? 1 : -1));
     }
 
+    // Agrupar produtos por família para a Carta de Vinhos
+    const familyOrder = ['Tinto', 'Branco', 'Rosé', 'Espumante', 'Cave', 'Azeite', 'Licores / Destilados', 'Outros'];
+    const groupedByFamily = filteredProducts.reduce<Record<string, Product[]>>((acc, product) => {
+        const family = (product.type && product.type.trim()) || 'Outros';
+        if (!acc[family]) acc[family] = [];
+        acc[family].push(product);
+        return acc;
+    }, {});
+
+    const sortedFamilies = Object.keys(groupedByFamily).sort((a, b) => {
+        const idxA = familyOrder.findIndex(f => f.toLowerCase() === a.toLowerCase());
+        const idxB = familyOrder.findIndex(f => f.toLowerCase() === b.toLowerCase());
+        if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+        if (idxA !== -1) return -1;
+        if (idxB !== -1) return 1;
+        return a.localeCompare(b);
+    });
+
     return (
         <>
             <Header />
 
-            <main className="loja-page">
+            <main className="loja-page parchment-bg">
+                {/* Cabeçalho Clássico da Carta */}
+                <section className="loja-hero-classic">
+                    <div className="container">
+                        <div className="loja-eyebrow">Garrafeira <span className="brand-3gwine">3GWINE</span></div>
+                        <h1 className="loja-title-classic">Carta de Vinhos &amp; Seleções</h1>
+                        <p className="loja-subtitle-classic">
+                            Selecione qualquer referência na carta para abrir o rótulo completo, fotografia da garrafa e notas de prova.
+                        </p>
+                    </div>
+                </section>
+
                 {/* Filters Section */}
                 <section className="filters-section">
                     <div className="container">
@@ -135,9 +165,9 @@ function LojaContent() {
                             {/* Type Filter */}
                             <div className="filter-group type-filter-group">
                                 <div className="filter-header-inline">
-                                    <label className="filter-label">Tipo</label>
+                                    <label className="filter-label">Família</label>
                                     <div className="results-count-inline">
-                                        {loading ? 'Carregando...' : filteredProducts.length + (filteredProducts.length === 1 ? ' produto encontrado' : ' produtos encontrados')}
+                                        {loading ? 'A carregar carta...' : filteredProducts.length + (filteredProducts.length === 1 ? ' referência na carta' : ' referências na carta')}
                                     </div>
                                 </div>
                                 <div className="filter-buttons">
@@ -189,82 +219,93 @@ function LojaContent() {
                     </div>
                 </section>
 
-                {/* Products Grid */}
+                {/* Carta de Vinhos por Famílias */}
                 <section className="products-section">
                     <div className="container">
                         {loading ? (
                             <div className="flex justify-center items-center py-20">
                                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
                             </div>
-                        ) : (
-                            <div className="products-grid">
-                                {filteredProducts.map(product => {
-                                    const tax = calculateProductTax(product.price, product.type);
-                                    return (
-                                        <div key={product.id} className="product-card" onClick={() => setSelectedProduct(product)}>
+                        ) : filteredProducts.length > 0 ? (
+                            <div className="carta-ledger double-brown-frame">
+                                <div className="carta-ledger-seal" title="Selo Oficial 3GWINE">
+                                    <RedWaxSeal className="carta-ledger-seal-svg" />
+                                </div>
+                                <div className="carta-ledger-header">
+                                    <div className="carta-ledger-eyebrow">Garrafeira Exclusiva · Póvoa de Santa Iria</div>
+                                    <h2 className="carta-ledger-title">Carta Oficial</h2>
+                                    <div className="carta-ledger-ornament">❦</div>
+                                </div>
 
-                                            <div className="product-image-wrapper">
-                                                {product.featured && (
-                                                    <div className="product-badge">Destaque</div>
-                                                )}
-                                                <div className="product-image-placeholder">
-                                                    <Image
-                                                        src={product.image || '/images/products/douro-2018.png'}
-                                                        alt={product.name}
-                                                        fill
-                                                        style={{ objectFit: 'contain', padding: '1rem' }}
-                                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                                    />
-                                                </div>
+                                <div className="carta-families-list">
+                                    {sortedFamilies.map((family) => (
+                                        <div key={family} className="carta-family-block">
+                                            <div className="carta-family-heading">
+                                                <h3>{family}</h3>
+                                                <span className="carta-family-count">
+                                                    {groupedByFamily[family].length} {groupedByFamily[family].length === 1 ? 'referência' : 'referências'}
+                                                </span>
                                             </div>
 
-                                            <div className="product-content">
-                                                <div className="product-header">
-                                                    <h3 className="product-name">{product.name}</h3>
-                                                    <span className="product-type">{product.type}</span>
-                                                </div>
-
-                                                <div className="product-meta">
-                                                    <span className="product-region">📍 {product.region || 'Portugal'}</span>
-                                                    <span className="product-year">📅 {product.year}</span>
-                                                </div>
-
-                                                <p className="product-description">{product.description}</p>
-
-                                                <div className="product-footer">
-                                                    <div className="product-price-container">
-                                                        <div className="product-final-price">
-                                                            {tax.formattedFinal} <span className="tax-badge-inc">IVA incl.</span>
+                                            <div className="carta-items-grid">
+                                                {groupedByFamily[family].map((product) => {
+                                                    const tax = calculateProductTax(product.price, product.type);
+                                                    return (
+                                                        <div
+                                                            key={product.id}
+                                                            className="carta-row"
+                                                            onClick={() => setSelectedProduct(product)}
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            onKeyDown={(e) => {
+                                                                if (e.key === 'Enter' || e.key === ' ') {
+                                                                    e.preventDefault();
+                                                                    setSelectedProduct(product);
+                                                                }
+                                                            }}
+                                                        >
+                                                            <div className="carta-row-main">
+                                                                <span className="carta-row-name">
+                                                                    {product.name}
+                                                                    {product.featured && (
+                                                                        <span className="carta-row-badge">Destaque</span>
+                                                                    )}
+                                                                </span>
+                                                                <span className="carta-row-dots"></span>
+                                                                <span className="carta-row-price">{tax.formattedFinal}</span>
+                                                                <button
+                                                                    type="button"
+                                                                    className="carta-row-add"
+                                                                    title="Adicionar ao carrinho"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        addToCart(product);
+                                                                    }}
+                                                                >
+                                                                    +
+                                                                </button>
+                                                            </div>
+                                                            <div className="carta-row-sub">
+                                                                <span>
+                                                                    {product.region || 'Portugal'}
+                                                                    {product.year ? ` · ${product.year}` : ''}
+                                                                    {product.description ? ` — ${product.description.substring(0, 75)}${product.description.length > 75 ? '...' : ''}` : ''}
+                                                                </span>
+                                                                <span className="carta-row-hint">Ver rótulo →</span>
+                                                            </div>
                                                         </div>
-                                                        <div className="product-tax-detail">
-                                                            {tax.formattedBase} s/ IVA · (+{tax.taxPercent}% IVA: {tax.formattedTax})
-                                                        </div>
-                                                    </div>
-                                                    <button
-                                                        className="btn-add-cart"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            addToCart(product);
-                                                        }}
-                                                    >
-                                                        <svg className="cart-icon-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                                                        </svg>
-                                                        Adicionar
-                                                    </button>
-                                                </div>
+                                                    );
+                                                })}
                                             </div>
                                         </div>
-                                    );
-                                })}
+                                    ))}
+                                </div>
                             </div>
-                        )}
-
-                        {filteredProducts.length === 0 && (
-                            <div className="no-results">
+                        ) : (
+                            <div className="no-results double-brown-frame">
                                 <div className="no-results-icon">🍷</div>
-                                <h3>Nenhum produto encontrado</h3>
-                                <p>Tente ajustar os seus filtros</p>
+                                <h3>Nenhuma referência encontrada</h3>
+                                <p>Tente ajustar os seus filtros na carta</p>
                             </div>
                         )}
                     </div>
